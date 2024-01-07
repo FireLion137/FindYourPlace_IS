@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Classe relativa a un Utente registrato.<br>
@@ -44,6 +45,7 @@ public class Utente {
      */
     @NotNull
     @Column(unique = true)
+    @Size(max = 30)
     @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,29}$")
     private String username;
 
@@ -103,4 +105,10 @@ public class Utente {
     @Size(max = 50)
     @Pattern(regexp = "^(?=.{2,50}$)[A-Za-zÀ-ÿ]+([-,. '][A-Za-zÀ-ÿ]+)*$")
     private String cognome;
+
+    /**
+     * Lista delle notifiche ricevute di un Utente.
+     */
+    @OneToMany(mappedBy = "studente")
+    List<NotificaRicevuta> notificheRicevute;
 }
