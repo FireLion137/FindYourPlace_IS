@@ -36,8 +36,9 @@ public class Utente {
      */
     @Id
     @NotNull
+    @Column(name = "id_utente")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_utente;
+    private long idUtente;
 
     /**
      * Username dell' Utente.<br>
@@ -106,9 +107,23 @@ public class Utente {
     @Pattern(regexp = "^(?=.{2,50}$)[A-Za-zÀ-ÿ]+([-,. '][A-Za-zÀ-ÿ]+)*$")
     private String cognome;
 
+
+    /**
+     * Preferenze dell' Utente
+     */
+    @OneToOne(mappedBy = "utente", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Preferenze preferenze;
+
     /**
      * Lista delle notifiche ricevute di un Utente.
      */
-    @OneToMany(mappedBy = "studente")
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
     List<NotificaRicevuta> notificheRicevute;
+
+    /**
+     * Lista delle ricerche effettuate da un Utente.
+     */
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
+    List<Ricerca> ricerche;
 }

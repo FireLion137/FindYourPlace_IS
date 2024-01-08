@@ -1,9 +1,7 @@
 package com.is.findyourplace.persistence.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -57,17 +55,19 @@ public class Notifica {
      * Data e ora di invio della Notifica.
      */
     @NotNull
+    @FutureOrPresent
     private LocalDateTime dataInvio;
 
     /**
      * Data e ora di scadenza della Notifica.
      */
     @NotNull
+    @Future
     private LocalDateTime expireDate;
 
     /**
      * Lista di chi ha ricevuto la notifica.
      */
-    @OneToMany(mappedBy = "notifica")
+    @OneToMany(mappedBy = "notifica", cascade = CascadeType.ALL)
     List<NotificaRicevuta> notificheRicevute;
 }
