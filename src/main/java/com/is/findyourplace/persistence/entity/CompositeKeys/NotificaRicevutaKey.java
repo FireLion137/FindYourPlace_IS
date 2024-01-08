@@ -1,4 +1,4 @@
-package com.is.findyourplace.persistence.entity;
+package com.is.findyourplace.persistence.entity.CompositeKeys;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

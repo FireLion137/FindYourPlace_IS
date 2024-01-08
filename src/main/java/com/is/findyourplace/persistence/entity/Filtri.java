@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Classe relativa a un Utente registrato.<br>
+ * Classe relativa ai Filtri di una ricerca.<br>
  * I campi sono:
  *  id ricerca,
  *  costo della vita (ALTO - MEDIO - BASSO),

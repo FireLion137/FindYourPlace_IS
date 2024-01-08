@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.geo.Point;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Classe relativa a una Ricerca effettuata da un Utente.<br>
@@ -55,7 +56,14 @@ public class Ricerca {
     private int raggio;
 
     /**
-     * Utente che ha effettuato la ricerca
+     * Id dell' utente che ha effettuato la ricerca.
+     */
+    @NotNull
+    @Column(name = "id_utente")
+    private long idUtente;
+
+    /**
+     * Utente che ha effettuato la ricerca.
      */
     @ManyToOne
     @MapsId("idUtente")
@@ -69,4 +77,10 @@ public class Ricerca {
     @OneToOne(mappedBy = "ricerca", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Filtri filtri;
+
+    /**
+     * Lista dei luoghi trovati in una ricerca.
+     */
+    @OneToMany(mappedBy = "ricerca", cascade = CascadeType.ALL)
+    List<LuogoTrovato> luoghiTrovati;
 }

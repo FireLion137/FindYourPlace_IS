@@ -126,4 +126,10 @@ public class Utente {
      */
     @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
     List<Ricerca> ricerche;
+
+    /**
+     * Lista delle ricerche che hanno trovato il luogo.
+     */
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
+    List<Preferiti> preferiti;
 }

@@ -1,14 +1,13 @@
 package com.is.findyourplace.persistence.repository;
 
 import com.is.findyourplace.persistence.entity.NotificaRicevuta;
-import com.is.findyourplace.persistence.entity.NotificaRicevutaKey;
+import com.is.findyourplace.persistence.entity.CompositeKeys.NotificaRicevutaKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
 public interface NotificaRicevutaRepository extends JpaRepository<NotificaRicevuta, NotificaRicevutaKey> {
-
     /**
      * Query custom per recuperare la lista delle notifiche ricevute
      * di un determinato utente tramite l'id.

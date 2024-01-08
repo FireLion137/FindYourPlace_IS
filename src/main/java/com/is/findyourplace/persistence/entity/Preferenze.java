@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Classe relativa a un Utente registrato.<br>
+ * Classe relativa alle Preferenze di un utente.<br>
  * I campi sono:
  *  id utente,
  *  notifiche (boolean),

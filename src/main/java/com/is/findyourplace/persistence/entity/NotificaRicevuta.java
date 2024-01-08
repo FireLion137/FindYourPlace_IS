@@ -1,5 +1,6 @@
 package com.is.findyourplace.persistence.entity;
 
+import com.is.findyourplace.persistence.entity.CompositeKeys.NotificaRicevutaKey;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
