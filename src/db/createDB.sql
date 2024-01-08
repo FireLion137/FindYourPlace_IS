@@ -100,12 +100,7 @@ CREATE TABLE Preferiti
 	id_utente 		bigint			NOT NULL,
     id_luogo		bigint			NOT NULL,
     qualityIndex	decimal(5,2)	NOT NULL,
-    costoVita	 	varchar(10)		NOT NULL,
-    danger			decimal(5,2)	NOT NULL,
-    numAbitanti		int				NOT NULL,
-    numNegozi		smallint		NOT NULL,
-    numScuole		smallint		NOT NULL,
-    numRistoranti	smallint		NOT NULL,
+    notifiche       boolean         NOT NULL,
     
     FOREIGN KEY (id_utente) REFERENCES Utente(id_utente) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_luogo) REFERENCES Luogo(id_luogo) ON DELETE CASCADE ON UPDATE CASCADE,
