@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Classe relativa a un Utente registrato.<br>
@@ -35,8 +36,9 @@ public class Utente {
      */
     @Id
     @NotNull
+    @Column(name = "id_utente")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_utente;
+    private long idUtente;
 
     /**
      * Username dell' Utente.<br>
@@ -44,6 +46,7 @@ public class Utente {
      */
     @NotNull
     @Column(unique = true)
+    @Size(max = 30)
     @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,29}$")
     private String username;
 
@@ -103,4 +106,30 @@ public class Utente {
     @Size(max = 50)
     @Pattern(regexp = "^(?=.{2,50}$)[A-Za-zÀ-ÿ]+([-,. '][A-Za-zÀ-ÿ]+)*$")
     private String cognome;
+
+
+    /**
+     * Preferenze dell' Utente
+     */
+    @OneToOne(mappedBy = "utente", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Preferenze preferenze;
+
+    /**
+     * Lista delle notifiche ricevute di un Utente.
+     */
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
+    List<NotificaRicevuta> notificheRicevute;
+
+    /**
+     * Lista delle ricerche effettuate da un Utente.
+     */
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
+    List<Ricerca> ricerche;
+
+    /**
+     * Lista delle ricerche che hanno trovato il luogo.
+     */
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
+    List<Preferiti> preferiti;
 }
