@@ -1,15 +1,122 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Site Head Nav Bar</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../../css/footer.css" type="text/css">
-    <script src="../../js/jquery-3.7.1.js"></script>
 </head>
 <body>
-    <header th:fragment="navbar">
-        <h1>Head</h1>
-    </header>
+<header class="mainHeader" th:fragment="navbar">
+    <script src="../../static/js/header.js" th:src="@{/js/header.js}"></script>
+    <div class="wrapperHeader">
+        <a onclick="openNav()" class="menuIcon"><i class="fa fa-bars"></i></a>
+        <div class="logo">
+            <a th:href="@{/}" class="site-logo-link"></a>
+        </div>
+        <nav class="navBar" id="myNavBar">
+            <div class="mobileHeader">
+                <a th:href="@{/}" class="homeBtn" id="hmBtn"><i class="fa fa-home"></i></a>
+                <a onclick="subCatClose()" class="goBack" id="goBck"><i class="fa fa-angle-left"></i></a>
+                <a style="flex-grow: 1"></a>
+                <a href="javascript:void(0)" class="closeBtn" onclick="closeNav()"><i class="fa fa-times"></i></a>
+            </div>
+            <div class="navListContainer">
+                <ul class="navCategories" id="navCats">
+                    <li>
+                        <div class="navBarPrimaryCategory">
+                            <a th:href="@{/placeholder}" title="Placeholder">Placeholder</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="navBarPrimaryCategory" onclick="subCatOpen(1)">
+                            <a th:href="@{/placeholder}" title="Placeholder">Placeholder</a>
+                            <i class="fa fa-caret-down" style="margin-left: 5px"></i>
+                        </div>
+                        <ul class="dropdown-content" id="drpCnt1">
+                            <li>
+                                <div class="navBarSecondaryCategory">
+                                    <a th:href="@{/placeholder}" title="Placeholder">Placeholder</a>
+                                </div>
+                                <div class="navBarSecondaryCategory">
+                                    <a th:href="@{/placeholder}" title="Placeholder">Placeholder</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="navBarPrimaryCategory" onclick="subCatOpen(2)">
+                            <a th:href="@{/placeholder}" title="Placeholder">Placeholder</a>
+                            <i class="fa fa-caret-down" style="margin-left: 5px"></i>
+                        </div>
+                        <ul class="dropdown-content" id="drpCnt2">
+                            <li>
+                                <div class="navBarSecondaryCategory">
+                                    <a th:href="@{/placeholder}" title="Placeholder">Placeholder</a>
+                                </div>
+                                <div class="navBarSecondaryCategory">
+                                    <a th:href="@{/placeholder}" title="Placeholder">Placeholder</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="navBarPrimaryCategory" onclick="subCatOpen(3)">
+                            <a th:href="@{/placeholder}" title="Placeholder">Placeholder</a>
+                            <i class="fa fa-caret-down" style="margin-left: 5px"></i>
+                        </div>
+                        <ul class="dropdown-content" id="drpCnt3">
+                            <li>
+                                <div class="navBarSecondaryCategory">
+                                    <a th:href="@{/placeholder}" title="Placeholder">Placeholder</a>
+                                </div>
+                                <div class="navBarSecondaryCategory">
+                                    <a th:href="@{/placeholder}" title="Placeholder">Placeholder</a>
+                                </div>
+                                <div class="navBarSecondaryCategory">
+                                    <a th:href="@{/placeholder}" title="Placeholder">Placeholder</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <ul class="actions">
+            <li>
+                <div class="account-btn">
+                    <a th:href="@{/AccountAuth}"> <!--onclick="actionOpen('Account')"-->
+                    <i class="fa fa-user-circle"></i>
+                    </a>
+                </div>
+                <ul class="dropdown-content" id="drpCntAccount">
+                    <li>
+                        <span class="closeAction" id="closeAct" onclick="actionClose()">
+                            <i class="fa fa-times"></i>
+                        </span>
+                        <h2>Account</h2>
+                        <div class="navBarSecondaryCategory" th:onclick="|location.href='@{/EditProfile}'|">
+                            <a th:href="@{/EditProfile}">
+                                Modifica Profilo
+                                <i class="fa fa-user" style="margin-left: 5px"></i>
+                            </a>
+                        </div>
+                        <!--<%if(session.getAttribute("Utente")!=null && ((Utente) session.getAttribute("Utente")).isAdmin()) {%>-->
+                        <div class="navBarSecondaryCategory" th:onclick="|location.href='@{/Admin/Users}'|">
+                            <a th:href="@{/Admin/Users}">
+                                Gestisci gli utenti
+                                <i class="fa fa-users" style="margin-left: 5px"></i>
+                            </a>
+                        </div>
+                        <div class="navBarSecondaryCategory" th:onclick="|location.href='@{/Logout}'|">
+                            <a th:href="@{/Logout}">
+                                Esci
+                                <i class="fa fa-sign-out" style="margin-left: 5px"></i>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</header>
 </body>
 </html>
