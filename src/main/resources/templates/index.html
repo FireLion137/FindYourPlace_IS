@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>FindYourPlace</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../css/homepage.css" type="text/css">
-    <link rel="stylesheet" href="../css/siteStyle.css" type="text/css">
-    <script src="../js/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="../static/css/homepage.css" th:href="@{/css/homepage.css}">
+    <link rel="stylesheet" href="../static/css/siteStyle.css" th:href="@{/css/siteStyle.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="../static/js/jquery-3.7.1.js" th:src="@{/js/jquery-3.7.1.js}"></script>
 </head>
 <body>
     <div th:insert="fragments/header :: navbar"></div>

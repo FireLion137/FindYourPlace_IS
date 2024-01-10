@@ -35,10 +35,9 @@ public class Utente {
      * Id dell'utente
      */
     @Id
-    @NotNull
     @Column(name = "id_utente")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idUtente;
+    private Long idUtente;
 
     /**
      * Username dell' Utente.<br>

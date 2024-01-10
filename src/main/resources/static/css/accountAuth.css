@@ -1,0 +1,119 @@
+.login {
+    padding: 0 20px;
+    max-width: 1240px;
+}
+@media screen and (min-width: 1024px) {
+    .login {
+        margin: 20px auto;
+        display: flex;
+        flex-flow: row wrap;
+        padding-bottom: 20px;
+    }
+}
+@media screen and (max-width: 1023px) {
+    .login {
+        margin: 20px 0;
+    }
+}
+
+.login-title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 24px;
+    padding-bottom: 20px;
+}
+@media screen and (min-width: 1024px) {
+    .login-title {
+        border-bottom: 1px solid #737373;
+        flex: 100%;
+        margin: 30px 0;
+    }
+}
+@media screen and (max-width: 1023px) {
+    .login-title {
+        padding-top: 20px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .login-wrapper {
+        align-items: flex-start;
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 25px;
+        flex: 100%;
+    }
+}
+@media screen and (max-width: 1023px) {
+    .login-wrapper {
+        margin: 20px 0;
+        padding: 0 20px;
+    }
+}
+
+.login-section {
+    flex: 100%;
+    margin-bottom: 20px;
+    padding-bottom: 30px;
+}
+@media screen and (min-width: 1024px) {
+    .login-section {
+        border: 1px solid #737373;
+        max-width: calc(50% - 30px);
+        padding: 30px 60px;
+    }
+}
+@media screen and (max-width: 1023px) {
+    .login-section {
+        display: none;
+    }
+}
+@media screen and (max-width: 1023px) {
+    .login-section--active {
+        display: block;
+    }
+}
+
+.login-subtitle {
+    border-bottom: 1px solid #737373;
+    display: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    text-transform: uppercase;
+}
+@media screen and (min-width: 1024px) {
+    .login-subtitle {
+        display: block;
+    }
+}
+
+.login-tabs {
+    background: #0d0d0d;
+    border-bottom: 2px solid #737373;
+    display: flex;
+    margin: 0 -20px 75px;
+    padding: 0 20px;
+}
+@media screen and (min-width: 1024px) {
+    .login-tabs {
+        display: none;
+    }
+}
+
+.login-link {
+    flex: 1;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 25px;
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
+    top: 2px;
+}
+.login-link--active {
+    background: #0d0d0d;
+    border: solid #737373;
+    border-width: 2px 2px 0 2px;
+}

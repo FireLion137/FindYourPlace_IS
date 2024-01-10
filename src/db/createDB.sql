@@ -4,12 +4,12 @@ USE FindYourPlace;
 
 CREATE TABLE Utente
 (
-	id_utente 		bigint			PRIMARY KEY,
+	id_utente 		bigint			PRIMARY KEY auto_increment,
     username		varchar(30)		NOT NULL UNIQUE,
     passwordHash	binary(60)		NOT NULL,
     email	 		varchar(50)		NOT NULL UNIQUE,
     numeroTel		varchar(15),
-    dataNascita		datetime		NOT NULL,
+    dataNascita		date		    NOT NULL,
     isAdmin			boolean			NOT NULL,
     nome			varchar(50)		NOT NULL,
     cognome			varchar(50)		NOT NULL
@@ -17,7 +17,7 @@ CREATE TABLE Utente
 
 CREATE TABLE Notifica
 (
-	id_notifica 	bigint			PRIMARY KEY,
+	id_notifica 	bigint			PRIMARY KEY auto_increment,
     autore			varchar(30)		NOT NULL,
     testo			varchar(1000)	NOT NULL,
     dataInvio	 	datetime		NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE Preferenze
 
 CREATE TABLE Ricerca
 (
-	id_ricerca 		bigint			PRIMARY KEY,
+	id_ricerca 		bigint			PRIMARY KEY auto_increment,
     dataRicerca	 	datetime		NOT NULL,
     coordinate		point			NOT NULL,
     raggio			smallint		NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE Filtri
 
 CREATE TABLE Luogo
 (
-	id_luogo 		bigint			PRIMARY KEY,
+	id_luogo 		bigint			PRIMARY KEY auto_increment,
     coordinate	 	point			NOT NULL,
     qualityIndex	decimal(5,2)	NOT NULL,
     lastFoundDate	datetime		NOT NULL
