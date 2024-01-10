@@ -4,11 +4,98 @@
     <meta charset="UTF-8">
     <title>FindYourPlace | Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../../static/css/accountAuth.css" type="text/css">
-    <link rel="stylesheet" href="../../static/css/siteStyle.css" type="text/css">
-    <script src="../../static/js/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="../../static/css/accountAuth.css" th:href="@{/css/accountAuth.css}">
+    <link rel="stylesheet" href="../../static/css/siteStyle.css" th:href="@{/css/siteStyle.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="../../static/js/jquery-3.7.1.js" th:src="@{/js/jquery-3.7.1.js}"></script>
+    <script src="../../static/js/accountAuth.js" th:src="@{/js/accountAuth.js}"></script>
 </head>
 <body>
+<div th:insert="fragments/header :: navbar"></div>
 
+<main class="login">
+    <h1 class="login-title">Accedi oppure registra un nuovo account</h1>
+    <nav class="login-tabs">
+        <a class="login-link login-link--active" id="linkTab-Login" onclick="changeTab('Login')">Accedi</a>
+        <a class="login-link" id="linkTab-Signup" onclick="changeTab('Signup')">Registrati</a>
+    </nav>
+    <div class="login-wrapper">
+        <section class="login-section login-section--active" id="section-Login">
+            <h2 class="login-subtitle">Accedi</h2>
+            <form th:action="@{/login}" th:object="${utente}" method="post" role="form">
+                <div class="form-field">
+                    <label class="form-field-label" for="usernameLogin">Username o Email</label>
+                    <input class="form-field-input" id="usernameLogin" name="username" th:field="*{username}" type="text" minlength="5" required>
+                </div>
+                <div class="form-field">
+                    <label class="form-field-label" for="passwordLogin">Password</label>
+                    <div class="form-field-icon">
+                        <input class="form-field-input" id="passwordLogin" name="password" th:field="*{password}" type="password"
+                               minlength="8" autocomplete="off" required>
+                        <span class="password-eye" onclick="revealPassword('Login')"><i class="fa fa-eye" id="passEyeLogin" title="Mostra Password"></i></span>
+                    </div>
+                </div>
+                <button class="form-submitButton" onclick="return (confermaParametri('Login'))" type="submit">Accedi</button>
+            </form>
+        </section>
+        <section class="login-section" id="section-Signup">
+            <h2 class="login-subtitle">Registrati</h2>
+            <form th:action="@{/register}" th:object="${utente}" method="post" role="form">
+                <div class="form-field">
+                    <label class="form-field-label" for="nameSignup">Nome</label>
+                    <input class="form-field-input" id="nameSignup" name="nameS" type="text" th:field="*{nome}" required>
+                </div>
+                <div class="form-field">
+                    <label class="form-field-label" for="lastnameSignup">Cognome</label>
+                    <input class="form-field-input" id="lastnameSignup" name="lastnameS" th:field="*{cognome}" type="text" required>
+                </div>
+                <div class="form-field">
+                    <label class="form-field-label" for="phoneSignup">Numero di Telefono (Opzionale)</label>
+                    <input class="form-field-input" id="phoneSignup" name="phoneS" th:field="*{numeroTel}" type="text">
+                </div>
+                <div class="form-field">
+                    <label class="form-field-label" for="birthDateSignup">Data di Nascita</label>
+                    <input class="form-field-input" id="birthDateSignup" name="birthDateS" th:field="*{dataNascita}" type="date" required>
+                </div>
+                <div class="form-field">
+                    <label class="form-field-label" for="usernameSignup">Username</label>
+                    <input class="form-field-input" id="usernameSignup" name="usernameS" th:field="*{username}" type="text"
+                           minlength="5" autocomplete="new-username" required>
+                    <div class="form-field-comment">
+                        Minimo 5 caratteri, Massimo 30 caratteri. Accetta lettere, numeri e trattino basso.
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label class="form-field-label" for="emailSignup">Email</label>
+                    <input class="form-field-input" id="emailSignup" name="emailS" th:field="*{email}" type="email" required>
+                </div>
+                <div class="form-field">
+                    <label class="form-field-label" for="passwordSignup1">Password</label>
+                    <div class="form-field-icon">
+                        <input class="form-field-input" id="passwordSignup1" name="passwordS" th:field="*{password}" type="password"
+                               minlength="8" autocomplete="new-password" required>
+                        <span class="password-eye" onclick="revealPassword('Signup1')"><i class="fa fa-eye" id="passEyeSignup1" title="Mostra Password"></i></span>
+                    </div>
+                    <div class="form-field-comment">
+                        Minimo 8 caratteri, Massimo 30 caratteri. Deve contenere lettere maiuscole, minuscole, numeri e caratteri speciali tranne slash.
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label class="form-field-label" for="passwordSignup2">Conferma Password</label>
+                    <div class="form-field-icon">
+                        <input class="form-field-input" id="passwordSignup2" name="passwordS2" type="password" minlength="8" autocomplete="new-password" required>
+                        <span class="password-eye" onclick="revealPassword('Signup2')"><i class="fa fa-eye" id="passEyeSignup2" title="Mostra Password"></i></span>
+                    </div>
+                    <div class="form-field-comment">
+                        Ripeti Password inserita nel campo precedente.
+                    </div>
+                </div>
+                <button class="form-submitButton" onclick="return (confermaParametri('Signup'))" type="submit">Registrati</button>
+            </form>
+        </section>
+    </div>
+</main>
+
+<div th:insert="fragments/footer :: footer"></div>
 </body>
 </html>

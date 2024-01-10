@@ -17,7 +17,7 @@ public class UtenteDto {
     /**
      * Id dell'utente
      */
-    private long idUtente;
+    private Long idUtente;
 
     /**
      * Username dell' Utente.<br>
@@ -58,7 +58,7 @@ public class UtenteDto {
     /**
      * Data di nascita dell' Utente.<br>
      */
-    @NotEmpty
+    @NotNull
     @Past
     private LocalDate dataNascita;
 

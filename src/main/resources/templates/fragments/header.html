@@ -83,7 +83,7 @@
         <ul class="actions">
             <li>
                 <div class="account-btn">
-                    <a th:href="@{/AccountAuth}"> <!--onclick="actionOpen('Account')"-->
+                    <a th:href="@{/accountAuth}"> <!--onclick="actionOpen('Account')"-->
                     <i class="fa fa-user-circle"></i>
                     </a>
                 </div>
@@ -93,21 +93,21 @@
                             <i class="fa fa-times"></i>
                         </span>
                         <h2>Account</h2>
-                        <div class="navBarSecondaryCategory" th:onclick="|location.href='@{/EditProfile}'|">
-                            <a th:href="@{/EditProfile}">
+                        <div class="navBarSecondaryCategory" th:onclick="|location.href='@{/editProfile}'|">
+                            <a th:href="@{/editProfile}">
                                 Modifica Profilo
                                 <i class="fa fa-user" style="margin-left: 5px"></i>
                             </a>
                         </div>
                         <!--<%if(session.getAttribute("Utente")!=null && ((Utente) session.getAttribute("Utente")).isAdmin()) {%>-->
-                        <div class="navBarSecondaryCategory" th:onclick="|location.href='@{/Admin/Users}'|">
-                            <a th:href="@{/Admin/Users}">
+                        <div class="navBarSecondaryCategory" th:onclick="|location.href='@{/admin/Users}'|">
+                            <a th:href="@{/admin/users}">
                                 Gestisci gli utenti
                                 <i class="fa fa-users" style="margin-left: 5px"></i>
                             </a>
                         </div>
-                        <div class="navBarSecondaryCategory" th:onclick="|location.href='@{/Logout}'|">
-                            <a th:href="@{/Logout}">
+                        <div class="navBarSecondaryCategory" th:onclick="|location.href='@{/logout}'|">
+                            <a th:href="@{/logout}">
                                 Esci
                                 <i class="fa fa-sign-out" style="margin-left: 5px"></i>
                             </a>

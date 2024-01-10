@@ -3,7 +3,7 @@ package com.is.findyourplace.service.gestioneUtenza;
 import com.is.findyourplace.persistence.dto.UtenteDto;
 import com.is.findyourplace.persistence.entity.Utente;
 import com.is.findyourplace.persistence.repository.UtenteRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 @Service
 public class AccountServiceImpl implements AccountService {
     private final UtenteRepository utenteRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public AccountServiceImpl(UtenteRepository utenteRepository, BCryptPasswordEncoder passwordEncoder) {
+    public AccountServiceImpl(UtenteRepository utenteRepository, PasswordEncoder passwordEncoder) {
         this.utenteRepository = utenteRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -50,6 +50,17 @@ public class AccountServiceImpl implements AccountService {
                 .map(this::mapToUtenteDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return utenteRepository.existsByUsername(username);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return utenteRepository.existsByEmail(email);
+    }
+
 
     private UtenteDto mapToUtenteDto(Utente u){
         UtenteDto utenteDto= new UtenteDto();

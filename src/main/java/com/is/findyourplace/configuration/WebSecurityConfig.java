@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -18,7 +19,7 @@ public class WebSecurityConfig {
     private UserDetailsService userDetailsService;
 
     @Bean
-    public static BCryptPasswordEncoder passwordEncoder(){
+    public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
@@ -27,12 +28,15 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((authorizeRequests) -> authorizeRequests
                         .requestMatchers("/", "/index").permitAll()
-                        .requestMatchers("/account", "/register").permitAll()
+                        .requestMatchers("/accountAuth", "/register").permitAll()
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login").permitAll()
+                        .loginPage("/accountAuth")
+                        .loginProcessingUrl("/login")
+                        .permitAll()
                 )
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
