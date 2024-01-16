@@ -3,10 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <title>Site Footer</title>
+    <link rel="stylesheet" href="../../static/css/siteStyle.css" th:href="@{/css/siteStyle.css}">
 </head>
 <body>
     <footer th:fragment="footer">
-        <h1>Footer</h1>
+        <script src="../../static/js/footer.js" th:src="@{/js/footer.js}"></script>
+        <div class="main-footer">
+            <div class="main-footer-wrapper">
+                <div class="main-footer-logo">
+                    <a th:href="@{/}" class="site-logo-link"></a>
+                </div>
+                <div class="main-footer-menu">
+                    <div class="main-footer-menu-container">
+                        <div class="main-footer-menu-head" onclick="openTail('Info')">
+                            Informazioni su FYP
+                            <i class="fa fa-caret-down" ></i>
+                        </div>
+                        <ul class="main-footer-nav-link" style="height:0" id="navLinkInfo">
+                            <li class="main-footer-link">
+                                <a th:href="@{/}" title="chi siamo">Cosa è FindYourPlace?</a>
+                            </li>
+                            <li class="main-footer-link">
+                                <a th:href="@{/}" title="Cosa è StudentSupps?">Chi siamo</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="main-footer-menu-container">
+                        <div class="main-footer-menu-head" onclick="openTail('Help')">
+                            Servizio Clienti
+                            <i class="fa fa-caret-down" ></i>
+                        </div>
+                        <ul class="main-footer-nav-link" style="height:0" id="navLinkHelp">
+                            <li class="main-footer-link">
+                                <a th:href="@{/}" title="Assistenza">Assistenza</a>
+                            </li>
+                            <li class="main-footer-link">
+                                <a th:href="@{/}" title="F.A.Q">F.A.Q</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="main-footer-menu-container">
+                        <div class="main-footer-menu-head" style="cursor: default;">Social media</div>
+                        <ul class="main-footer-nav-link">
+                            <li class="main-footer-Slink">
+                                <a class="fa fa-stack" th:href="@{/}" title="twitter" >
+                                    <i class="fa fa-square fa fa-stack-2x"  style="color:#620000" ></i>
+                                    <i class="fa fa-twitter fa fa-stack-1x" style="color:#fff" ></i>
+                                </a>
+                            </li>
+                            <li class="main-footer-Slink">
+                                <a class="fa fa-stack" th:href="@{/}" title="instagram" >
+                                    <i class="fa fa-square fa fa-stack-2x"  style="color:#620000" ></i>
+                                    <i class="fa fa-instagram fa fa-stack-1x" style="color:#fff" ></i>
+                                </a>
+                            </li>
+                            <li class="main-footer-Slink">
+                                <a class="fa fa-stack" th:href="@{/}" title="facebook" >
+                                    <i class="fa fa-square fa fa-stack-2x"  style="color:#620000" ></i>
+                                    <i class="fa fa-facebook fa fa-stack-1x" style="color:#fff" ></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </footer>
 </body>
 </html>

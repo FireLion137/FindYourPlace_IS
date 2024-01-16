@@ -11,9 +11,6 @@ public class RedirectController {
         return "index";
     }
 
-    @RequestMapping(value = {"/admin/users", "/admin/utenti"})
-    public String utenti(Model model) {
-        return "admin/users";
-    }
+
 
 }

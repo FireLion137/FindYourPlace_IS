@@ -55,7 +55,7 @@ public class Notifica {
      * Data e ora di invio della Notifica.
      */
     @NotNull
-    @FutureOrPresent
+    @PastOrPresent
     private LocalDateTime dataInvio;
 
     /**
