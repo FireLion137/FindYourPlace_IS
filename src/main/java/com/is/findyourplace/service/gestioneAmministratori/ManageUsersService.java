@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public interface ManageUsersService {
-    Utente findByUsernameOrEmail(String username);
+    UtenteDto findByUsernameOrEmail(String username);
     List<UtenteDto> findAllUtenti();
 
 }

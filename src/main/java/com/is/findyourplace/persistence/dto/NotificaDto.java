@@ -53,6 +53,12 @@ public class NotificaDto {
     @Future
     private LocalDateTime dataScadenza;
 
+    /**
+     * Destinatario della notifica
+     */
+    @Size(max = 30)
+    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,29}$")
+    private String destinatario;
 
 
 

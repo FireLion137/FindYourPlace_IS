@@ -3,6 +3,7 @@ package com.is.findyourplace.service.gestioneAmministratori;
 import com.is.findyourplace.persistence.dto.NotificaDto;
 import com.is.findyourplace.persistence.dto.UtenteDto;
 import com.is.findyourplace.persistence.entity.Notifica;
+import com.is.findyourplace.persistence.entity.NotificaRicevuta;
 import com.is.findyourplace.persistence.entity.Utente;
 import com.is.findyourplace.persistence.repository.NotificaRepository;
 import com.is.findyourplace.persistence.repository.UtenteRepository;
@@ -32,6 +33,14 @@ public class NotificationServiceImpl implements NotificationService{
         notifica.setExpireDate(notificaDto.getDataScadenza());
 
         notificaRepository.save(notifica);
+        notificaRepository.flush();
+        NotificaRicevuta notificaRicevuta = new NotificaRicevuta();
+        Utente utente= utenteRepository.findByUsername(notificaDto.getDestinatario());
+        notificaRicevuta.setUtente(utente);
+        notificaRicevuta.setNotifica(notifica);
+        utente.getNotificheRicevute().add(notificaRicevuta);
+        notifica.getNotificheRicevute().add(notificaRicevuta);
+
     }
     @Override
     public Notifica findByIdNotifica(Long id_notifica) {

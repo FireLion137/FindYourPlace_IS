@@ -1,6 +1,6 @@
 function openTabContentB(x){
     let navlink=document.getElementById("tab-content-"+x);
-    let button=document.getElementById("button-notification")
+    let button=document.getElementById("Button-"+x)
     if (navlink.style.height==="0px"){
         navlink.style.height="auto";
         navlink.style.border="1px solid #737373";
@@ -15,7 +15,10 @@ function openTabContentB(x){
         navlink.style.margin="0px";
         navlink.style.padding="0px";
         navlink.style.display="none"; //prov
+        if (x==='form-notification')
         button.innerText="Invia notifica";
+        else
+            button.innerText="Invia notifica Broadcast";
     }
 }    function openTabContent(x){
     let navlink=document.getElementById("tab-content-"+x);

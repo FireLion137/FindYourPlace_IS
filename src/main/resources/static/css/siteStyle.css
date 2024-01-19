@@ -648,9 +648,6 @@ input[type=number] {
 .defaultTable tr:nth-child(even){
     background-color: #1d2021;
 }
-.defaultTable tr:hover {
-    background-color: #464646;
-}
 .defaultTable th {
     padding-top: 12px;
     padding-bottom: 12px;

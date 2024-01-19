@@ -1,0 +1,29 @@
+#Button-form-notificationB{
+    max-width: fit-content;
+        margin: 20px auto;
+}
+#tab-content-form-notificationB{
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 20px;
+    width: 600px;
+    padding: 10px;
+}
+#tab-content-form-notification{
+    margin: 5px auto;
+    width: 600px;
+    padding: 10px;
+}
+
+.formContainer-title{
+    margin: 5px;
+    text-align: center;
+
+}
+.main-wrapper{
+    display: grid;
+}
+#title-page{
+    margin: 20px;
+    max-width: fit-content;
+}

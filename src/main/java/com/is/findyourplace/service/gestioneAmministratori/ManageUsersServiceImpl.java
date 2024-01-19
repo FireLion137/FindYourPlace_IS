@@ -27,8 +27,9 @@ public class ManageUsersServiceImpl implements ManageUsersService{
     }
 
     @Override
-    public Utente findByUsernameOrEmail(String username) {
-        return utenteRepository.findByUsernameOrEmail(username, username);
+    public UtenteDto findByUsernameOrEmail(String username) {
+        Utente u= utenteRepository.findByUsernameOrEmail(username, username);
+        return mapToUtenteDto(u);
     }
 
     private UtenteDto mapToUtenteDto(Utente u){

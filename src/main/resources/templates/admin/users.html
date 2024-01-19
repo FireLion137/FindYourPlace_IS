@@ -5,37 +5,31 @@
     <title>FindYourPlace | Utenti</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../../static/css/siteStyle.css" th:href="@{/css/siteStyle.css}">
+    <link rel="stylesheet" href="../../static/css/siteStyle.css" th:href="@{/css/users.css}">
     <script src="../../static/js/users.js" th:src="@{/js/users.js}"></script>
 </head>
 <body>
 <div th:insert="fragments/header :: navbar"></div>
 <main>
-    <div>
-        <h1>Utenti</h1>
+    <div class="main-wrapper">
+        <h1 id="title-page">Utenti</h1>
         <div class="tableContainer">
             <table class="defaultTable">
                 <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Numero Telefono</th>
-                    <th>Nome</th>
-                    <th>Cognome</th>
-                    <th>Data di Nascita</th>
+                    <th style="text-align: center">Username</th>
+                    <th style="text-align: center">email</th>
                 </tr>
-
                 <tr th:each="utente : ${utenti}">
                     <td th:text="${utente.getUsername()}"></td>
                     <td th:text="${utente.getEmail()}"></td>
-                    <td th:text="${utente.getNumeroTel()}"></td>
-                    <td th:text="${utente.getNome()}"></td>
-                    <td th:text="${utente.getCognome()}"></td>
-                    <td th:text="${utente.getDataNascita()}"></td>
                     <td>
                         <span th:if="${utente.getUsername() == #authentication.getName()}">Non puoi interagire con il tuo account.</span>
                         <div th:unless="${utente.getUsername() == #authentication.getName()}">
-                            <button class="buttonPrimary buttonHover" th:onclick="|location.href='@{/admin/dettagliUtente}'|">Modifica</button>
-
-                            <button class="buttonPrimary buttonHover" onclick="openTabContentB('form-notification')">Invia notifica</button>
+                            <button class="buttonPrimary buttonHover" style="border: 0px;width: 180px;"
+                                    th:href="@{/admin/dettagliUtente(username=${utente.getUsername()})}"
+                                    onclick="location.replace(this.getAttribute('href'))">Modifica
+                            </button>
+                            <button class="buttonPrimary buttonHover"  id="Button-form-notification" style="border: 0px;width: 190px;" onclick="openTabContentB('form-notification')">Invia notifica</button>
                             <div class="formContainer" id="tab-content-form-notification" style="height:0; border: 0 solid #737373; margin:0; padding:0; display: none;">
 
                                 <h1 class="formContainer-title " style="text-align: center;">Scrivi qui i dettagli della notifica</h1>
@@ -48,50 +42,36 @@
                                             </div>
                                             <div class="form-field">
                                                 <label class="form-field-label" for="textSendnot">testo</label>
-
-                                                <input class="form-field-input" id="textSendnot" name="text" th:field="*{testo}"  type="text"  autocomplete="off" required>
+                                                <textarea class="form-field-input" style="height: 100px; resize: none;" th:field="*{testo}"    id="textSendnot" name="text" rows="5" maxlength="500" autocomplete="off" required></textarea>
                                             </div>
-                                            <button class="form-submitButton buttonPrimary buttonHover" onclick="return (confermaParametri('single'))" type="submit">Invia Notifica</button>
+                                            <button class="form-submitButton buttonPrimary buttonHover" style="margin: 20px auto;width: 180px;" onclick="return (confermaParametri('single'))" type="submit">Invia Notifica</button>
                                         </form>
                                     </div>
 
                             </div>
-
-
                         </div>
-
                     </td>
                 </tr>
             </table>
-            <button class="buttonPrimary buttonHover" onclick="openTabContentB('form-notificationB')">Invia notifica Broadcats</button>
-            <div class="formContainer" id="tab-content-form-notificationB" style="height:0; border: 0 solid #737373; margin:0; padding:0; display: none;">
-
-                <h1 class="formContainer-title " style="text-align: center;">Scrivi qui i dettagli della notifica</h1>
-                <div class="formContainer-wrapper" id="formContainer-wrapper-notificationB">
-                    <form th:action="@{/sendNotificationAll}" th:object="${notifica}" method="post" role="form">
-                        <div class="form-field">
-                            <label class="form-field-label" for="autoreSendnotB">Autore</label>
-                            <input class="form-field-input" id="autoreSendnotB" name="autore" th:value="${#authentication.getName()}" type="text" readonly autocomplete="off" required>
-                        </div>
-                        <div class="form-field">
-                            <label class="form-field-label" for="textSendnotB">testo</label>
-
-                            <input class="form-field-input" id="textSendnotB" name="text" th:field="*{testo}"  type="text"  autocomplete="off" required>
-                        </div>
-                        <button class="form-submitButton buttonPrimary buttonHover" onclick="return (confermaParametri('all'))" type="submit">Invia Notifica</button>
-                    </form>
-                </div>
-
-            </div>
 
         </div>
-
-
-
-
-
-
-
+        <button class="buttonPrimary buttonHover buttonNot" id="Button-form-notificationB" onclick="openTabContentB('form-notificationB')">Invia notifica Broadcast</button>
+        <div class="formContainer" id="tab-content-form-notificationB" style="height:0; border: 0 solid #737373; margin:0; padding:0; display: none;">
+            <h1 class="formContainer-title ">Scrivi qui i dettagli della notifica</h1>
+            <div class="formContainer-wrapper" id="formContainer-wrapper-notificationB">
+                <form th:action="@{/sendNotificationAll}" th:object="${notifica}" method="post" role="form">
+                    <div class="form-field">
+                        <label class="form-field-label" for="autoreSendnotB">Autore</label>
+                        <input class="form-field-input" id="autoreSendnotB" name="autore" th:value="${#authentication.getName()}" type="text" readonly autocomplete="off" required>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-field-label" for="textSendnotB">testo</label>
+                        <textarea class="form-field-input" style="height: 100px; resize: none;" id="textSendnotB" name="text" rows="5" maxlength="500" autocomplete="off" required></textarea>
+                    </div>
+                    <button class="form-submitButton buttonPrimary buttonHover" style="margin: 20px auto;display: block;width: 180px;" onclick="return (confermaParametri('all'))" type="submit">Invia Notifica</button>
+                </form>
+            </div>
+        </div>
     </div>
 </main>
 <div th:insert="fragments/footer :: footer"></div>
