@@ -25,7 +25,8 @@ public class UtenteDto {
      */
     @NotEmpty
     @Size(max = 30)
-    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,29}$")
+    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,29}$",
+            message = "L'Username non rispetta il formato corretto!")
     private String username;
 
     /**
@@ -35,7 +36,8 @@ public class UtenteDto {
      */
     @NotEmpty
     @Size(min = 8, max = 50)
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()\\[{}\\]:;',?*~$^\\-+=<>]).{8,50}$")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()\\[{}\\]:;',?*~$^\\-+=<>]).{8,50}$",
+            message = "La Password non rispetta il formato corretto!")
     private String password;
 
     /**
@@ -44,7 +46,8 @@ public class UtenteDto {
      */
     @NotEmpty
     @Size(max = 50)
-    @Pattern(regexp = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$")
+    @Pattern(regexp = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            message = "L'Email non rispetta il formato corretto!")
     private String email;
 
     /**
@@ -52,7 +55,8 @@ public class UtenteDto {
      * Può essere Null e deve rispettare il pattern.
      */
     @Size(max = 15)
-    @Pattern(regexp = "^([+]?[(]?[0-9]{1,3}[)]?[-\\s])?([(]?[0-9]{3}[)]?[-\\s]?)?([0-9][-\\s]?){3,10}[0-9]$")
+    @Pattern(regexp = "^$|^([+]?[(]?[0-9]{1,3}[)]?[-\\s])?([(]?[0-9]{3}[)]?[-\\s]?)?([0-9][-\\s]?){3,10}[0-9]$",
+            message = "Il Numero di telefono non rispetta il formato corretto!")
     private String numeroTel;
 
     /**
@@ -68,7 +72,8 @@ public class UtenteDto {
      */
     @NotEmpty
     @Size(max = 50)
-    @Pattern(regexp = "^(?=.{2,50}$)[A-Za-zÀ-ÿ]+([-,. '][A-Za-zÀ-ÿ]+)*$")
+    @Pattern(regexp = "^(?=.{2,50}$)[A-Za-zÀ-ÿ]+([-,. '][A-Za-zÀ-ÿ]+)*$",
+            message = "Il Nome non rispetta il formato corretto!")
     private String nome;
 
     /**
@@ -77,6 +82,7 @@ public class UtenteDto {
      */
     @NotEmpty
     @Size(max = 50)
-    @Pattern(regexp = "^(?=.{2,50}$)[A-Za-zÀ-ÿ]+([-,. '][A-Za-zÀ-ÿ]+)*$")
+    @Pattern(regexp = "^(?=.{2,50}$)[A-Za-zÀ-ÿ]+([-,. '][A-Za-zÀ-ÿ]+)*$",
+            message = "Il Cognome non rispetta il formato corretto!")
     private String cognome;
 }

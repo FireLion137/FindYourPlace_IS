@@ -49,5 +49,15 @@ public class Preferiti {
      * Campo che definisce se le notifiche sono attive.
      */
     @NotNull
-    private boolean notifiche;
+    private boolean notifiche = true;
+
+    public Preferiti(Utente utente, Luogo luogo) {
+        this.utente = utente;
+        this.luogo = luogo;
+        this.qualityIndex = luogo.getQualityIndex();
+        this.idPreferiti = new PreferitiKey(
+                utente.getIdUtente(),
+                luogo.getIdLuogo()
+        );
+    }
 }

@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,7 +73,7 @@ public class Utente {
      * Può essere Null e deve rispettare il pattern.
      */
     @Size(max = 15)
-    @Pattern(regexp = "^([+]?[(]?[0-9]{1,3}[)]?[-\\s])?([(]?[0-9]{3}[)]?[-\\s]?)?([0-9][-\\s]?){3,10}[0-9]$")
+    @Pattern(regexp = "^$|^([+]?[(]?[0-9]{1,3}[)]?[-\\s])?([(]?[0-9]{3}[)]?[-\\s]?)?([0-9][-\\s]?){3,10}[0-9]$")
     private String numeroTel;
 
     /**
@@ -118,17 +119,33 @@ public class Utente {
      * Lista delle notifiche ricevute di un Utente.
      */
     @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
-    List<NotificaRicevuta> notificheRicevute;
+    List<NotificaRicevuta> notificheRicevute = new ArrayList<>();
 
     /**
      * Lista delle ricerche effettuate da un Utente.
      */
     @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
-    List<Ricerca> ricerche;
+    List<Ricerca> ricerche = new ArrayList<>();
 
     /**
      * Lista delle ricerche che hanno trovato il luogo.
      */
     @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
-    List<Preferiti> preferiti;
+    List<Preferiti> preferiti = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Utente{" +
+                "idUtente=" + idUtente +
+                ", username='" + username + '\'' +
+                ", passwordHash='" + passwordHash + '\'' +
+                ", email='" + email + '\'' +
+                ", numeroTel='" + numeroTel + '\'' +
+                ", dataNascita=" + dataNascita +
+                ", isAdmin=" + isAdmin +
+                ", nome='" + nome + '\'' +
+                ", cognome='" + cognome + '\'' +
+                ", preferenze=" + preferenze +
+                '}';
+    }
 }

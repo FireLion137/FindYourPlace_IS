@@ -67,7 +67,7 @@ public class AccountServiceImpl implements AccountService {
         utenteDto.setUsername(u.getUsername());
         utenteDto.setEmail(u.getEmail());
         utenteDto.setNome(u.getNome());
-        utenteDto.setCognome(u.getNome());
+        utenteDto.setCognome(u.getCognome());
 
         //Da vedere se servono
         utenteDto.setNumeroTel(u.getNumeroTel());

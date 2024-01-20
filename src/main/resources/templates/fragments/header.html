@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Site Head Nav Bar</title>
@@ -83,8 +83,11 @@
         <ul class="actions">
             <li>
                 <div class="account-btn">
-                    <a th:href="@{/accountAuth}"> <!--onclick="actionOpen('Account')"-->
-                    <i class="fa fa-user-circle"></i>
+                    <a sec:authorize="isAuthenticated()" onclick="actionOpen('Account')">
+                        <i class="fa fa-user-circle"></i>
+                    </a>
+                    <a sec:authorize="isAnonymous()" th:href="@{/accountAuth}">
+                        <i class="fa fa-user-circle"></i>
                     </a>
                 </div>
                 <ul class="dropdown-content" id="drpCntAccount">
@@ -99,8 +102,7 @@
                                 <i class="fa fa-user" style="margin-left: 5px"></i>
                             </a>
                         </div>
-                        <!--<%if(session.getAttribute("Utente")!=null && ((Utente) session.getAttribute("Utente")).isAdmin()) {%>-->
-                        <div class="navBarSecondaryCategory" th:onclick="|location.href='@{/admin/Users}'|">
+                        <div sec:authorize="hasRole('ROLE_ADMIN')" class="navBarSecondaryCategory" th:onclick="|location.href='@{/admin/Users}'|">
                             <a th:href="@{/admin/users}">
                                 Gestisci gli utenti
                                 <i class="fa fa-users" style="margin-left: 5px"></i>

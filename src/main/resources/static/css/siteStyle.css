@@ -100,19 +100,20 @@ input[type=number] {
         min-height: 80px;
     }
 }
-@media screen and (max-width: 1023px) {
-    .mainHeader .wrapperHeader {
-        min-height: 0;
-    }
-}
 .mainHeader .wrapperHeader {
     display: flex;
     margin-left: auto;
     margin-right: auto;
-    max-width: 1400px;
+    max-width: 75%;
     padding: 0 20px;
     position: relative;
     z-index: 1;
+}
+@media screen and (max-width: 1023px) {
+    .mainHeader .wrapperHeader {
+        min-height: 0;
+        max-width: 100%;
+    }
 }
 
 
@@ -171,6 +172,7 @@ input[type=number] {
         background: #1d2021;
         border-bottom: none;
         min-height: 46px;
+        padding-right: 25px;
     }
 }
 @media screen and (max-width: 1023px) {
@@ -285,6 +287,7 @@ input[type=number] {
         box-shadow: 0 0 50px 100vw rgba(0, 0, 0, 0.2);
         padding-left: 0;
         list-style: none;
+        width: max-content;
     }
 
     .navCategories li:hover .dropdown-content {
@@ -354,7 +357,7 @@ input[type=number] {
 }
 @media screen and (min-width: 1024px) {
     .actions li .dropdown-content {
-        margin: 10px -25px;
+        margin: 10px -50px;
     }
     .actions li .dropdown-content--active {
         display: block;
@@ -647,9 +650,6 @@ input[type=number] {
 }
 .defaultTable tr:nth-child(even){
     background-color: #1d2021;
-}
-.defaultTable tr:hover {
-    background-color: #464646;
 }
 .defaultTable th {
     padding-top: 12px;

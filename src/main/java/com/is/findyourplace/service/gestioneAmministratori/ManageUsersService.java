@@ -1,8 +1,13 @@
 package com.is.findyourplace.service.gestioneAmministratori;
 
-import org.springframework.stereotype.Service;
+import com.is.findyourplace.persistence.dto.UtenteDto;
+import com.is.findyourplace.persistence.entity.Utente;
 
-@Service
-public class ManageUsersService {
+import java.util.List;
+
+
+public interface ManageUsersService {
+    UtenteDto findByUsernameOrEmail(String username);
+    List<UtenteDto> findAllUtenti();
 
 }
