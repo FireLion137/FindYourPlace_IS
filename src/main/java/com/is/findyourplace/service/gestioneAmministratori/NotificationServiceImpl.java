@@ -41,6 +41,25 @@ public class NotificationServiceImpl implements NotificationService{
         notifica.getNotificheRicevute().add(notificaRicevuta);
 
     }
+
+    @Override
+    @Transactional
+    public void saveNotificaBroadcast(NotificaDto notificaDto) {
+        Notifica notifica= new Notifica();
+        notifica.setAutore(notificaDto.getAutore());
+        notifica.setTesto(notificaDto.getTesto());
+        notifica.setDataInvio(notificaDto.getDataInvio());
+        notifica.setExpireDate(notificaDto.getDataScadenza());
+
+        notificaRepository.save(notifica);
+
+        for (Utente utente: utenteRepository.findAll()) {
+            NotificaRicevuta notificaRicevuta = new NotificaRicevuta(utente, notifica);
+            utente.getNotificheRicevute().add(notificaRicevuta);
+            notifica.getNotificheRicevute().add(notificaRicevuta);
+        }
+    }
+
     @Override
     public Notifica findByIdNotifica(Long id_notifica) {
         return notificaRepository.findByIdNotifica(id_notifica);

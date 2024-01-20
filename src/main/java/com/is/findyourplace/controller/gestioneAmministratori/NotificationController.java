@@ -1,7 +1,6 @@
 package com.is.findyourplace.controller.gestioneAmministratori;
 
 import com.is.findyourplace.persistence.dto.NotificaDto;
-import com.is.findyourplace.persistence.dto.UtenteDto;
 import com.is.findyourplace.service.gestioneAmministratori.ManageUsersService;
 import com.is.findyourplace.service.gestioneAmministratori.NotificationService;
 import jakarta.validation.Valid;
@@ -55,7 +54,7 @@ public class NotificationController {
         notificaDto.setDataInvio(LocalDateTime.now());
         notificaDto.setDataScadenza(LocalDateTime.now().plusMonths(2));
 
-        notificationService.saveNotifica(notificaDto);
+        notificationService.saveNotificaBroadcast(notificaDto);
 
         return "redirect:/admin/notificaInviata";
     }
