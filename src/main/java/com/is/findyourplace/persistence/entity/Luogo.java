@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.geo.Point;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,11 +60,21 @@ public class Luogo {
      * Lista delle ricerche che hanno trovato il luogo.
      */
     @OneToMany(mappedBy = "luogo", cascade = CascadeType.ALL)
-    List<LuogoTrovato> luoghiTrovati;
+    List<LuogoTrovato> luoghiTrovati = new ArrayList<>();
 
     /**
      * Lista degli utenti che hanno salvato il luogo nei preferiti.
      */
     @OneToMany(mappedBy = "luogo", cascade = CascadeType.ALL)
-    List<Preferiti> preferiti;
+    List<Preferiti> preferiti = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Luogo{" +
+                "idLuogo=" + idLuogo +
+                ", coordinate=" + coordinate +
+                ", qualityIndex=" + qualityIndex +
+                ", lastFoundDate=" + lastFoundDate +
+                '}';
+    }
 }

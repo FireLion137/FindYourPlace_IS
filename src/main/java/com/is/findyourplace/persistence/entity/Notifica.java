@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,5 +70,16 @@ public class Notifica {
      * Lista di chi ha ricevuto la notifica.
      */
     @OneToMany(mappedBy = "notifica", cascade = CascadeType.ALL)
-    List<NotificaRicevuta> notificheRicevute;
+    List<NotificaRicevuta> notificheRicevute = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Notifica{" +
+                "idNotifica=" + idNotifica +
+                ", autore='" + autore + '\'' +
+                ", testo='" + testo + '\'' +
+                ", dataInvio=" + dataInvio +
+                ", expireDate=" + expireDate +
+                '}';
+    }
 }

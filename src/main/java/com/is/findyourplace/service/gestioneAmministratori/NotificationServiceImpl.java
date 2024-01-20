@@ -1,13 +1,13 @@
 package com.is.findyourplace.service.gestioneAmministratori;
 
 import com.is.findyourplace.persistence.dto.NotificaDto;
-import com.is.findyourplace.persistence.dto.UtenteDto;
 import com.is.findyourplace.persistence.entity.Notifica;
 import com.is.findyourplace.persistence.entity.NotificaRicevuta;
 import com.is.findyourplace.persistence.entity.Utente;
 import com.is.findyourplace.persistence.repository.NotificaRepository;
 import com.is.findyourplace.persistence.repository.UtenteRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,6 +25,7 @@ public class NotificationServiceImpl implements NotificationService{
     }
 
     @Override
+    @Transactional
     public void saveNotifica(NotificaDto notificaDto) {
         Notifica notifica= new Notifica();
         notifica.setAutore(notificaDto.getAutore());
@@ -33,11 +34,9 @@ public class NotificationServiceImpl implements NotificationService{
         notifica.setExpireDate(notificaDto.getDataScadenza());
 
         notificaRepository.save(notifica);
-        notificaRepository.flush();
-        NotificaRicevuta notificaRicevuta = new NotificaRicevuta();
+
         Utente utente= utenteRepository.findByUsername(notificaDto.getDestinatario());
-        notificaRicevuta.setUtente(utente);
-        notificaRicevuta.setNotifica(notifica);
+        NotificaRicevuta notificaRicevuta = new NotificaRicevuta(utente, notifica);
         utente.getNotificheRicevute().add(notificaRicevuta);
         notifica.getNotificheRicevute().add(notificaRicevuta);
 

@@ -96,4 +96,13 @@ public class LuogoTrovato {
     @PositiveOrZero
     @Size(max = 1000)
     private int numRistoranti;
+
+    public LuogoTrovato(Ricerca ricerca, Luogo luogo) {
+        this.ricerca = ricerca;
+        this.luogo = luogo;
+        this.idLuogoTrovato = new LuogoTrovatoKey(
+                ricerca.getIdRicerca(),
+                luogo.getIdLuogo()
+        );
+    }
 }

@@ -40,4 +40,13 @@ public class NotificaRicevuta {
      */
     @NotNull
     private boolean isRead;
+
+    public NotificaRicevuta(Utente utente, Notifica notifica) {
+        this.utente = utente;
+        this.notifica = notifica;
+        this.idNotificaRicevuta = new NotificaRicevutaKey(
+                utente.getIdUtente(),
+                notifica.getIdNotifica()
+        );
+    }
 }

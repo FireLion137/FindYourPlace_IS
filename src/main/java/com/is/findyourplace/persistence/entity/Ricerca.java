@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.geo.Point;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -82,5 +83,18 @@ public class Ricerca {
      * Lista dei luoghi trovati in una ricerca.
      */
     @OneToMany(mappedBy = "ricerca", cascade = CascadeType.ALL)
-    List<LuogoTrovato> luoghiTrovati;
+    List<LuogoTrovato> luoghiTrovati = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Ricerca{" +
+                "idRicerca=" + idRicerca +
+                ", dataRicerca=" + dataRicerca +
+                ", coordinate=" + coordinate +
+                ", raggio=" + raggio +
+                ", idUtente=" + idUtente +
+                ", utente=" + utente +
+                ", filtri=" + filtri +
+                '}';
+    }
 }
