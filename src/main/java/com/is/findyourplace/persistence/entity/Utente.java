@@ -72,7 +72,7 @@ public class Utente {
      * Può essere Null e deve rispettare il pattern.
      */
     @Size(max = 15)
-    @Pattern(regexp = "^([+]?[(]?[0-9]{1,3}[)]?[-\\s])?([(]?[0-9]{3}[)]?[-\\s]?)?([0-9][-\\s]?){3,10}[0-9]$")
+    @Pattern(regexp = "^$|^([+]?[(]?[0-9]{1,3}[)]?[-\\s])?([(]?[0-9]{3}[)]?[-\\s]?)?([0-9][-\\s]?){3,10}[0-9]$")
     private String numeroTel;
 
     /**

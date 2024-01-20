@@ -40,6 +40,7 @@ public class WebSecurityConfig {
                 )
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/")
                         .permitAll()
                 );
 
