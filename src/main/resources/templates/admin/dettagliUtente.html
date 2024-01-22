@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../../static/css/siteStyle.css" th:href="@{/css/siteStyle.css}">
     <link rel="stylesheet" href="../../static/css/siteStyle.css" th:href="@{/css/users.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="../../static/js/users.js" th:src="@{/js/users.js}"></script>
 </head>
 <body>
@@ -26,13 +27,18 @@
                     <tr>
                         <td>username</td>
                         <td th:text="${utente.getUsername()}"></td>
-                        <td><button class="buttonPrimary buttonHover" style="border: 0px;width: 130px" th:onclick="|location.href='@{/placeholder}'|">Resetta</button></td>
+                        <td>
+                            <form th:action="@{/admin/modifyUser}" method="post" role="form">
+                                <input class="form-field-input" id="modifyuser" name="username" th:value="${utente.getUsername()}" type="text" readonly autocomplete="off" hidden>
 
+                            <button class="buttonPrimary buttonHover form-submitButton"  type="submit"   style="border: 0px;width: 130px">Resetta</button>
+                            </form>
+                        </td>
                     </tr>
                     <tr>
                         <td>password</td>
                          <td>********</td>
-                        <td><button class="buttonPrimary buttonHover" style="border: 0px;width: 130px" th:onclick="|location.href='@{/placeholder}'|">Reimposta</button></td>
+                        <td><button class="buttonPrimary buttonHover" style="border: 0px;width: 130px">Reimposta</button></td>
 
                     </tr>
                     <tr>
