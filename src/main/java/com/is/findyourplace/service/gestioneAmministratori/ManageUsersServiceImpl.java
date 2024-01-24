@@ -12,12 +12,29 @@ import java.util.stream.Collectors;
 public class ManageUsersServiceImpl implements ManageUsersService{
 
     private final UtenteRepository utenteRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public ManageUsersServiceImpl(UtenteRepository utenteRepository) {
+    public ManageUsersServiceImpl(UtenteRepository utenteRepository, PasswordEncoder passwordEncoder) {
         this.utenteRepository = utenteRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
+    @Override
+    public void updateUtenteUsername(Utente utente) {
+        if(utenteRepository.existsByUsername(utente.getUsername())){
+            return;
+        }
+        if (!utenteRepository.existsById(utente.getIdUtente())){
+            return;
+        }
+        utenteRepository.save(utente);
+    }
+    @Override
+    public void updateUtentePassword(Utente utente,String password) {
+        utente.setPasswordHash(passwordEncoder.encode(password));
+        utenteRepository.save(utente);
+    }
     @Override
     public List<UtenteDto> findAllUtenti() {
         List<Utente> utenti = utenteRepository.findAll();
@@ -46,4 +63,7 @@ public class ManageUsersServiceImpl implements ManageUsersService{
 
         return utenteDto;
     }
+
+
+
 }
