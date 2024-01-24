@@ -9,5 +9,7 @@ import java.util.List;
 public interface ManageUsersService {
     UtenteDto findByUsernameOrEmail(String username);
     List<UtenteDto> findAllUtenti();
+    void updateUtenteUsername(Utente utente);
+     void updateUtentePassword(Utente utente,String password);
 
 }

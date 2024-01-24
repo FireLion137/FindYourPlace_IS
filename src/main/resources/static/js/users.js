@@ -72,3 +72,15 @@ if (x==='single')
 }else{return false}
 
     }
+    function ConfermaAzioneResetUsername(){
+        if(!confirm('Vuoi davvero resettare l\x27username?\n' +
+            'Quest\x27azione non è reversibile!'))
+            return false;
+
+    }
+function ConfermaAzioneResetPassword(){
+    if(!confirm('Vuoi davvero reimpostare la Password?\n' +
+        'Quest\x27azione non è reversibile!'))
+        return false;
+
+}
