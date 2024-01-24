@@ -56,6 +56,11 @@ public class AccountController {
                     "Email già usata!");
         }
 
+        if(utenteDto.getPassword().isBlank()){
+            result.rejectValue("password", "null",
+                    "Pattern Password errato!");
+        }
+
         if(result.hasErrors()){
             model.addAttribute("utenteR", utenteDto);
             model.addAttribute("utenteL", new UtenteDto());

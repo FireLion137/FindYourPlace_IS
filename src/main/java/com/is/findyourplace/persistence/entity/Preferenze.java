@@ -31,7 +31,7 @@ public class Preferenze {
     /**
      * La chiave primaria deriva dalla chiave dell' utente
      */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "id_utente")
     private Utente utente;
@@ -45,10 +45,22 @@ public class Preferenze {
     /**
      * Campo che definisce se l'utente è uno studente.
      */
-    private boolean isStudente;
+    @Column(name = "isStudente")
+    private boolean studente;
 
     /**
      * Campo che definisce se l'utente è un genitore.
      */
-    private boolean isGenitore;
+    @Column(name = "isGenitore")
+    private boolean genitore;
+
+    @Override
+    public String toString() {
+        return "Preferenze{" +
+                "idUtente=" + idUtente +
+                ", notifiche=" + notifiche +
+                ", studente=" + studente +
+                ", genitore=" + genitore +
+                '}';
+    }
 }

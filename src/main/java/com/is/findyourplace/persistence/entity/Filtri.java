@@ -35,7 +35,7 @@ public class Filtri {
     /**
      * La chiave primaria deriva dalla chiave della ricerca
      */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "id_ricerca")
     private Ricerca ricerca;

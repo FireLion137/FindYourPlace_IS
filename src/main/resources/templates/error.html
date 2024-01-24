@@ -4,14 +4,22 @@
     <meta charset="UTF-8">
     <title>FindYourPlace | Error 404</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/siteStyle.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script th:src="@{/js/jquery-3.7.1.js}"></script>
 </head>
 <body>
+<div th:insert="fragments/header :: navbar"></div>
 
-<main>
-    <div>
-        <h1>Error 404</h1>
-    </div>
-</main>
+<div style="margin: auto; min-height: 140px; text-align: center">
+    <h1 style="margin-bottom: 20px">ERROR</h1>
+    <h2 th:text="${errorMessage}"></h2>
+    <button class="buttonPrimary buttonHover" style="margin-top: 20px;"
+            th:href="@{/}"
+            onclick="location.replace(this.getAttribute('href'))">Torna alla Home
+    </button>
+</div>
 
+<div th:insert="fragments/footer :: footer"></div>
 </body>
 </html>

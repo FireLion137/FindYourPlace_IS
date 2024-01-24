@@ -96,19 +96,22 @@
                             <i class="fa fa-times"></i>
                         </span>
                         <h2>Account</h2>
-                        <div class="navBarSecondaryCategory" th:onclick="|location.href='@{/editProfile}'|">
+                        <div class="navBarSecondaryCategory"
+                            th:href="@{/editProfile}" onclick="location.replace(this.getAttribute('href'))">
                             <a th:href="@{/editProfile}">
                                 Modifica Profilo
                                 <i class="fa fa-user" style="margin-left: 5px"></i>
                             </a>
                         </div>
-                        <div sec:authorize="hasRole('ROLE_ADMIN')" class="navBarSecondaryCategory" th:onclick="|location.href='@{/admin/Users}'|">
+                        <div sec:authorize="hasRole('ROLE_ADMIN')" class="navBarSecondaryCategory"
+                             th:href="@{/admin/users}" onclick="location.replace(this.getAttribute('href'))">
                             <a th:href="@{/admin/users}">
                                 Gestisci gli utenti
                                 <i class="fa fa-users" style="margin-left: 5px"></i>
                             </a>
                         </div>
-                        <div class="navBarSecondaryCategory" th:onclick="|location.href='@{/logout}'|">
+                        <div class="navBarSecondaryCategory"
+                            th:href="@{/logout}" onclick="location.replace(this.getAttribute('href'))">
                             <a th:href="@{/logout}">
                                 Esci
                                 <i class="fa fa-sign-out" style="margin-left: 5px"></i>

@@ -8,6 +8,7 @@ import java.util.List;
 public interface AccountService {
     void saveUtente(UtenteDto utenteDto);
     Utente findByUsernameOrEmail(String username);
+    UtenteDto findByUsername(String username);
     List<UtenteDto> findAllUtenti();
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);

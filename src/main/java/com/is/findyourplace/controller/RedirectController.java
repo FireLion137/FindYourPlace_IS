@@ -11,6 +11,9 @@ public class RedirectController {
         return "index";
     }
 
-
-
+    @RequestMapping(value = {"/serverError"})
+    public String serverError(Model model) {
+        model.addAttribute("errorMessage", "serverError");
+        return "error";
+    }
 }

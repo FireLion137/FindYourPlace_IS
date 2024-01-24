@@ -1,0 +1,69 @@
+package com.is.findyourplace.service.gestioneUtenza;
+
+import com.is.findyourplace.persistence.dto.UtenteDto;
+import com.is.findyourplace.persistence.entity.Preferenze;
+import com.is.findyourplace.persistence.entity.Utente;
+import com.is.findyourplace.persistence.repository.PreferenzeRepository;
+import com.is.findyourplace.persistence.repository.UtenteRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ProfileServiceImpl implements ProfileService {
+    private final UtenteRepository utenteRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final PreferenzeRepository preferenzeRepository;
+
+    public ProfileServiceImpl(UtenteRepository utenteRepository,
+                              PasswordEncoder passwordEncoder,
+                              PreferenzeRepository preferenzeRepository) {
+        this.utenteRepository = utenteRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.preferenzeRepository = preferenzeRepository;
+    }
+
+    @Override
+    public void updateUtente(UtenteDto utenteDto) {
+        Utente utente= utenteRepository.findByIdUtente(utenteDto.getIdUtente());
+
+        utente.setUsername(utenteDto.getUsername());
+        utente.setEmail(utenteDto.getEmail());
+
+        //Encrypt using springboot security
+        if(!utenteDto.getPassword().isBlank())
+            utente.setPasswordHash(passwordEncoder.encode(utenteDto.getPassword()));
+
+        if(utenteDto.getNumeroTel() != null)
+            utente.setNumeroTel(utenteDto.getNumeroTel());
+        utente.setDataNascita(utenteDto.getDataNascita());
+        utente.setNome(utenteDto.getNome());
+        utente.setCognome(utenteDto.getCognome());
+
+        utenteRepository.save(utente);
+    }
+
+    @Override
+    public Preferenze findPrefByUtente(Utente utente) {
+        return preferenzeRepository.findByIdUtente(utente.getIdUtente());
+    }
+
+    @Override
+    public Preferenze createPreferenze(Utente utente) {
+        Preferenze preferenze= new Preferenze();
+        preferenze.setIdUtente(utente.getIdUtente());
+        preferenze.setNotifiche(true);
+        preferenze.setUtente(utente);
+        utente.setPreferenze(preferenze);
+
+        preferenzeRepository.save(preferenze);
+        return preferenze;
+    }
+
+    @Override
+    public void updatePreferenze(Preferenze preferenze) {
+        preferenzeRepository.save(preferenze);
+
+        Utente utente= utenteRepository.findByIdUtente(preferenze.getIdUtente());
+        utente.setPreferenze(preferenze);
+    }
+}
