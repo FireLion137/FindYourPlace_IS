@@ -55,14 +55,13 @@
 }
 
 .title {
-    font-size: 1.1em;
     line-height: 35px;
     font-weight: 600;
     text-transform: uppercase;
 }
 .edit-title {
     border-bottom: 1px solid rgba(51,51,51,.83922);
-    padding: 0 10px;
+    padding: 5px 10px 0;
     background: #222;
 }
 .title-2 {
@@ -83,10 +82,17 @@
     margin: auto !important;
 }
 .form-buttons {
-    padding-left: 15%;
-    padding-right: 15.5%;
+    padding: 0 15.5% 15px 15%;
 }
 .form-field-comment {
     max-width: 70%;
     margin: auto;
+}
+
+.password-eye {
+    right: calc(25% + 12px) !important;
+}
+.form-passwordInput {
+    padding-right: 50px !important;
+    text-indent: 30px;
 }

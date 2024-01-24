@@ -3,7 +3,6 @@ package com.is.findyourplace.controller.gestioneUtenza;
 import com.is.findyourplace.persistence.dto.UtenteDto;
 import com.is.findyourplace.persistence.entity.Utente;
 import com.is.findyourplace.service.gestioneUtenza.AccountService;
-import com.is.findyourplace.service.gestioneUtenza.CustomUserDetailsService;
 import com.is.findyourplace.service.gestioneUtenza.ProfileService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +23,7 @@ public class ProfileController {
     private final AccountService accountService;
     private final ProfileService profileService;
 
-    public ProfileController(AccountService accountService, ProfileService profileService, CustomUserDetailsService customUserDetailsService) {
+    public ProfileController(AccountService accountService, ProfileService profileService) {
         this.accountService = accountService;
         this.profileService = profileService;
     }
@@ -74,6 +73,7 @@ public class ProfileController {
                 !isUsernameEqual) {
             try {
                 request.logout();
+                return "redirect:/accountAuth";
             } catch (ServletException e) {
                 throw new RuntimeException(e);
             }

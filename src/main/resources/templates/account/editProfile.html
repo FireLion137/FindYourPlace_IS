@@ -85,7 +85,7 @@
                     <div class="form-field">
                         <label class="form-field-label" for="passwordUpdate1">Password</label>
                         <div class="form-field-icon">
-                            <input class="form-field-input" id="passwordUpdate1" name="password" type="password" th:field="*{password}" minlength="8" autocomplete="off">
+                            <input class="form-field-input form-passwordInput" id="passwordUpdate1" name="password" type="password" th:field="*{password}" minlength="8" autocomplete="off">
                             <span class="password-eye" onclick="revealPassword('Update1')"><i class="fa fa-eye" id="passEyeUpdate1" title="Mostra Password"></i></span>
                         </div>
                         <p style="color: red" th:errors = "*{password}" th:if="${#fields.hasErrors('password')}"></p>
@@ -97,7 +97,7 @@
                     <div class="form-field">
                         <label class="form-field-label field-center" for="passwordUpdate2">Conferma Password</label>
                         <div class="form-field-icon field-center">
-                            <input class="form-field-input" id="passwordUpdate2" name="password2" type="password" minlength="8" autocomplete="off">
+                            <input class="form-field-input form-passwordInput" id="passwordUpdate2" name="password2" type="password" minlength="8" autocomplete="off">
                             <span class="password-eye" onclick="revealPassword('Update2')"><i class="fa fa-eye" id="passEyeUpdate2" title="Mostra Password"></i></span>
                         </div>
                         <div class="form-field-comment field-center">
