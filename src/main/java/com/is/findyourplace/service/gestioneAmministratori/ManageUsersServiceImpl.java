@@ -3,6 +3,7 @@ package com.is.findyourplace.service.gestioneAmministratori;
 import com.is.findyourplace.persistence.dto.UtenteDto;
 import com.is.findyourplace.persistence.entity.Utente;
 import com.is.findyourplace.persistence.repository.UtenteRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.stream.Collectors;
 public class ManageUsersServiceImpl implements ManageUsersService{
 
     private final UtenteRepository utenteRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public ManageUsersServiceImpl(UtenteRepository utenteRepository) {
+    public ManageUsersServiceImpl(UtenteRepository utenteRepository, PasswordEncoder passwordEncoder) {
         this.utenteRepository = utenteRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -25,6 +28,11 @@ public class ManageUsersServiceImpl implements ManageUsersService{
         if (!utenteRepository.existsById(utente.getIdUtente())){
             return;
         }
+        utenteRepository.save(utente);
+    }
+    @Override
+    public void updateUtentePassword(Utente utente,String password) {
+        utente.setPasswordHash(passwordEncoder.encode(password));
         utenteRepository.save(utente);
     }
     @Override
