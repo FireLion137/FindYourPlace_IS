@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>FindYourPlace | Modifica Preferenze</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/editProfile.css}">
+    <link rel="stylesheet" th:href="@{/css/siteStyle.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script th:src="@{/js/jquery-3.7.1.js}"></script>
+    <script th:src="@{/js/account.js}"></script>
+</head>
+<body>
+<div th:insert="fragments/header :: navbar"></div>
+
+<main class="profile-page">
+    <div class="col-sidebar">
+        <div class="col-bg">
+            <ul class="menu">
+                <li class="menu-item">
+                    <a th:href="@{/editProfile}">
+                        <i class="fa fa-pencil"></i>
+                        &nbsp;&nbsp;Impostazioni
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a th:href="@{/editPreferences}">
+                        <i class="fa fa-user-plus"></i>
+                        &nbsp;Preferenze
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/logout}">
+                        <i class="fa fa-sign-out"></i>
+                        &nbsp;&nbsp;Esci
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-mainEdit">
+        <div class="edit-title">
+                <span class="title">Modifica le tue preferenze</span>
+            </div>
+        <div class="col-bg">
+            <div class="edit-body">
+                <div class="edit-title" style="margin-bottom: 25px">
+                    <span class="title-2">Preferenze</span>
+                </div>
+                <form th:action="@{/editPreferences}" th:object="${preferenze}" method="post" role="form">
+                    <div class="form-field">
+                        <label class="form-field-label" for="notificheUpdate">Notifiche attive</label>
+                        <input class="form-field-input" id="notificheUpdate" name="notifiche" type="checkbox" th:checked="*{notifiche}">
+                        <p style="color: red" th:errors = "*{notifiche}" th:if="${#fields.hasErrors('notifiche')}"></p>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-field-label" for="isStudenteUpdate">Sei uno studente?</label>
+                        <input class="form-field-input" id="isStudenteUpdate" name="studente" type="checkbox" th:checked="*{studente}">
+                        <p style="color: red" th:errors = "*{studente}" th:if="${#fields.hasErrors('studente')}"></p>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-field-label" for="isGenitoreUpdate">Sei un genitore?</label>
+                        <input class="form-field-input" id="isGenitoreUpdate" name="genitore" type="checkbox" th:checked="*{genitore}">
+                        <p style="color: red" th:errors = "*{genitore}" th:if="${#fields.hasErrors('genitore')}"></p>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button class="buttonPrimary buttonHover" style="text-transform: none;" type="submit">
+                            <i class="fa fa-save"></i>
+                            &nbsp;&nbsp;Salva preferenze
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:insert="fragments/footer :: footer"></div>
+</body>
+</html>

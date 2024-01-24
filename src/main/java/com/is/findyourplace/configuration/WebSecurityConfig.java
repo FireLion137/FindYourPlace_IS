@@ -31,7 +31,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/accountAuth", "/register").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/editProfile").authenticated()
+                        .requestMatchers("/editProfile", "/editPreferences").authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin((form) -> form

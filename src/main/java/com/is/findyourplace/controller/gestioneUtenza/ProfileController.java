@@ -1,6 +1,7 @@
 package com.is.findyourplace.controller.gestioneUtenza;
 
 import com.is.findyourplace.persistence.dto.UtenteDto;
+import com.is.findyourplace.persistence.entity.Preferenze;
 import com.is.findyourplace.persistence.entity.Utente;
 import com.is.findyourplace.service.gestioneUtenza.AccountService;
 import com.is.findyourplace.service.gestioneUtenza.ProfileService;
@@ -88,5 +89,40 @@ public class ProfileController {
         }
 
         return "account/editProfile";
+    }
+
+
+    @GetMapping("/editPreferences")
+    public String ViewEditPreferences(Model model){
+        Authentication auth= SecurityContextHolder.getContext().getAuthentication();
+        if(auth == null || auth instanceof AnonymousAuthenticationToken)
+            return "redirect:/serverError";
+        Utente utente= accountService.findByUsernameOrEmail(auth.getName());
+        Preferenze preferenze= profileService.findPrefByUtente(utente);
+        if(preferenze == null)
+            preferenze= profileService.createPreferenze(utente);
+
+        model.addAttribute("preferenze", preferenze);
+        return "account/editPreferences";
+    }
+
+    @PostMapping("/editPreferences")
+    public String EditPreferences(@Valid @ModelAttribute("preferenze") Preferenze preferenze,
+                              BindingResult result,
+                              Model model){
+        Authentication auth= SecurityContextHolder.getContext().getAuthentication();
+        Utente user= accountService.findByUsernameOrEmail(auth.getName());
+
+        preferenze.setIdUtente(user.getIdUtente());
+        if(!user.getIdUtente().equals(preferenze.getIdUtente()))
+            return "redirect:/serverError";
+
+        if(result.hasErrors()){
+            model.addAttribute("preferenze", preferenze);
+            return "account/editPreferences";
+        }
+
+        profileService.updatePreferenze(preferenze);
+        return "account/editPreferences";
     }
 }
