@@ -34,9 +34,8 @@ public class UtenteDto {
      * Il suo pattern prevede tra 8 e 50 caratteri, numeri,
      * lettere maiuscole, minuscole e caratteri speciali.
      */
-    @NotEmpty
-    @Size(min = 8, max = 50)
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()\\[{}\\]:;',?*~$^\\-+=<>]).{8,50}$",
+    @Size(max = 50)
+    @Pattern(regexp = "^$|^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()\\[{}\\]:;',?*~$^\\-+=<>]).{8,50}$",
             message = "La Password non rispetta il formato corretto!")
     private String password;
 

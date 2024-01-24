@@ -1,8 +1,10 @@
 package com.is.findyourplace.service.gestioneUtenza;
 
-import org.springframework.stereotype.Service;
+import com.is.findyourplace.persistence.dto.UtenteDto;
+import com.is.findyourplace.persistence.entity.Preferenze;
 
-@Service
-public class ProfileService {
-
+public interface ProfileService {
+    void updateUtente(UtenteDto utenteDto);
+    void createPreferenze(UtenteDto utenteDto);
+    void updatePreferenze(Preferenze preferenze);
 }

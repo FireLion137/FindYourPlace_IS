@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../static/css/siteStyle.css" th:href="@{/css/siteStyle.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="../../static/js/jquery-3.7.1.js" th:src="@{/js/jquery-3.7.1.js}"></script>
-    <script src="../../static/js/accountAuth.js" th:src="@{/js/accountAuth.js}"></script>
+    <script src="../../static/js/account.js" th:src="@{/js/account.js}"></script>
 </head>
 <body>
 <div th:insert="fragments/header :: navbar"></div>
@@ -36,7 +36,7 @@
                         <span class="password-eye" onclick="revealPassword('Login')"><i class="fa fa-eye" id="passEyeLogin" title="Mostra Password"></i></span>
                     </div>
                 </div>
-                <button class="form-submitButton" onclick="return (confermaParametri('Login'))" type="submit">Accedi</button>
+                <button class="form-submitButton" onclick="return (confermaParametriAuth('Login'))" type="submit">Accedi</button>
             </form>
         </section>
         <section class="login-section" id="section-Signup">
@@ -98,7 +98,7 @@
                         Ripeti Password inserita nel campo precedente.
                     </div>
                 </div>
-                <button class="form-submitButton" onclick="return (confermaParametri('Signup'))" type="submit">Registrati</button>
+                <button class="form-submitButton" onclick="return (confermaParametriAuth('Signup'))" type="submit">Registrati</button>
             </form>
         </section>
     </div>

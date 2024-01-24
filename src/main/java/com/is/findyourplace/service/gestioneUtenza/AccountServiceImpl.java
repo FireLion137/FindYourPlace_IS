@@ -44,6 +44,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public UtenteDto findByUsername(String username) {
+        return mapToUtenteDto(utenteRepository.findByUsername(username));
+    }
+
+    @Override
     public List<UtenteDto> findAllUtenti() {
         List<Utente> utenti = utenteRepository.findAll();
         return utenti.stream()
@@ -68,8 +73,6 @@ public class AccountServiceImpl implements AccountService {
         utenteDto.setEmail(u.getEmail());
         utenteDto.setNome(u.getNome());
         utenteDto.setCognome(u.getCognome());
-
-        //Da vedere se servono
         utenteDto.setNumeroTel(u.getNumeroTel());
         utenteDto.setDataNascita(u.getDataNascita());
 

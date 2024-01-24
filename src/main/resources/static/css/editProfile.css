@@ -1,0 +1,92 @@
+.profile-page {
+    width: 100%;
+    max-width: 1000px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin: 25px auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@media (min-width: 1024px) {
+    .col-sidebar {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+
+    .col-mainEdit {
+        flex: 0 0 75%;
+        max-width: 75%;
+    }
+}
+
+.col-sidebar, .col-mainEdit {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.col-bg {
+    padding: 10px;
+    background: #222;
+}
+
+.menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.menu li {
+    background: #151515;
+}
+.menu li:nth-child(even) {
+    background: #1a1a1a;
+}
+.active {
+    background: #0b5d28 !important;
+}
+.menu-item a {
+    color: white;
+    display: block;
+    padding: 0 10px;
+    height: 40px;
+    line-height: 40px;
+    width: 100%;
+}
+
+.title {
+    font-size: 1.1em;
+    line-height: 35px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.edit-title {
+    border-bottom: 1px solid rgba(51,51,51,.83922);
+    padding: 0 10px;
+    background: #222;
+}
+.title-2 {
+    line-height: 35px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.form-field, .form-field-input, .form-field-label, .form-field-comment {
+    text-align: center;
+    justify-content: center;
+}
+.form-field-input {
+    background: #292929 !important;
+    border: 1px solid #2f2f2f !important;
+    color: #888 !important;
+    width: 50% !important;
+    margin: auto !important;
+}
+.form-buttons {
+    padding-left: 15%;
+    padding-right: 15.5%;
+}
+.form-field-comment {
+    max-width: 70%;
+    margin: auto;
+}
