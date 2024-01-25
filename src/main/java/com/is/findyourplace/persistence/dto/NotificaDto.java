@@ -1,6 +1,10 @@
 package com.is.findyourplace.persistence.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Future;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +14,7 @@ import java.time.LocalDateTime;
 
 
 /**
- * Classe Dto di Notifica
+ * Classe Dto di Notifica.
  */
 @Data
 @NoArgsConstructor
@@ -18,12 +22,12 @@ import java.time.LocalDateTime;
 public class NotificaDto {
 
     /**
-     * Id dell'utente
+     * Id dell'utente.
      */
     private Long idNotifica;
 
     /**
-     * Autore della notifica
+     * Autore della notifica.
      */
     @NotEmpty
     @Size(max = 30)
@@ -31,7 +35,7 @@ public class NotificaDto {
     private String autore;
 
      /**
-        * testo della notifica
+        * Testo della notifica.
      */
 
     @NotEmpty
@@ -40,27 +44,23 @@ public class NotificaDto {
     private String testo;
 
     /**
-     * Data di invio della notifica.<br>
+     * Data di invio della notifica.
      */
-    @NotNull
     @PastOrPresent
     private LocalDateTime dataInvio;
 
     /**
-     * Data di scadenza della notifica.<br>
+     * Data di scadenza della notifica.
      */
-    @NotNull
     @Future
     private LocalDateTime dataScadenza;
 
     /**
-     * Destinatario della notifica
+     * Destinatario della notifica.<br>
+     * Se la notifica è di tipo broadcast,
+     * questo campo sarà null.
      */
     @Size(max = 30)
     @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,29}$")
     private String destinatario;
-
-
-
-
 }

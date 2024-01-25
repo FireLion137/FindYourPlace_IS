@@ -1,6 +1,10 @@
 package com.is.findyourplace.persistence.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,14 +12,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 /**
- * Classe Dto di Utente
+ * Classe Dto di Utente.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UtenteDto {
     /**
-     * Id dell'utente
+     * Id dell'utente.
      */
     private Long idUtente;
 
@@ -35,8 +39,15 @@ public class UtenteDto {
      * lettere maiuscole, minuscole e caratteri speciali.
      */
     @Size(max = 50)
-    @Pattern(regexp = "^$|^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()\\[{}\\]:;',?*~$^\\-+=<>]).{8,50}$",
-            message = "La Password non rispetta il formato corretto!")
+    @Pattern(
+            regexp = "^$|"
+                    + "^(?=.*[0-9])"
+                    + "(?=.*[a-z])"
+                    + "(?=.*[A-Z])"
+                    + "(?=.*[!@#&()\\[{}\\]:;',?*~$^\\-+=<>])"
+                    + ".{8,50}$",
+            message = "La Password non rispetta il formato corretto!"
+    )
     private String password;
 
     /**
@@ -54,7 +65,10 @@ public class UtenteDto {
      * Può essere Null e deve rispettare il pattern.
      */
     @Size(max = 15)
-    @Pattern(regexp = "^$|^([+]?[(]?[0-9]{1,3}[)]?[-\\s])?([(]?[0-9]{3}[)]?[-\\s]?)?([0-9][-\\s]?){3,10}[0-9]$",
+    @Pattern(regexp = "^$|"
+            + "^([+]?[(]?[0-9]{1,3}[)]?[-\\s])?"
+            + "([(]?[0-9]{3}[)]?[-\\s]?)?"
+            + "([0-9][-\\s]?){3,10}[0-9]$",
             message = "Il Numero di telefono non rispetta il formato corretto!")
     private String numeroTel;
 

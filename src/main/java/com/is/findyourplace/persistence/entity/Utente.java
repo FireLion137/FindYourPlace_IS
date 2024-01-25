@@ -1,10 +1,20 @@
 package com.is.findyourplace.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,7 +43,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Utente {
     /**
-     * Id dell'utente
+     * Id dell'utente.
      */
     @Id
     @Column(name = "id_utente")
@@ -73,7 +83,11 @@ public class Utente {
      * Può essere Null e deve rispettare il pattern.
      */
     @Size(max = 15)
-    @Pattern(regexp = "^$|^([+]?[(]?[0-9]{1,3}[)]?[-\\s])?([(]?[0-9]{3}[)]?[-\\s]?)?([0-9][-\\s]?){3,10}[0-9]$")
+    @Pattern(regexp = "^$|"
+            + "^([+]?[(]?[0-9]{1,3}[)]?[-\\s])?"
+            + "([(]?[0-9]{3}[)]?[-\\s]?)?"
+            + "([0-9][-\\s]?){3,10}[0-9]$"
+    )
     private String numeroTel;
 
     /**
@@ -109,7 +123,7 @@ public class Utente {
 
 
     /**
-     * Preferenze dell' Utente
+     * Preferenze dell' Utente.
      */
     @OneToOne(mappedBy = "utente", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
@@ -135,17 +149,17 @@ public class Utente {
 
     @Override
     public String toString() {
-        return "Utente{" +
-                "idUtente=" + idUtente +
-                ", username='" + username + '\'' +
-                ", passwordHash='" + passwordHash + '\'' +
-                ", email='" + email + '\'' +
-                ", numeroTel='" + numeroTel + '\'' +
-                ", dataNascita=" + dataNascita +
-                ", isAdmin=" + isAdmin +
-                ", nome='" + nome + '\'' +
-                ", cognome='" + cognome + '\'' +
-                ", preferenze=" + preferenze +
-                '}';
+        return "Utente{"
+                + "idUtente=" + idUtente
+                + ", username='" + username + '\''
+                + ", passwordHash='" + passwordHash + '\''
+                + ", email='" + email + '\''
+                + ", numeroTel='" + numeroTel + '\''
+                + ", dataNascita=" + dataNascita
+                + ", isAdmin=" + isAdmin
+                + ", nome='" + nome + '\''
+                + ", cognome='" + cognome + '\''
+                + ", preferenze=" + preferenze
+                + '}';
     }
 }

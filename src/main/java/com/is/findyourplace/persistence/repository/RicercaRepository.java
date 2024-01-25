@@ -9,6 +9,16 @@ import java.util.List;
 
 @Repository
 public interface RicercaRepository extends JpaRepository<Ricerca, Long> {
-    Ricerca findByIdRicerca(long id_ricerca);
+    /**
+     * Query per trovare una Ricerca tramite il suo id.
+     * @param idRicerca Id della Ricerca
+     * @return Ricerca
+     */
+    Ricerca findByIdRicerca(long idRicerca);
+    /**
+     * Query per trovare la lista delle ricerche di un utente.
+     * @param utente Utente
+     * @return Lista di ricerche
+     */
     List<Ricerca> findByUtente(Utente utente);
 }

@@ -10,31 +10,53 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
+    /**
+     * Repository Utente.
+     */
     private final UtenteRepository utenteRepository;
+    /**
+     * Password Encoder.
+     */
     private final PasswordEncoder passwordEncoder;
+    /**
+     * Repository Preferenze.
+     */
     private final PreferenzeRepository preferenzeRepository;
 
-    public ProfileServiceImpl(UtenteRepository utenteRepository,
-                              PasswordEncoder passwordEncoder,
-                              PreferenzeRepository preferenzeRepository) {
+    /**
+     * Costruttore del service.
+     * @param utenteRepository UtenteRepository
+     * @param passwordEncoder PasswordEncoder
+     * @param preferenzeRepository PreferenzeRepository
+     */
+    public ProfileServiceImpl(
+            final UtenteRepository utenteRepository,
+            final PasswordEncoder passwordEncoder,
+            final PreferenzeRepository preferenzeRepository) {
         this.utenteRepository = utenteRepository;
         this.passwordEncoder = passwordEncoder;
         this.preferenzeRepository = preferenzeRepository;
     }
 
     @Override
-    public void updateUtente(UtenteDto utenteDto) {
-        Utente utente= utenteRepository.findByIdUtente(utenteDto.getIdUtente());
+    public void updateUtente(final UtenteDto utenteDto) {
+        Utente utente = utenteRepository.findByIdUtente(
+                utenteDto.getIdUtente()
+        );
 
         utente.setUsername(utenteDto.getUsername());
         utente.setEmail(utenteDto.getEmail());
 
         //Encrypt using springboot security
-        if(!utenteDto.getPassword().isBlank())
-            utente.setPasswordHash(passwordEncoder.encode(utenteDto.getPassword()));
+        if (!utenteDto.getPassword().isBlank()) {
+            utente.setPasswordHash(
+                    passwordEncoder.encode(utenteDto.getPassword())
+            );
+        }
 
-        if(utenteDto.getNumeroTel() != null)
+        if (utenteDto.getNumeroTel() != null) {
             utente.setNumeroTel(utenteDto.getNumeroTel());
+        }
         utente.setDataNascita(utenteDto.getDataNascita());
         utente.setNome(utenteDto.getNome());
         utente.setCognome(utenteDto.getCognome());
@@ -43,13 +65,13 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Preferenze findPrefByUtente(Utente utente) {
+    public Preferenze findPrefByUtente(final Utente utente) {
         return preferenzeRepository.findByIdUtente(utente.getIdUtente());
     }
 
     @Override
-    public Preferenze createPreferenze(Utente utente) {
-        Preferenze preferenze= new Preferenze();
+    public Preferenze createPreferenze(final Utente utente) {
+        Preferenze preferenze = new Preferenze();
         preferenze.setIdUtente(utente.getIdUtente());
         preferenze.setNotifiche(true);
         preferenze.setUtente(utente);
@@ -60,10 +82,12 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void updatePreferenze(Preferenze preferenze) {
+    public void updatePreferenze(final Preferenze preferenze) {
         preferenzeRepository.save(preferenze);
 
-        Utente utente= utenteRepository.findByIdUtente(preferenze.getIdUtente());
+        Utente utente = utenteRepository.findByIdUtente(
+                preferenze.getIdUtente()
+        );
         utente.setPreferenze(preferenze);
     }
 }

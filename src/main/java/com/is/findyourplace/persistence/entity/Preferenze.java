@@ -1,6 +1,13 @@
 package com.is.findyourplace.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.JoinColumn;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +28,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Preferenze {
     /**
-     * Id dell'utente
+     * Id dell'utente.
      */
     @Id
     @NotNull
@@ -29,7 +36,7 @@ public class Preferenze {
     private long idUtente;
 
     /**
-     * La chiave primaria deriva dalla chiave dell' utente
+     * La chiave primaria deriva dalla chiave dell' utente.
      */
     @OneToOne(cascade = CascadeType.ALL)
     @MapsId
@@ -56,11 +63,11 @@ public class Preferenze {
 
     @Override
     public String toString() {
-        return "Preferenze{" +
-                "idUtente=" + idUtente +
-                ", notifiche=" + notifiche +
-                ", studente=" + studente +
-                ", genitore=" + genitore +
-                '}';
+        return "Preferenze{"
+                + "idUtente=" + idUtente
+                + ", notifiche=" + notifiche
+                + ", studente=" + studente
+                + ", genitore=" + genitore
+                + '}';
     }
 }

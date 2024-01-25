@@ -15,43 +15,65 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+    /**
+     * Autowiring UserDetailsService because
+     * there is a CustomUserDetailsService.
+     */
     @Autowired
     private UserDetailsService userDetailsService;
 
+    /**
+     * Define the type of PasswordEncoder used for Authentication.
+     * @return BCryptPasswordEncoder
+     */
     @Bean
-    public static PasswordEncoder passwordEncoder(){
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Define the security filter for every http.
+     * @param http link http passed
+     * @return Builded security http
+     * @throws Exception in case there is an error
+     */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(final HttpSecurity http)
+            throws Exception {
         http
-                .authorizeHttpRequests((authorizeRequests) -> authorizeRequests
-                        .requestMatchers("/", "/index").permitAll()
-                        .requestMatchers("/accountAuth", "/register").permitAll()
-                        .requestMatchers("/error").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/editProfile", "/editPreferences").authenticated()
-                        .anyRequest().permitAll()
-                )
-                .formLogin((form) -> form
-                        .loginPage("/accountAuth")
-                        .loginProcessingUrl("/login")
-                        .permitAll()
-                )
-                .logout((logout) -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/")
-                        .permitAll()
-                );
+            .authorizeHttpRequests((authorizeRequests) -> authorizeRequests
+                    .requestMatchers("/", "/index").permitAll()
+                    .requestMatchers("/accountAuth", "/register").permitAll()
+                    .requestMatchers("/error").permitAll()
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .requestMatchers("/editProfile",
+                            "/editPreferences").authenticated()
+                    .anyRequest().permitAll()
+            )
+            .formLogin((form) -> form
+                    .loginPage("/accountAuth")
+                    .loginProcessingUrl("/login")
+                    .permitAll()
+            )
+            .logout((logout) -> logout
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/")
+                    .permitAll()
+            );
 
         return http.build();
     }
 
+    /**
+     * Autowiring to encode with specified passwordEncoder.
+     * @param auth AuthenticationManagerBuilder
+     * @throws Exception in case of errors
+     */
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureGlobal(final AuthenticationManagerBuilder auth)
+            throws Exception {
         auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+            .userDetailsService(userDetailsService)
+            .passwordEncoder(passwordEncoder());
     }
 }

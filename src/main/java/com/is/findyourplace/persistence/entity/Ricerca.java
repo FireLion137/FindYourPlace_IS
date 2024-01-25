@@ -1,12 +1,26 @@
 package com.is.findyourplace.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.data.geo.Point;
 
 import java.time.LocalDateTime;
@@ -28,7 +42,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Ricerca {
     /**
-     * Id dell Ricerca
+     * Id dell Ricerca.
      */
     @Id
     @NotNull
@@ -73,7 +87,7 @@ public class Ricerca {
 
 
     /**
-     * Filtri della ricerca
+     * Filtri della ricerca.
      */
     @OneToOne(mappedBy = "ricerca", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
@@ -87,14 +101,14 @@ public class Ricerca {
 
     @Override
     public String toString() {
-        return "Ricerca{" +
-                "idRicerca=" + idRicerca +
-                ", dataRicerca=" + dataRicerca +
-                ", coordinate=" + coordinate +
-                ", raggio=" + raggio +
-                ", idUtente=" + idUtente +
-                ", utente=" + utente +
-                ", filtri=" + filtri +
-                '}';
+        return "Ricerca{"
+                + "idRicerca=" + idRicerca
+                + ", dataRicerca=" + dataRicerca
+                + ", coordinate=" + coordinate
+                + ", raggio=" + raggio
+                + ", idUtente=" + idUtente
+                + ", utente=" + utente
+                + ", filtri=" + filtri
+                + '}';
     }
 }

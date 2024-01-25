@@ -18,10 +18,16 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Embeddable
 public class PreferitiKey implements Serializable {
+    /**
+     * Id dell' utente.
+     */
     @NotNull
     @Column(name = "id_utente")
     private long idUtente;
 
+    /**
+     * Id del luogo.
+     */
     @NotNull
     @Column(name = "id_luogo")
     private long idLuogo;

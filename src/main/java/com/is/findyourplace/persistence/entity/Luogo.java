@@ -1,11 +1,20 @@
 package com.is.findyourplace.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.geo.Point;
 
@@ -27,7 +36,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Luogo {
     /**
-     * Id del Luogo
+     * Id del Luogo.
      */
     @Id
     @NotNull
@@ -70,11 +79,11 @@ public class Luogo {
 
     @Override
     public String toString() {
-        return "Luogo{" +
-                "idLuogo=" + idLuogo +
-                ", coordinate=" + coordinate +
-                ", qualityIndex=" + qualityIndex +
-                ", lastFoundDate=" + lastFoundDate +
-                '}';
+        return "Luogo{"
+                + "idLuogo=" + idLuogo
+                + ", coordinate=" + coordinate
+                + ", qualityIndex=" + qualityIndex
+                + ", lastFoundDate=" + lastFoundDate
+                + '}';
     }
 }

@@ -1,10 +1,18 @@
 package com.is.findyourplace.persistence.entity;
 
 import com.is.findyourplace.persistence.entity.CompositeKeys.LuogoTrovatoKey;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,16 +37,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LuogoTrovato {
     /**
-     * Id composto del Luogo Trovato
+     * Id composto del Luogo Trovato.
      */
     @EmbeddedId
     private LuogoTrovatoKey idLuogoTrovato;
 
+    /**
+     * Ogni LuogoTrovato è collegato a una Ricerca.
+     */
     @ManyToOne
     @MapsId("idRicerca")
     @JoinColumn(name = "id_ricerca")
     Ricerca ricerca;
 
+    /**
+     * Ogni LuogoTrovato è collegato a un Luogo.
+     */
     @ManyToOne
     @MapsId("idLuogo")
     @JoinColumn(name = "id_luogo")
@@ -55,6 +69,9 @@ public class LuogoTrovato {
      * Enum usato per forzare solo 3 stringhe precise.
      */
     public enum CostoVita {
+        /**
+         * Costo della vita Basso, Medio o Alto per regione.
+         */
         BASSO, MEDIO, ALTO
     }
     /**
@@ -97,7 +114,12 @@ public class LuogoTrovato {
     @Size(max = 1000)
     private int numRistoranti;
 
-    public LuogoTrovato(Ricerca ricerca, Luogo luogo) {
+    /**
+     * Costruttore LuogoTrovato.
+     * @param ricerca Ricerca che ha trovato il Luogo
+     * @param luogo Luogo trovato
+     */
+    public LuogoTrovato(final Ricerca ricerca, final Luogo luogo) {
         this.ricerca = ricerca;
         this.luogo = luogo;
         this.idLuogoTrovato = new LuogoTrovatoKey(

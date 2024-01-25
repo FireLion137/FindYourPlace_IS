@@ -1,9 +1,15 @@
 package com.is.findyourplace.persistence.entity;
 
 import com.is.findyourplace.persistence.entity.CompositeKeys.PreferitiKey;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.JoinColumn;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,23 +29,30 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Preferiti {
     /**
-     * Id composto del luogo salvato nei Preferiti
+     * Id composto del luogo salvato nei Preferiti.
      */
     @EmbeddedId
     private PreferitiKey idPreferiti;
 
+    /**
+     * Ogni luogo Preferito è collegata a un Utente.
+     */
     @ManyToOne
     @MapsId("idUtente")
     @JoinColumn(name = "id_utente")
     Utente utente;
 
+    /**
+     * Ogni luogo Preferito è collegato a un Luogo.
+     */
     @ManyToOne
     @MapsId("idLuogo")
     @JoinColumn(name = "id_luogo")
     Luogo luogo;
 
     /**
-     * Indice di Qualità in percentuale al momento del salvataggio nei preferiti.
+     * Indice di Qualità in percentuale
+     * al momento del salvataggio nei preferiti.
      */
     @NotNull
     @Size(min = 2, max = 100)
@@ -51,7 +64,12 @@ public class Preferiti {
     @NotNull
     private boolean notifiche = true;
 
-    public Preferiti(Utente utente, Luogo luogo) {
+    /**
+     * Costruttore luogo Preferito.
+     * @param utente Utente che ha salvato il luogo Preferito
+     * @param luogo Luogo
+     */
+    public Preferiti(final Utente utente, final Luogo luogo) {
         this.utente = utente;
         this.luogo = luogo;
         this.qualityIndex = luogo.getQualityIndex();

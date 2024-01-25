@@ -6,5 +6,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FiltriRepository extends JpaRepository<Filtri, Long> {
-    Filtri findByIdRicerca(long id_ricerca);
+    /**
+     * Query per trovare i Filtri usando idRicerca.
+     * @param idRicerca Id della Ricerca
+     * @return Filtri della Ricerca
+     */
+    Filtri findByIdRicerca(long idRicerca);
 }

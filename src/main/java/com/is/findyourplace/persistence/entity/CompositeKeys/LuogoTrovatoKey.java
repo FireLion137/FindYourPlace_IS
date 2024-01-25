@@ -18,10 +18,16 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Embeddable
 public class LuogoTrovatoKey implements Serializable {
+    /**
+     * Id della ricerca.
+     */
     @NotNull
     @Column(name = "id_ricerca")
     private long idRicerca;
 
+    /**
+     * Id del luogo.
+     */
     @NotNull
     @Column(name = "id_luogo")
     private long idLuogo;

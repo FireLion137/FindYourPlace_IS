@@ -9,29 +9,43 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 @Service
-public class ManageUsersServiceImpl implements ManageUsersService{
-
+public class ManageUsersServiceImpl implements ManageUsersService {
+    /**
+     * Repository Utente.
+     */
     private final UtenteRepository utenteRepository;
+    /**
+     * Password Encoder.
+     */
     private final PasswordEncoder passwordEncoder;
 
-    public ManageUsersServiceImpl(UtenteRepository utenteRepository, PasswordEncoder passwordEncoder) {
+    /**
+     * Costruttore del service.
+     * @param utenteRepository UtenteRepository
+     * @param passwordEncoder PasswordEncoder
+     */
+    public ManageUsersServiceImpl(
+            final UtenteRepository utenteRepository,
+            final PasswordEncoder passwordEncoder) {
         this.utenteRepository = utenteRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
 
     @Override
-    public void updateUtenteUsername(Utente utente) {
-        if(utenteRepository.existsByUsername(utente.getUsername())){
+    public void updateUtenteUsername(final Utente utente) {
+        if (utenteRepository.existsByUsername(utente.getUsername())) {
             return;
         }
-        if (!utenteRepository.existsById(utente.getIdUtente())){
+        if (!utenteRepository.existsByIdUtente(utente.getIdUtente())) {
             return;
         }
         utenteRepository.save(utente);
     }
     @Override
-    public void updateUtentePassword(Utente utente,String password) {
+    public void updateUtentePassword(
+            final Utente utente,
+            final String password) {
         utente.setPasswordHash(passwordEncoder.encode(password));
         utenteRepository.save(utente);
     }
@@ -44,13 +58,13 @@ public class ManageUsersServiceImpl implements ManageUsersService{
     }
 
     @Override
-    public UtenteDto findByUsernameOrEmail(String username) {
-        Utente u= utenteRepository.findByUsernameOrEmail(username, username);
+    public UtenteDto findByUsernameOrEmail(final String username) {
+        Utente u = utenteRepository.findByUsernameOrEmail(username, username);
         return mapToUtenteDto(u);
     }
 
-    private UtenteDto mapToUtenteDto(Utente u){
-        UtenteDto utenteDto= new UtenteDto();
+    private UtenteDto mapToUtenteDto(final Utente u) {
+        UtenteDto utenteDto = new UtenteDto();
         utenteDto.setIdUtente(u.getIdUtente());
         utenteDto.setUsername(u.getUsername());
         utenteDto.setEmail(u.getEmail());

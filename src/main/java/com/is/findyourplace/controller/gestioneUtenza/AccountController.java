@@ -15,23 +15,38 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-//Gestisce Registrazione, Login e Logout di un Utente
+/**
+ * Gestisce Registrazione, Login e Logout di un Utente.
+ */
 @Controller
 public class AccountController {
+    /**
+     * Service usato per l'autenticazione.
+     */
     private final AccountService accountService;
 
-    public AccountController(AccountService accountService) {
+    /**
+     * Costruttore del controller.
+     * @param accountService AccountService
+     */
+    public AccountController(final AccountService accountService) {
         this.accountService = accountService;
     }
 
-    // handler method to handle user registration and login form request
+    /**
+     * Mapping method to handle user registration and login form request.
+     * @param model Model
+     * @return account/accountAuth.html
+     */
     @GetMapping("/accountAuth")
-    public String AccountAuthForm(Model model){
-        Authentication auth= SecurityContextHolder.getContext().getAuthentication();
-        if(auth != null &&
-                auth.isAuthenticated() &&
-                !(auth instanceof AnonymousAuthenticationToken))
+    public String accountAuthForm(final Model model) {
+        Authentication auth =
+                SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null
+                && auth.isAuthenticated()
+                && !(auth instanceof AnonymousAuthenticationToken)) {
             return "redirect:/";
+        }
         // create model object to store form data
         UtenteDto uR = new UtenteDto();
         UtenteDto uL = new UtenteDto();
@@ -40,28 +55,36 @@ public class AccountController {
         return "account/accountAuth";
     }
 
-    // handler method to handle user registration form submit request
+    /**
+     * Mapping method to handle user registration form submit request.
+     * @param utenteDto UtenteDto con tutti i dati.
+     * @param result BindingResult, contiene gli errori.
+     * @param model Model
+     * @param request HttpServletRequest
+     * @return account/accountAuth.html
+     */
     @PostMapping("/register")
-    public String registration(@Valid @ModelAttribute("utenteR") UtenteDto utenteDto,
-                               BindingResult result,
-                               Model model,
-                               HttpServletRequest request) {
-        if(accountService.existsByUsername(utenteDto.getUsername())){
+    public String registration(
+            @Valid @ModelAttribute("utenteR") final UtenteDto utenteDto,
+            final BindingResult result,
+            final Model model,
+            final HttpServletRequest request) {
+        if (accountService.existsByUsername(utenteDto.getUsername())) {
             result.rejectValue("username", "null",
                     "Username già usato!");
         }
 
-        if(accountService.existsByEmail(utenteDto.getEmail())){
+        if (accountService.existsByEmail(utenteDto.getEmail())) {
             result.rejectValue("email", "null",
                     "Email già usata!");
         }
 
-        if(utenteDto.getPassword().isBlank()){
+        if (utenteDto.getPassword().isBlank()) {
             result.rejectValue("password", "null",
                     "Pattern Password errato!");
         }
 
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             model.addAttribute("utenteR", utenteDto);
             model.addAttribute("utenteL", new UtenteDto());
             return "account/accountAuth";

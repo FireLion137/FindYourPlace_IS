@@ -6,30 +6,43 @@ import com.is.findyourplace.persistence.repository.UtenteRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class AccountServiceImpl implements AccountService {
+    /**
+     * Repository Utente.
+     */
     private final UtenteRepository utenteRepository;
+    /**
+     * Password Encoder.
+     */
     private final PasswordEncoder passwordEncoder;
 
-    public AccountServiceImpl(UtenteRepository utenteRepository, PasswordEncoder passwordEncoder) {
+    /**
+     * Costruttore del service.
+     * @param utenteRepository UtenteRepository
+     * @param passwordEncoder PasswordEncoder
+     */
+    public AccountServiceImpl(
+            final UtenteRepository utenteRepository,
+            final PasswordEncoder passwordEncoder) {
         this.utenteRepository = utenteRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public void saveUtente(UtenteDto utenteDto) {
-        Utente utente= new Utente();
+    public void saveUtente(final UtenteDto utenteDto) {
+        Utente utente = new Utente();
         utente.setUsername(utenteDto.getUsername());
         utente.setEmail(utenteDto.getEmail());
 
         //Encrypt using springboot security
-        utente.setPasswordHash(passwordEncoder.encode(utenteDto.getPassword()));
+        utente.setPasswordHash(
+                passwordEncoder.encode(utenteDto.getPassword())
+        );
 
-        if(utenteDto.getNumeroTel() != null)
+        if (utenteDto.getNumeroTel() != null) {
             utente.setNumeroTel(utenteDto.getNumeroTel());
+        }
         utente.setDataNascita(utenteDto.getDataNascita());
         utente.setAdmin(false);
         utente.setNome(utenteDto.getNome());
@@ -39,36 +52,28 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Utente findByUsernameOrEmail(String username) {
+    public Utente findByUsernameOrEmail(final String username) {
         return utenteRepository.findByUsernameOrEmail(username, username);
     }
 
     @Override
-    public UtenteDto findByUsername(String username) {
+    public UtenteDto findByUsername(final String username) {
         return mapToUtenteDto(utenteRepository.findByUsername(username));
     }
 
     @Override
-    public List<UtenteDto> findAllUtenti() {
-        List<Utente> utenti = utenteRepository.findAll();
-        return utenti.stream()
-                .map(this::mapToUtenteDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public boolean existsByUsername(String username) {
+    public boolean existsByUsername(final String username) {
         return utenteRepository.existsByUsername(username);
     }
 
     @Override
-    public boolean existsByEmail(String email) {
+    public boolean existsByEmail(final String email) {
         return utenteRepository.existsByEmail(email);
     }
 
 
-    private UtenteDto mapToUtenteDto(Utente u){
-        UtenteDto utenteDto= new UtenteDto();
+    private UtenteDto mapToUtenteDto(final Utente u) {
+        UtenteDto utenteDto = new UtenteDto();
         utenteDto.setUsername(u.getUsername());
         utenteDto.setEmail(u.getEmail());
         utenteDto.setNome(u.getNome());

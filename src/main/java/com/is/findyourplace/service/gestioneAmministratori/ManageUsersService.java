@@ -7,9 +7,29 @@ import java.util.List;
 
 
 public interface ManageUsersService {
+    /**
+     * Trova utente, mappandolo in UtenteDto, tramite username o email.
+     * @param username Username dell' utente
+     * @return UtenteDto
+     */
     UtenteDto findByUsernameOrEmail(String username);
-    List<UtenteDto> findAllUtenti();
-    void updateUtenteUsername(Utente utente);
-     void updateUtentePassword(Utente utente,String password);
 
+    /**
+     * Restituisce la lista di tutti gli utenti, mappati in UtenteDto.
+     * @return Lista di utenti
+     */
+    List<UtenteDto> findAllUtenti();
+
+    /**
+     * Aggiorna l'username di un utente.
+     * @param utente Utente
+     */
+    void updateUtenteUsername(Utente utente);
+
+    /**
+     * Aggiorna l'username di un utente.
+     * @param utente Utente
+     * @param password Nuova password
+     */
+    void updateUtentePassword(Utente utente, String password);
 }
