@@ -9,13 +9,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PreferitiRepository extends JpaRepository<Preferiti, PreferitiKey> {
+public interface PreferitiRepository
+        extends JpaRepository<Preferiti, PreferitiKey> {
     /**
      * Query custom per recuperare la lista dei luoghi preferiti
      * di un determinato utente tramite l'id.
-     * @param id_utente Id dell' Utente
+     * @param idUtente Id dell' Utente
      * @return Lista di notifiche ricevute di quell' Utente
      */
     @Query("SELECT p FROM Preferiti p WHERE p.idPreferiti.idUtente=?1")
-    List<Preferiti> findByIdUtente(Long id_utente);
+    List<Preferiti> findByIdUtente(Long idUtente);
 }

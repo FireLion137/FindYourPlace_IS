@@ -9,13 +9,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LuogoTrovatoRepository extends JpaRepository<LuogoTrovato, LuogoTrovatoKey> {
+public interface LuogoTrovatoRepository
+        extends JpaRepository<LuogoTrovato, LuogoTrovatoKey> {
     /**
      * Query custom per recuperare la lista dei luoghi trovati
      * da una determinata ricerca tramite l'id.
-     * @param id_ricerca Id della Ricerca
-     * @return Lista di luoghi trovati in una ricerca.
+     * @param idRicerca Id della Ricerca
+     * @return Lista di luoghi trovati in una ricerca
      */
     @Query("SELECT l FROM LuogoTrovato l WHERE l.idLuogoTrovato.idRicerca=?1")
-    List<LuogoTrovato> findByIdRicerca(Long id_ricerca);
+    List<LuogoTrovato> findByIdRicerca(Long idRicerca);
 }

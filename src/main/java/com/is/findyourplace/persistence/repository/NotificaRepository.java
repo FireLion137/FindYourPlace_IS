@@ -8,6 +8,16 @@ import java.util.List;
 
 @Repository
 public interface NotificaRepository extends JpaRepository<Notifica, Long> {
-    Notifica findByIdNotifica(Long id_notifica);
+    /**
+     * Query per trovare una Notifica usando il suo id.
+     * @param idNotifica Id della Notifica
+     * @return Notifica
+     */
+    Notifica findByIdNotifica(Long idNotifica);
+    /**
+     * Query per trovare la lista notifiche inviate da un autore.
+     * @param autore Autore della notifica
+     * @return Lista di notifiche
+     */
     List<Notifica> findByAutore(String autore);
 }

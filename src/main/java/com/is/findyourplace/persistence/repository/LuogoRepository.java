@@ -6,5 +6,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LuogoRepository extends JpaRepository<Luogo, Long> {
-    Luogo findByIdLuogo(long id_luogo);
+    /**
+     * Query per trovare un Luogo usando il suo id.
+     * @param idLuogo Id del Luogo
+     * @return Luogo
+     */
+    Luogo findByIdLuogo(long idLuogo);
 }
