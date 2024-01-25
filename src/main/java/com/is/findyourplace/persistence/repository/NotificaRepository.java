@@ -20,4 +20,10 @@ public interface NotificaRepository extends JpaRepository<Notifica, Long> {
      * @return Lista di notifiche
      */
     List<Notifica> findByAutore(String autore);
+    /**
+     * Query per controllare se esiste una notifica tramite l'id.
+     * @param idNotifica Id della notifica
+     * @return boolean
+     */
+    boolean existsByIdNotifica(long idNotifica);
 }

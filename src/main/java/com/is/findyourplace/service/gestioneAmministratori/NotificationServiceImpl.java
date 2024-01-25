@@ -12,22 +12,32 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class NotificationServiceImpl implements NotificationService{
-
+public class NotificationServiceImpl implements NotificationService {
+    /**
+     * Repository Utente.
+     */
     private final UtenteRepository utenteRepository;
-
+    /**
+     * Repository Notifica.
+     */
     private final NotificaRepository notificaRepository;
 
-
-    public NotificationServiceImpl(UtenteRepository utenteRepository, NotificaRepository notificaRepository) {
+    /**
+     * Costruttore del service.
+     * @param utenteRepository UtenteRepository
+     * @param notificaRepository NotificaRepository
+     */
+    public NotificationServiceImpl(
+            final UtenteRepository utenteRepository,
+            final NotificaRepository notificaRepository) {
         this.utenteRepository = utenteRepository;
         this.notificaRepository = notificaRepository;
     }
 
     @Override
     @Transactional
-    public void saveNotifica(NotificaDto notificaDto) {
-        Notifica notifica= new Notifica();
+    public void saveNotifica(final NotificaDto notificaDto) {
+        Notifica notifica = new Notifica();
         notifica.setAutore(notificaDto.getAutore());
         notifica.setTesto(notificaDto.getTesto());
         notifica.setDataInvio(notificaDto.getDataInvio());
@@ -35,17 +45,19 @@ public class NotificationServiceImpl implements NotificationService{
 
         notificaRepository.save(notifica);
 
-        Utente utente= utenteRepository.findByUsername(notificaDto.getDestinatario());
-        NotificaRicevuta notificaRicevuta = new NotificaRicevuta(utente, notifica);
+        Utente utente = utenteRepository.findByUsername(
+                notificaDto.getDestinatario()
+        );
+        NotificaRicevuta notificaRicevuta =
+                new NotificaRicevuta(utente, notifica);
         utente.getNotificheRicevute().add(notificaRicevuta);
         notifica.getNotificheRicevute().add(notificaRicevuta);
-
     }
 
     @Override
     @Transactional
-    public void saveNotificaBroadcast(NotificaDto notificaDto) {
-        Notifica notifica= new Notifica();
+    public void saveNotificaBroadcast(final NotificaDto notificaDto) {
+        Notifica notifica = new Notifica();
         notifica.setAutore(notificaDto.getAutore());
         notifica.setTesto(notificaDto.getTesto());
         notifica.setDataInvio(notificaDto.getDataInvio());
@@ -54,30 +66,31 @@ public class NotificationServiceImpl implements NotificationService{
         notificaRepository.save(notifica);
 
         for (Utente utente: utenteRepository.findAll()) {
-            NotificaRicevuta notificaRicevuta = new NotificaRicevuta(utente, notifica);
+            NotificaRicevuta notificaRicevuta =
+                    new NotificaRicevuta(utente, notifica);
             utente.getNotificheRicevute().add(notificaRicevuta);
             notifica.getNotificheRicevute().add(notificaRicevuta);
         }
     }
 
     @Override
-    public Notifica findByIdNotifica(Long id_notifica) {
-        return notificaRepository.findByIdNotifica(id_notifica);
+    public Notifica findByIdNotifica(final Long idNotifica) {
+        return notificaRepository.findByIdNotifica(idNotifica);
     }
 
 
     @Override
-    public List<Notifica> findByAutore(String autore) {
+    public List<Notifica> findByAutore(final String autore) {
         return notificaRepository.findByAutore(autore);
     }
 
     @Override
-    public boolean existsById(Long id_notifica) {
-        return notificaRepository.existsById(id_notifica);
+    public boolean existsByIdNotifica(final Long idNotifica) {
+        return notificaRepository.existsByIdNotifica(idNotifica);
     }
 
-    private NotificaDto mapToNotificaDto(Notifica n){
-        NotificaDto notificaDto= new NotificaDto();
+    private NotificaDto mapToNotificaDto(final Notifica n) {
+        NotificaDto notificaDto = new NotificaDto();
         notificaDto.setIdNotifica(n.getIdNotifica());
         notificaDto.setAutore(n.getAutore());
         notificaDto.setTesto(n.getTesto());

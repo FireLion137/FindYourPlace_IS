@@ -16,10 +16,10 @@ public interface UtenteRepository extends JpaRepository<Utente, Long> {
 
     /**
      * Query per controllare se esiste un Utente tramite l' id.
-     * @param id Id dell' utente
+     * @param idUtente Id dell' utente
      * @return boolean
      */
-    boolean existsById(Long id);
+    boolean existsByIdUtente(Long idUtente);
     /**
      * Query per controllare se esiste un Utente tramite l' username.
      * @param username Username dell' utente
