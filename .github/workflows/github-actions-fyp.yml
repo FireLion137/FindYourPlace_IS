@@ -15,9 +15,8 @@ jobs:
         image: mysql:latest
         env:
           MYSQL_DATABASE: FindYourPlace
-          MYSQL_USER: root
           MYSQL_PASSWORD: password
-          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_ROOT_PASSWORD: password
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -28,6 +27,8 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
+          distribution: 'temurin'
+          cache: maven
 
       - name: Cache the Maven packages to speed up build
         uses: actions/cache@v2
