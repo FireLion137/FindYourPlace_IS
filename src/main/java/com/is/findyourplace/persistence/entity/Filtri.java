@@ -1,7 +1,20 @@
 package com.is.findyourplace.persistence.entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.AssertTrue;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +38,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Filtri {
     /**
-     * Id della ricerca
+     * Id della ricerca.
      */
     @Id
     @NotNull
@@ -33,7 +46,7 @@ public class Filtri {
     private long idRicerca;
 
     /**
-     * La chiave primaria deriva dalla chiave della ricerca
+     * La chiave primaria deriva dalla chiave della ricerca.
      */
     @OneToOne(cascade = CascadeType.ALL)
     @MapsId
@@ -44,10 +57,13 @@ public class Filtri {
      * Enum usato per forzare solo 3 stringhe precise.
      */
     public enum CostoVita {
+        /**
+         * Costo della vita Basso, Medio o Alto per regione.
+         */
         BASSO, MEDIO, ALTO
     }
     /**
-     * Campo che definisce il costo della vita.
+     * Campo che definisce il costo della vita della regione.
      */
     @Enumerated(EnumType.STRING)
     private CostoVita costoVita;
@@ -72,7 +88,8 @@ public class Filtri {
     @Size(min = 1000, max = 10000000)
     private int numAbitantiMax;
 
-    @AssertTrue(message = "Il numero di abitanti massimo deve essere maggiore al numero minimo.")
+    @AssertTrue(message = "Il numero di abitanti massimo "
+            + "deve essere maggiore al numero minimo.")
     private boolean isNumAbitantiMaxValid() {
         return numAbitantiMax >= numAbitantiMin;
     }

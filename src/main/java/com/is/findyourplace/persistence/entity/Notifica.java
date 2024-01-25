@@ -1,7 +1,19 @@
 package com.is.findyourplace.persistence.entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Future;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +38,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Notifica {
     /**
-     * Id della Notifica
+     * Id della Notifica.
      */
     @Id
     @NotNull
@@ -74,12 +86,12 @@ public class Notifica {
 
     @Override
     public String toString() {
-        return "Notifica{" +
-                "idNotifica=" + idNotifica +
-                ", autore='" + autore + '\'' +
-                ", testo='" + testo + '\'' +
-                ", dataInvio=" + dataInvio +
-                ", expireDate=" + expireDate +
-                '}';
+        return "Notifica{"
+                + "idNotifica=" + idNotifica
+                + ", autore='" + autore + '\''
+                + ", testo='" + testo + '\''
+                + ", dataInvio=" + dataInvio
+                + ", expireDate=" + expireDate
+                + '}';
     }
 }
