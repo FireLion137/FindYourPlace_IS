@@ -60,7 +60,7 @@
                 <div class="form-field">
                     <label class="form-field-label" for="birthDateSignup">Data di Nascita</label>
                     <input class="form-field-input" id="birthDateSignup" name="birthDateS" th:field="*{dataNascita}" type="date" required>
-                    <p style="color: red" th:errors = "*{dataNascita}" th:if="${#fields.hasErrors('dataNascita')}"></p>
+                    <p id="futureDateError" style="color: red" th:errors = "*{dataNascita}" th:if="${#fields.hasErrors('dataNascita')}"></p>
                 </div>
                 <div class="form-field">
                     <label class="form-field-label" for="usernameSignup">Username</label>
