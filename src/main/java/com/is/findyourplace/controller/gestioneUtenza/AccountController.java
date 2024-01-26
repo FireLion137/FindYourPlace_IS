@@ -5,6 +5,7 @@ import com.is.findyourplace.service.gestioneUtenza.AccountService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +33,13 @@ public class AccountController {
     public AccountController(final AccountService accountService) {
         this.accountService = accountService;
     }
+
+    /**
+     * Variabile usata per definire quando questo controller
+     * viene usato per un test.
+     */
+    @Value("${app.testMode:false}")
+    private boolean testMode;
 
     /**
      * Mapping method to handle user registration and login form request.
@@ -91,10 +99,14 @@ public class AccountController {
         }
 
         accountService.saveUtente(utenteDto);
-        try {
-            request.login(utenteDto.getUsername(), utenteDto.getPassword());
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
+
+        // Login automatico dopo la registrazione
+        if (!testMode) {
+            try {
+                request.login(utenteDto.getUsername(), utenteDto.getPassword());
+            } catch (ServletException e) {
+                throw new RuntimeException(e);
+            }
         }
         return "redirect:/";
     }
