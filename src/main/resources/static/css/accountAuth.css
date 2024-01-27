@@ -117,3 +117,17 @@
     border: solid #737373;
     border-width: 2px 2px 0 2px;
 }
+
+#submitS-spinner{
+    display: none;
+    color: white;
+    margin-left: 20px;
+}
+
+.errorMessage {
+    color: red;
+    margin: 8px 0;
+}
+.errorMessage:empty {
+    display: none;
+}
