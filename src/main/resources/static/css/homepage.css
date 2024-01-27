@@ -1,0 +1,10 @@
+main {
+    background: #2f2f2f;
+}
+
+#map {
+    height: 60vh;
+    width: 60vw;
+    margin: 0 auto;
+    position: sticky;
+}

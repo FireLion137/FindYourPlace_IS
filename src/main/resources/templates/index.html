@@ -4,21 +4,65 @@
     <meta charset="UTF-8">
     <title>FindYourPlace</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../static/css/homepage.css" th:href="@{/css/homepage.css}">
-    <link rel="stylesheet" href="../static/css/siteStyle.css" th:href="@{/css/siteStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/homepage.css}">
+    <link rel="stylesheet" th:href="@{/css/siteStyle.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="../static/js/jquery-3.7.1.js" th:src="@{/js/jquery-3.7.1.js}"></script>
+    <script th:src="@{/js/jquery-3.7.1.js}"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    <script th:src="@{/js/homepage.js}"></script>
 </head>
 <body>
-    <div th:insert="fragments/header :: navbar"></div>
+<div th:insert="fragments/header :: navbar"></div>
 
-    <main>
-        <div>
-            <a th:href="@{/admin/users}">users</a>
+<main>
+    <div id="searchBar">
+        <label for="addressInput">Cerca</label>
+        <input type="text" id="addressInput" placeholder="Inserisci un indirizzo">
+        <button type="button" onclick="searchAddress()">Cerca</button>
+    </div>
+    <div id="map"></div>
 
-        </div>
-    </main>
+    <form id="searchForm" th:action="@{/search}" th:object="${search}" method="POST" role="form">
+        <input type="hidden" id="latitude" name="latitude">
+        <input type="hidden" id="longitude" name="longitude">
 
-    <div th:insert="fragments/footer :: footer"></div>
+        <label for="raggio">Raggio:</label>
+        <input type="number" id="raggio" name="raggio" required>
+
+        <label for="costoVita">Costo della vita:</label>
+        <select id="costoVita" name="costoVita">
+            <option value="ALTO">ALTO</option>
+            <option value="MEDIO">MEDIO</option>
+            <option value="BASSO">BASSO</option>
+        </select>
+
+        <label for="dangerMax">Pericolosità (%):</label>
+        <input type="number" id="dangerMax" name="dangerMax">
+
+        <label for="numAbitantiMin">Numero abitanti minimo:</label>
+        <input type="number" id="numAbitantiMin" name="numAbitantiMin">
+
+        <label for="numAbitantiMax">Numero abitanti massimo:</label>
+        <input type="number" id="numAbitantiMax" name="numAbitantiMax">
+
+        <label for="numNegoziMin">Numero negozi minimo:</label>
+        <input type="number" id="numNegoziMin" name="numNegoziMin">
+
+        <label for="numScuoleMin">Numero scuole minimo:</label>
+        <input type="number" id="numScuoleMin" name="numScuoleMin">
+
+        <label for="numRistorantiMin">Numero ristoranti minimo:</label>
+        <input type="number" id="numRistorantiMin" name="numRistorantiMin">
+
+        <button type="submit">Cerca</button>
+    </form>
+</main>
+
+<div th:insert="fragments/footer :: footer"></div>
 </body>
 </html>

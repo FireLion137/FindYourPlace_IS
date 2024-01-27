@@ -9,11 +9,12 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.AssertTrue;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -88,17 +89,19 @@ public class Filtri {
     @Size(min = 1000, max = 10000000)
     private int numAbitantiMax;
 
-    @AssertTrue(message = "Il numero di abitanti massimo "
-            + "deve essere maggiore al numero minimo.")
-    private boolean isNumAbitantiMaxValid() {
-        return numAbitantiMax >= numAbitantiMin;
+    @PrePersist
+    @PreUpdate
+    private void validateNumAbitanti() {
+        if (numAbitantiMax <= numAbitantiMin) {
+            throw new IllegalStateException("Il numero massimo di abitanti deve essere maggiore del numero minimo");
+        }
     }
 
     /**
      * Campo che definisce il numero di negozi minimo.
      */
     @PositiveOrZero
-    @Size(max = 10000)
+    @Size(max = 1000)
     private int numNegoziMin;
 
     /**
@@ -112,6 +115,20 @@ public class Filtri {
      * Campo che definisce il numero di ristoranti minimo.
      */
     @PositiveOrZero
-    @Size(max = 1000)
+    @Size(max = 10000)
     private int numRistorantiMin;
+
+    @Override
+    public String toString() {
+        return "Filtri{" +
+                "idRicerca=" + idRicerca +
+                ", costoVita=" + costoVita +
+                ", dangerMax=" + dangerMax +
+                ", numAbitantiMin=" + numAbitantiMin +
+                ", numAbitantiMax=" + numAbitantiMax +
+                ", numNegoziMin=" + numNegoziMin +
+                ", numScuoleMin=" + numScuoleMin +
+                ", numRistorantiMin=" + numRistorantiMin +
+                '}';
+    }
 }
