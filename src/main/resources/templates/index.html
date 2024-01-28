@@ -20,46 +20,80 @@
 <div th:insert="fragments/header :: navbar"></div>
 
 <main>
-    <div id="searchBar">
-        <label for="addressInput">Cerca</label>
-        <input type="text" id="addressInput" placeholder="Inserisci un indirizzo">
-        <button type="button" onclick="searchAddress()">Cerca</button>
+    <div id="searchBar" class="form-field">
+        <label class="form-field-label" for="addressInput"></label>
+        <input class="form-field-input" type="text" id="addressInput" placeholder="Inserisci un indirizzo">
+        <button class="search-addressBtn" type="button" onclick="searchAddress()">Cerca</button>
     </div>
-    <div id="map"></div>
 
     <form id="searchForm" th:action="@{/search}" th:object="${search}" method="POST" role="form">
         <input type="hidden" id="latitude" name="latitude">
         <input type="hidden" id="longitude" name="longitude">
 
-        <label for="raggio">Raggio:</label>
-        <input type="number" id="raggio" name="raggio" required>
+        <div class="form-field">
+            <label class="form-field-label" for="raggio" id="raggioValue">Raggio in Km: 25</label>
+            <div class="slidecontainer">
+                <input type="range" class="slider" id="raggio" name="raggio" min="10" max="500" value="25" required>
+            </div>
+        </div>
 
-        <label for="costoVita">Costo della vita:</label>
-        <select id="costoVita" name="costoVita">
-            <option value="ALTO">ALTO</option>
-            <option value="MEDIO">MEDIO</option>
-            <option value="BASSO">BASSO</option>
-        </select>
+        <div id="map"></div>
 
-        <label for="dangerMax">Pericolosità (%):</label>
-        <input type="number" id="dangerMax" name="dangerMax">
+        <div class="form-field">
+            <label class="form-field-label" for="costoVita">Costo della vita:</label>
+            <select class="form-field-input" id="costoVita" name="costoVita">
+                <option value="QUALSIASI">QUALSIASI</option>
+                <option value="BASSO">BASSO</option>
+                <option value="MEDIO">MEDIO</option>
+                <option value="ALTO">ALTO</option>
+            </select>
+        </div>
 
-        <label for="numAbitantiMin">Numero abitanti minimo:</label>
-        <input type="number" id="numAbitantiMin" name="numAbitantiMin">
+        <div class="form-field">
+            <label class="form-field-label" for="dangerMax" id="dangerMaxValue">Pericolosità massima: 100%</label>
+            <div class="slidecontainer">
+                <input type="range" class="slider" id="dangerMax" name="dangerMax" min="25" max="100" value="100">
+            </div>
+        </div>
 
-        <label for="numAbitantiMax">Numero abitanti massimo:</label>
-        <input type="number" id="numAbitantiMax" name="numAbitantiMax">
+        <div class="form-field">
+            <label class="form-field-label" for="numAbitantiMin" id="numAbitantiMinValue">Numero abitanti minimo: 0</label>
+            <div class="slidecontainer">
+                <input type="range" class="slider" id="numAbitantiMin" name="numAbitantiMin" min="0" max="1000000" value="0">
+            </div>
+        </div>
 
-        <label for="numNegoziMin">Numero negozi minimo:</label>
-        <input type="number" id="numNegoziMin" name="numNegoziMin">
+        <div class="form-field">
+            <label class="form-field-label" for="numAbitantiMax" id="numAbitantiMaxValue">Numero abitanti massimo: 10000000</label>
+            <div class="slidecontainer">
+                <input type="range" class="slider" id="numAbitantiMax" name="numAbitantiMax" min="1000" max="10000000" value="10000000">
+            </div>
+        </div>
 
-        <label for="numScuoleMin">Numero scuole minimo:</label>
-        <input type="number" id="numScuoleMin" name="numScuoleMin">
+        <div class="form-field">
+            <label class="form-field-label" for="numNegoziMin" id="numNegoziMinValue">Numero negozi minimo: 0</label>
+            <div class="slidecontainer">
+                <input type="range" class="slider" id="numNegoziMin" name="numNegoziMin" min="0" max="1000" value="0">
+            </div>
+        </div>
 
-        <label for="numRistorantiMin">Numero ristoranti minimo:</label>
-        <input type="number" id="numRistorantiMin" name="numRistorantiMin">
+        <div class="form-field">
+            <label class="form-field-label" for="numRistorantiMin" id="numRistorantiMinValue">Numero ristoranti minimo: 0</label>
+            <div class="slidecontainer">
+                <input type="range" class="slider" id="numRistorantiMin" name="numRistorantiMin" min="0" max="10000" value="0">
+            </div>
+        </div>
 
-        <button type="submit">Cerca</button>
+        <div class="form-field">
+            <label class="form-field-label" for="numScuoleMin" id="numScuoleMinValue">Numero scuole minimo: 0</label>
+            <div class="slidecontainer">
+                <input type="range" class="slider" id="numScuoleMin" name="numScuoleMin" min="0" max="100" value="0">
+            </div>
+        </div>
+
+        <div class="form-buttons">
+            <button class="form-submitButton" type="submit">Cerca</button>
+        </div>
     </form>
 </main>
 
