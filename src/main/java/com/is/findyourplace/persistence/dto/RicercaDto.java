@@ -62,7 +62,7 @@ public class RicercaDto {
         /**
          * Costo della vita Basso, Medio o Alto per regione.
          */
-        BASSO, MEDIO, ALTO
+        QUALSIASI, BASSO, MEDIO, ALTO
     }
     /**
      * Campo che definisce il costo della vita della regione.

@@ -27,14 +27,14 @@
     </div>
 
     <form id="searchForm" th:action="@{/search}" th:object="${ricerca}" method="POST" role="form">
-        <input type="hidden" id="latitude" name="latitude" th:field="*{latitude}">
-        <input type="hidden" id="longitude" name="longitude" th:field="*{longitude}">
+        <input type="hidden" id="latitude" name="latitude">
+        <input type="hidden" id="longitude" name="longitude">
 
         <div class="form-field">
             <label class="form-field-label" for="raggio" id="raggioValue">Raggio in Km: 25</label>
             <div class="slidecontainer">
                 <input type="range" class="slider" id="raggio" name="raggio"
-                       th:field="*{raggio}" min="10" max="500" value="25" required>
+                       min="10" max="500" th:value="25" required>
             </div>
         </div>
 
@@ -42,11 +42,11 @@
 
         <div class="form-field">
             <label class="form-field-label" for="costoVita">Costo della vita:</label>
-            <select class="form-field-input" id="costoVita" name="costoVita" th:field="*{costoVita}">
-                <option value="QUALSIASI">QUALSIASI</option>
-                <option value="BASSO">BASSO</option>
-                <option value="MEDIO">MEDIO</option>
-                <option value="ALTO">ALTO</option>
+            <select class="form-field-input" id="costoVita" name="costoVita">
+                <option th:value="QUALSIASI">QUALSIASI</option>
+                <option th:value="BASSO">BASSO</option>
+                <option th:value="MEDIO">MEDIO</option>
+                <option th:value="ALTO">ALTO</option>
             </select>
         </div>
 
@@ -54,7 +54,7 @@
             <label class="form-field-label" for="dangerMax" id="dangerMaxValue">Pericolosità massima: 100%</label>
             <div class="slidecontainer">
                 <input type="range" class="slider" id="dangerMax" name="dangerMax"
-                       th:field="*{dangerMax}" min="25" max="100" value="100">
+                       min="25" max="100" th:value="100">
             </div>
         </div>
 
@@ -62,7 +62,7 @@
             <label class="form-field-label" for="numAbitantiMin" id="numAbitantiMinValue">Numero abitanti minimo: 0</label>
             <div class="slidecontainer">
                 <input type="range" class="slider" id="numAbitantiMin" name="numAbitantiMin"
-                       th:field="*{numAbitantiMin}" min="0" max="1000000" value="0">
+                       min="0" max="1000000" th:value="0">
             </div>
         </div>
 
@@ -70,7 +70,7 @@
             <label class="form-field-label" for="numAbitantiMax" id="numAbitantiMaxValue">Numero abitanti massimo: 10000000</label>
             <div class="slidecontainer">
                 <input type="range" class="slider" id="numAbitantiMax" name="numAbitantiMax"
-                       th:field="*{numAbitantiMax}" min="1000" max="10000000" value="10000000">
+                       min="1000" max="10000000" th:value="10000000">
             </div>
         </div>
 
@@ -78,7 +78,7 @@
             <label class="form-field-label" for="numNegoziMin" id="numNegoziMinValue">Numero negozi minimo: 0</label>
             <div class="slidecontainer">
                 <input type="range" class="slider" id="numNegoziMin" name="numNegoziMin"
-                       th:field="*{numNegoziMin}" min="0" max="1000" value="0">
+                       min="0" max="1000" th:value="0">
             </div>
         </div>
 
@@ -86,7 +86,7 @@
             <label class="form-field-label" for="numRistorantiMin" id="numRistorantiMinValue">Numero ristoranti minimo: 0</label>
             <div class="slidecontainer">
                 <input type="range" class="slider" id="numRistorantiMin" name="numRistorantiMin"
-                       th:field="*{numRistorantiMin}" min="0" max="10000" value="0">
+                       min="0" max="10000" th:value="0">
             </div>
         </div>
 
@@ -94,12 +94,12 @@
             <label class="form-field-label" for="numScuoleMin" id="numScuoleMinValue">Numero scuole minimo: 0</label>
             <div class="slidecontainer">
                 <input type="range" class="slider" id="numScuoleMin" name="numScuoleMin"
-                       th:field="*{numScuoleMin}" min="0" max="100" value="0">
+                       min="0" max="100" th:value="0">
             </div>
         </div>
 
         <div class="form-buttons">
-            <button class="form-submitButton" onclick="return (confermaParametri())" type="submit">
+            <button class="form-submitButton" onclick="return confermaParametri()" type="submit">
                 Cerca
                 <i id="submitS-spinner" class="fa fa-spinner fa-spin"></i>
             </button>
