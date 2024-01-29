@@ -43,7 +43,6 @@ public class TF1Test {
         mockMvc.perform(MockMvcRequestBuilders.post("/register")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .flashAttr("utenteR", utenteDto))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/"));
+                .andExpect(MockMvcResultMatchers.status().is(201));
     }
 }

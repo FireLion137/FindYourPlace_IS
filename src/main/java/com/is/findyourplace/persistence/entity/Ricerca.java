@@ -107,7 +107,6 @@ public class Ricerca {
                 + ", coordinate=" + coordinate
                 + ", raggio=" + raggio
                 + ", idUtente=" + idUtente
-                + ", utente=" + utente
                 + ", filtri=" + filtri
                 + '}';
     }

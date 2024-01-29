@@ -9,9 +9,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.Duration;
 import java.util.*;
 
 @SpringBootTest()
@@ -54,9 +57,11 @@ public class TC11Test {
     driver.findElement(By.id("passwordSignup1")).sendKeys("DavidCalif03!");
     driver.findElement(By.id("passwordSignup2")).sendKeys("DavidCalif03!");
     driver.findElement(By.cssSelector(".form-submitButton:nth-child(10)")).click();
-    assertEquals(driver.getCurrentUrl(), "http://localhost:8080/");
 
+    new WebDriverWait(driver, Duration.ofSeconds(5))
+            .until(ExpectedConditions.urlToBe("http://localhost:8080/"));
     utenteRepository.deleteById(utenteRepository.findByUsername(username).getIdUtente());
+    assertEquals("http://localhost:8080/", driver.getCurrentUrl());
     //driver.close();
   }
   @Test
@@ -192,7 +197,7 @@ public class TC11Test {
     driver.findElement(By.id("passwordSignup1")).sendKeys("DiegoG12!");
     driver.findElement(By.id("passwordSignup2")).sendKeys("DiegoG12!");
     driver.findElement(By.cssSelector(".form-submitButton:nth-child(10)")).click();
-    assertFalse(driver.findElements(By.id("futureDateError")).isEmpty());
+    assertFalse(driver.findElements(By.id("dataNascitaSError")).isEmpty());
     //driver.close();
   }
   @Test
@@ -214,9 +219,11 @@ public class TC11Test {
     driver.findElement(By.id("lastnameSignup")).sendKeys("Giulioli");
     driver.findElement(By.id("birthDateSignup")).sendKeys("23-02-2000");
     driver.findElement(By.cssSelector(".form-submitButton:nth-child(10)")).click();
-    assertEquals(driver.getCurrentUrl(), "http://localhost:8080/");
 
+    new WebDriverWait(driver, Duration.ofSeconds(5))
+            .until(ExpectedConditions.urlToBe("http://localhost:8080/"));
     utenteRepository.deleteById(utenteRepository.findByUsername(username).getIdUtente());
+    assertEquals("http://localhost:8080/", driver.getCurrentUrl());
     //driver.close();
   }
   @Test

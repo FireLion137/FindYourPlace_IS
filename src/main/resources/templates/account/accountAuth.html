@@ -41,32 +41,32 @@
         </section>
         <section class="login-section" id="section-Signup">
             <h2 class="login-subtitle">Registrati</h2>
-            <form th:action="@{/register}" th:object="${utenteR}" method="post" role="form">
+            <form id="registrationForm" th:action="@{/register}" th:object="${utenteR}" method="post" role="form">
                 <div class="form-field">
                     <label class="form-field-label" for="nameSignup">Nome</label>
                     <input class="form-field-input" id="nameSignup" name="nameS" type="text" th:field="*{nome}" required>
-                    <p style="color: red" th:errors = "*{nome}" th:if="${#fields.hasErrors('nome')}"></p>
+                    <p class="errorMessage" id="nomeSError"></p>
                 </div>
                 <div class="form-field">
                     <label class="form-field-label" for="lastnameSignup">Cognome</label>
                     <input class="form-field-input" id="lastnameSignup" name="lastnameS" th:field="*{cognome}" type="text" required>
-                    <p style="color: red" th:errors = "*{cognome}" th:if="${#fields.hasErrors('cognome')}"></p>
+                    <p class="errorMessage" id="cognomeSError"></p>
                 </div>
                 <div class="form-field">
                     <label class="form-field-label" for="phoneSignup">Numero di Telefono (Opzionale)</label>
                     <input class="form-field-input" id="phoneSignup" name="phoneS" th:field="*{numeroTel}" type="text">
-                    <p style="color: red" th:errors = "*{numeroTel}" th:if="${#fields.hasErrors('numeroTel')}"></p>
+                    <p class="errorMessage" id="numeroTelSError"></p>
                 </div>
                 <div class="form-field">
                     <label class="form-field-label" for="birthDateSignup">Data di Nascita</label>
                     <input class="form-field-input" id="birthDateSignup" name="birthDateS" th:field="*{dataNascita}" type="date" required>
-                    <p id="futureDateError" style="color: red" th:errors = "*{dataNascita}" th:if="${#fields.hasErrors('dataNascita')}"></p>
+                    <p class="errorMessage" id="dataNascitaSError"></p>
                 </div>
                 <div class="form-field">
                     <label class="form-field-label" for="usernameSignup">Username</label>
                     <input class="form-field-input" id="usernameSignup" name="usernameS" th:field="*{username}" type="text"
                            minlength="5" autocomplete="new-username" required>
-                    <p style="color: red" th:errors = "*{username}" th:if="${#fields.hasErrors('username')}"></p>
+                    <p class="errorMessage" id="usernameSError"></p>
                     <div class="form-field-comment">
                         Minimo 5 caratteri, Massimo 30 caratteri. Accetta lettere, numeri e trattino basso.
                     </div>
@@ -74,7 +74,7 @@
                 <div class="form-field">
                     <label class="form-field-label" for="emailSignup">Email</label>
                     <input class="form-field-input" id="emailSignup" name="emailS" th:field="*{email}" type="email" required>
-                    <p style="color: red" th:errors = "*{email}" th:if="${#fields.hasErrors('email')}"></p>
+                    <p class="errorMessage" id="emailSError"></p>
                 </div>
                 <div class="form-field">
                     <label class="form-field-label" for="passwordSignup1">Password</label>
@@ -83,7 +83,7 @@
                                minlength="8" autocomplete="new-password" required>
                         <span class="password-eye" onclick="revealPassword('Signup1')"><i class="fa fa-eye" id="passEyeSignup1" title="Mostra Password"></i></span>
                     </div>
-                    <p style="color: red" th:errors = "*{password}" th:if="${#fields.hasErrors('password')}"></p>
+                    <p class="errorMessage" id="passwordSError"></p>
                     <div class="form-field-comment">
                         Minimo 8 caratteri, Massimo 30 caratteri. Deve contenere lettere maiuscole, minuscole, numeri e caratteri speciali tranne slash.
                     </div>
@@ -98,7 +98,10 @@
                         Ripeti Password inserita nel campo precedente.
                     </div>
                 </div>
-                <button class="form-submitButton" onclick="return (confermaParametriAuth('Signup'))" type="submit">Registrati</button>
+                <button class="form-submitButton" onclick="return (confermaParametriAuth('Signup'))" type="submit">
+                    Registrati
+                    <i id="submitS-spinner" class="fa fa-spinner fa-spin"></i>
+                </button>
             </form>
         </section>
     </div>
@@ -106,4 +109,41 @@
 
 <div th:insert="fragments/footer :: footer"></div>
 </body>
+
+<script>
+    $(document).ready(function() {
+        $('#registrationForm').submit(function(e) {
+            e.preventDefault();
+
+            let spinner= $('#submitS-spinner');
+            spinner.show();
+            $.ajax({
+                type: 'POST',
+                url: '/register',
+                data: $('#registrationForm').serialize(),
+                success: function(response, textStatus, xhr) {
+                    if(xhr.status === 201) {
+                        window.location.href = "/";
+                    } else {
+                        console.log("HTTP Status imprevisto: " + xhr.status)
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    if(xhr.status === 400) {
+                        $('[id$=Error]').text('');
+                        xhr.responseJSON.errors.forEach(function(error) {
+                            $('#' + error.field + 'SError').text(error.defaultMessage);
+                        });
+                    }
+                    else {
+                        console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+                    }
+                },
+                complete: function() {
+                    spinner.hide();
+                }
+            });
+        });
+    });
+</script>
 </html>
