@@ -10,7 +10,8 @@ $(function(){
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '<a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
         maxBounds: bounds,
-        maxZoom: 18
+        maxZoom: 18,
+        minZoom: 5
     }).addTo(map);
 
     map.setMaxBounds(map.getBounds());
@@ -119,3 +120,64 @@ $(function(){
         outputnumScuoleMin.innerHTML = "Numero scuole minimo: " + this.value;
     }
 })
+
+
+function confermaParametri() {
+    let latitude= document.getElementById('latitude').value;
+    let longitude= document.getElementById('longitude').value;
+    let raggio= document.getElementById('raggio').value;
+    let costoVita= document.getElementById('costoVita').value;
+    let dangerMax= document.getElementById('dangerMax').value;
+    let numAbitantiMin= document.getElementById('numAbitantiMin').value;
+    let numAbitantiMax= document.getElementById('numAbitantiMax').value;
+    let numNegoziMin= document.getElementById('numNegoziMin').value;
+    let numRistorantiMin= document.getElementById('numRistorantiMin').value;
+    let numScuoleMin= document.getElementById('numScuoleMin').value;
+
+    const coordsRGX = /^((-?|\+?)?\d+(\.\d+)?).\s*((-?|\+?)?\d+(\.\d+)?)$/;
+    const numberRGX= /^\d+$/;
+    const costoVitaAllowed = ["QUALSIASI", "BASSO", "MEDIO", "ALTO"];
+
+    if(!coordsRGX.test(latitude) || !coordsRGX.test(longitude)) {
+        alert("Coordinante non valide!");
+        return false;
+    }
+    if(!numberRGX.test(raggio)) {
+        alert("Raggio non valido!");
+        return false;
+    }
+    if(costoVitaAllowed.indexOf(costoVita) === -1) {
+        alert("Costo Vita non valido!");
+        return false;
+    }
+    if(!numberRGX.test(dangerMax)) {
+        alert("Pericolosità massima non valida!");
+        return false;
+    }
+    if(!numberRGX.test(numAbitantiMin)) {
+        alert("Numero abitanti minimo non valido!");
+        return false;
+    }
+    if(!numberRGX.test(numAbitantiMax)) {
+        alert("Numero abitanti massimo non valido!");
+        return false;
+    }
+    if(numAbitantiMin >= numAbitantiMax) {
+        alert("Numero abitanti minimo maggiore del massimo!");
+        return false;
+    }
+    if(!numberRGX.test(numNegoziMin)) {
+        alert("Numero negozi minimo non valido!");
+        return false;
+    }
+    if(!numberRGX.test(numRistorantiMin)) {
+        alert("Numero ristoranti minimo non valido!");
+        return false;
+    }
+    if(!numberRGX.test(numScuoleMin)) {
+        alert("Numero scuole minimo non valido!");
+        return false;
+    }
+
+    return true;
+}

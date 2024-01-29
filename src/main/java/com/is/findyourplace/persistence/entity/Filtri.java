@@ -12,9 +12,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -72,21 +70,23 @@ public class Filtri {
     /**
      * Campo che definisce la pericolosità massima.
      */
-    @Size(min = 2, max = 100)
+    @DecimalMin(value = "2")
+    @DecimalMax(value = "100")
     private float dangerMax;
 
     /**
      * Campo che definisce il numero di abitanti minimo.
      */
     @PositiveOrZero
-    @Size(max = 1000000)
+    @Max(1000000)
     private int numAbitantiMin;
 
     /**
      * Campo che definisce il numero di abitanti massimo.
      */
     @PositiveOrZero
-    @Size(min = 1000, max = 10000000)
+    @Min(1000)
+    @Max(10000000)
     private int numAbitantiMax;
 
     @PrePersist
@@ -101,21 +101,21 @@ public class Filtri {
      * Campo che definisce il numero di negozi minimo.
      */
     @PositiveOrZero
-    @Size(max = 1000)
+    @Max(1000)
     private int numNegoziMin;
 
     /**
      * Campo che definisce il numero di scuole minimo.
      */
     @PositiveOrZero
-    @Size(max = 100)
+    @Max(100)
     private int numScuoleMin;
 
     /**
      * Campo che definisce il numero di ristoranti minimo.
      */
     @PositiveOrZero
-    @Size(max = 10000)
+    @Max(10000)
     private int numRistorantiMin;
 
     @Override

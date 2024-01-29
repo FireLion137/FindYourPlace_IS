@@ -15,7 +15,8 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -67,7 +68,8 @@ public class Ricerca {
      */
     @NotNull
     @PositiveOrZero
-    @Size(min = 2, max = 500)
+    @Min(2)
+    @Max(500)
     private int raggio;
 
     /**

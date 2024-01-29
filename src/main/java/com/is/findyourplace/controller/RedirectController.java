@@ -1,5 +1,6 @@
 package com.is.findyourplace.controller;
 
+import com.is.findyourplace.persistence.dto.RicercaDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +14,9 @@ public class RedirectController {
      * Mapping della homepage.
      * @return index.html
      */
-    @RequestMapping(value = {"", "/index"})
-    public String home() {
+    @RequestMapping(value = {"/", "/index"})
+    public String home(final Model model) {
+        model.addAttribute("ricerca", new RicercaDto());
         return "index";
     }
 
