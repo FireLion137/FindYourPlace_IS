@@ -32,8 +32,16 @@ function confermaParametri(x,y) {
 
 if (x==='single')
 {
-    let author= document.getElementById('autoreSendnot' +y).value;
-    let text= document.getElementById('textSendnot'+y).value;
+    let author, text;
+    if (y!=null)
+    {
+         author= document.getElementById('autoreSendnot' +y).value;
+         text= document.getElementById('testoSendnot'+y).value;
+    }else {
+         author= document.getElementById('autoreSendnot').value;
+         text= document.getElementById('testoSendnot').value;
+    }
+
 
 
     const authorRGX= /^[A-Za-z][A-Za-z0-9_]{4,29}$/;
@@ -52,7 +60,7 @@ if (x==='single')
     return true;
 }else if(x==='all'){
     let author= document.getElementById('autoreSendnotB').value;
-    let text= document.getElementById('textSendnotB').value;
+    let text= document.getElementById('testoSendnotB').value;
 
 
     const authorRGX= /^[A-Za-z][A-Za-z0-9_]{4,29}$/;
@@ -88,13 +96,14 @@ function ConfermaAzioneResetPassword(){
 
 function InvioNotificaSingola(x){
     let username=x
-    if (!confermaParametri('single',username)){
-        return false;
-    }
     let form =$('#notForm'+username);
     form.submit(function (e){
         e.preventDefault();
     });
+    if (!confermaParametri('single',username)){
+        return false;
+    }
+
     $('[id$=Success]').text('');
 
     $.ajax({
@@ -113,7 +122,7 @@ function InvioNotificaSingola(x){
             if(xhr.status === 400) {
                 $('[id$=Error]').text('');
                 xhr.responseJSON.errors.forEach(function(error) {
-                    $('#' + error.field + username + 'Error').text(error.defaultMessage);
+                    $('#' + error.field +'Sendnot'+ username + 'Error').text(error.defaultMessage);
                 });
             }
             else {
@@ -149,6 +158,41 @@ function InvioNotificaAll(){
                 $('[id$=Error]').text('');
                 xhr.responseJSON.errors.forEach(function(error) {
                     $('#' + error.field  + 'BError').text(error.defaultMessage);
+                });
+            }
+            else {
+                console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+            }
+        }
+    });
+}
+function InvioNotificaSingolaDetUser(){
+    if (!confermaParametri('single',null)){
+        return false;
+    }
+    let form =$('#NotForm');
+    form.submit(function (e){
+        e.preventDefault();
+    });
+    $('[id$=Success]').text('');
+
+    $.ajax({
+        type: 'POST',
+        url: '/sendNotification',
+        data: form.serialize(),
+        success: function(response, textStatus, xhr) {
+            if(xhr.status === 201) {
+                $('#SubmitSendnotSuccess').text("Notifica inviata correttamente");
+                $('#textSendnot' ).val('');
+            } else {
+                console.log("HTTP Status imprevisto: " + xhr.status)
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            if(xhr.status === 400) {
+                $('[id$=Error]').text('');
+                xhr.responseJSON.errors.forEach(function(error) {
+                    $('#' + error.field  + 'DetUError').text(error.defaultMessage);
                 });
             }
             else {

@@ -2,6 +2,7 @@ package com.is.findyourplace.controller.gestioneAmministratori;
 
 import com.is.findyourplace.persistence.dto.NotificaDto;
 import com.is.findyourplace.service.gestioneAmministratori.NotificationService;
+import com.is.findyourplace.service.gestioneUtenza.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +27,19 @@ public class NotificationController {
      * inviate da un amministratore.
      */
     private final NotificationService notificationService;
+    private final AccountService accountService;
 
 
     /**
      * Costruttore del controller.
+     *
      * @param notificationService NotificationService
+     * @param accountService AccountService
      */
     public NotificationController(
-            final NotificationService notificationService) {
+            final NotificationService notificationService, AccountService accountService) {
         this.notificationService = notificationService;
+        this.accountService = accountService;
     }
 
     /**
@@ -64,6 +69,12 @@ public class NotificationController {
 
         notificaDto.setDataInvio(LocalDateTime.now());
         notificaDto.setDataScadenza(LocalDateTime.now().plusMonths(2));
+        if (notificaDto.getDestinatario()==null
+                || notificaDto.getDestinatario().isBlank()
+                || !accountService.existsByUsername(notificaDto.getDestinatario()) ){
+            result.rejectValue("destinatario", "null",
+                    "Destinatario non valido!");
+        }
 
         if (result.hasErrors()) {
             response.put("errors", result.getAllErrors());

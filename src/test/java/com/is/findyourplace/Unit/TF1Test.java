@@ -36,7 +36,6 @@ public class TF1Test {
         utenteDto.setUsername("testuser");
         utenteDto.setEmail("test@example.com");
         utenteDto.setPassword("Testpassword1!");
-
         Mockito.when(accountService.existsByUsername("testuser")).thenReturn(false);
         Mockito.when(accountService.existsByEmail("test@example.com")).thenReturn(false);
 

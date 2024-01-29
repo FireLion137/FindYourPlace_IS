@@ -37,16 +37,17 @@
                                 <h1 class="formContainer-title " style="text-align: center;">Scrivi qui i dettagli della notifica</h1>
                                     <div class="formContainer-wrapper" id="formContainer-wrapper-notification">
                                         <form th:id="'notForm' + ${utente.getUsername()} " th:action="@{/sendNotification}" th:object="${notifica}" method="post" role="form">
-                                             <input class="form-field-input" th:id="'destinatarioSendnot' + ${utente.getUsername()} " name="destinatario" th:value="${utente.getUsername()}" type="text" readonly autocomplete="off" hidden>
+                                            <input class="form-field-input" th:id="'destinatarioSendnot' + ${utente.getUsername()} " name="destinatario" th:value="${utente.getUsername()}" type="text" readonly autocomplete="off" hidden>
+                                            <p class="errorMessage" th:id="'destinatarioSendnot' + ${utente.getUsername()} + 'Error'"></p>
                                             <div class="form-field">
                                                 <label class="form-field-label" th:for="'autoreSendnot' + ${utente.getUsername()}">Autore</label>
                                                 <input class="form-field-input" th:id="'autoreSendnot' + ${utente.getUsername()}"   name="autore" th:value="${#authentication.getName()}" type="text" readonly autocomplete="off" required>
                                                 <p class="errorMessage" th:id="'autoreSendnot' + ${utente.getUsername()} + 'Error'"></p>
                                             </div>
                                             <div class="form-field">
-                                                <label class="form-field-label" th:for="'textSendnot' + ${utente.getUsername()}">testo</label>
-                                                <textarea class="form-field-input" style="height: 100px; resize: none;" th:field="*{testo}"   th:id="'textSendnot' + ${utente.getUsername()}"  name="text" rows="5" maxlength="500" autocomplete="off" required></textarea>
-                                                <p class="errorMessage" th:id="'textSendnot' + ${utente.getUsername()}+  'Error'"></p>
+                                                <label class="form-field-label" th:for="'testoSendnot' + ${utente.getUsername()}">testo</label>
+                                                <textarea class="form-field-input" style="height: 100px; resize: none;" th:field="*{testo}"   th:id="'testoSendnot' + ${utente.getUsername()}"  name="text" rows="5" maxlength="500" autocomplete="off" required></textarea>
+                                                <p class="errorMessage" th:id="'testoSendnot' + ${utente.getUsername()}+  'Error'"></p>
                                             </div>
                                             <button class="form-submitButton buttonPrimary buttonHover" th:id="'SubmitNot' + ${utente.getUsername()}" style="margin: 20px auto;width: 180px;" th:attr="onclick=|return InvioNotificaSingola('${utente.getUsername()}')|" type="submit">Invia Notifica</button>
                                             <p class="SuccessMessage" th:id="'SubmitSendnot' + ${utente.getUsername()} + 'Success'"></p>
@@ -71,9 +72,9 @@
                         <p class="errorMessage" id="autoreSendnotBError"></p>
                     </div>
                     <div class="form-field">
-                        <label class="form-field-label" for="textSendnotB">testo</label>
-                        <textarea class="form-field-input" style="height: 100px; resize: none;" th:field="*{testo}"  id="textSendnotB" name="text" rows="5" maxlength="500" autocomplete="off" required></textarea>
-                        <p class="errorMessage" id="textSendnotBError"></p>
+                        <label class="form-field-label" for="testoSendnotB">testo</label>
+                        <textarea class="form-field-input" style="height: 100px; resize: none;" th:field="*{testo}"  id="testoSendnotB" name="text" rows="5" maxlength="500" autocomplete="off" required></textarea>
+                        <p class="errorMessage" id="testoSendnotBError"></p>
                     </div>
                     <button class="form-submitButton buttonPrimary buttonHover" id="SubmitNotB" style="margin: 20px auto;display: block;width: 180px;" onclick="return InvioNotificaAll()" type="submit">Invia Notifica</button>
                     <p class="SuccessMessage" id="SubmitSendnotBSuccess"></p>
