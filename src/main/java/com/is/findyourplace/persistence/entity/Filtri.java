@@ -40,9 +40,8 @@ public class Filtri {
      * Id della ricerca.
      */
     @Id
-    @NotNull
     @Column(name = "id_ricerca")
-    private long idRicerca;
+    private Long idRicerca;
 
     /**
      * La chiave primaria deriva dalla chiave della ricerca.
@@ -59,7 +58,7 @@ public class Filtri {
         /**
          * Costo della vita Basso, Medio o Alto per regione.
          */
-        BASSO, MEDIO, ALTO
+        QUALSIASI, BASSO, MEDIO, ALTO
     }
     /**
      * Campo che definisce il costo della vita della regione.

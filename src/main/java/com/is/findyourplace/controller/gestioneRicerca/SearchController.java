@@ -44,6 +44,11 @@ public class SearchController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
+        searchService.saveRicerca(ricercaDto);
+
+        //Call al modulo di IA
+        //response.put()
+
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

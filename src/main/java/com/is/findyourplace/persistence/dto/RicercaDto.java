@@ -1,5 +1,6 @@
 package com.is.findyourplace.persistence.dto;
 
+import com.is.findyourplace.persistence.entity.Filtri.CostoVita;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.NotNull;
@@ -56,18 +57,9 @@ public class RicercaDto {
 
 
     /**
-     * Enum usato per forzare solo 3 stringhe precise.
-     */
-    public enum CostoVita {
-        /**
-         * Costo della vita Basso, Medio o Alto per regione.
-         */
-        QUALSIASI, BASSO, MEDIO, ALTO
-    }
-    /**
      * Campo che definisce il costo della vita della regione.
      */
-    private RicercaDto.CostoVita costoVita;
+    private CostoVita costoVita;
 
     /**
      * Campo che definisce la pericolosità massima.

@@ -21,8 +21,7 @@ import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -46,10 +45,9 @@ public class Ricerca {
      * Id dell Ricerca.
      */
     @Id
-    @NotNull
     @Column(name = "id_ricerca")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idRicerca;
+    private Long idRicerca;
 
     /**
      * Data e ora della Ricerca.
@@ -75,9 +73,8 @@ public class Ricerca {
     /**
      * Id dell' utente che ha effettuato la ricerca.
      */
-    @NotNull
     @Column(name = "id_utente")
-    private long idUtente;
+    private Long idUtente;
 
     /**
      * Utente che ha effettuato la ricerca.

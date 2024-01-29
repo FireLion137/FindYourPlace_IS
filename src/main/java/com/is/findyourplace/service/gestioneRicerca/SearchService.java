@@ -1,8 +1,9 @@
 package com.is.findyourplace.service.gestioneRicerca;
 
-import org.springframework.stereotype.Service;
+import com.is.findyourplace.persistence.dto.RicercaDto;
+import com.is.findyourplace.persistence.entity.Luogo;
 
-@Service
-public class SearchService {
-
+public interface SearchService {
+    void saveRicerca(RicercaDto ricercaDto);
+    void saveLuogo(Luogo luogo);
 }
