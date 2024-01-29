@@ -15,10 +15,10 @@ function openTabContentB(x){
         navlink.style.margin="0px";
         navlink.style.padding="0px";
         navlink.style.display="none"; //prov
-        if (x==='form-notification')
-        button.innerText="Invia notifica";
-        else
+        if (x==='form-notificationB')
             button.innerText="Invia notifica Broadcast";
+        else
+            button.innerText="Invia notifica";
     }
 }    function openTabContent(x){
     let navlink=document.getElementById("tab-content-"+x);
@@ -28,12 +28,12 @@ function openTabContentB(x){
         navlink.style.height="0px";
 }
 
-function confermaParametri(x) {
+function confermaParametri(x,y) {
 
 if (x==='single')
 {
-    let author= document.getElementById('autoreSendnot').value;
-    let text= document.getElementById('textSendnot').value;
+    let author= document.getElementById('autoreSendnot' +y).value;
+    let text= document.getElementById('textSendnot'+y).value;
 
 
     const authorRGX= /^[A-Za-z][A-Za-z0-9_]{4,29}$/;
@@ -84,3 +84,78 @@ function ConfermaAzioneResetPassword(){
         return false;
 
 }
+
+
+function InvioNotificaSingola(x){
+    let username=x
+    if (!confermaParametri('single',username)){
+        return false;
+    }
+    let form =$('#notForm'+username);
+    form.submit(function (e){
+        e.preventDefault();
+    });
+    $('[id$=Success]').text('');
+
+    $.ajax({
+        type: 'POST',
+        url: '/sendNotification',
+        data: form.serialize(),
+        success: function(response, textStatus, xhr) {
+            if(xhr.status === 201) {
+                $('#SubmitSendnot' + username + 'Success').text("Notifica inviata correttamente");
+                $('#textSendnot' + username).val('');
+            } else {
+                console.log("HTTP Status imprevisto: " + xhr.status)
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            if(xhr.status === 400) {
+                $('[id$=Error]').text('');
+                xhr.responseJSON.errors.forEach(function(error) {
+                    $('#' + error.field + username + 'Error').text(error.defaultMessage);
+                });
+            }
+            else {
+                console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+            }
+        }
+    });
+}
+function InvioNotificaAll(){
+    if (!confermaParametri('all')){
+        return false;
+    }
+    let form =$('#notFormB');
+    form.submit(function (e){
+        e.preventDefault();
+    });
+    $('[id$=Success]').text('');
+
+    $.ajax({
+        type: 'POST',
+        url: '/sendNotificationAll',
+        data: form.serialize(),
+        success: function(response, textStatus, xhr) {
+            if(xhr.status === 201) {
+                $('#SubmitSendnotBSuccess').text("Notifica inviata correttamente");
+                $('#textSendnotB' ).val('');
+            } else {
+                console.log("HTTP Status imprevisto: " + xhr.status)
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            if(xhr.status === 400) {
+                $('[id$=Error]').text('');
+                xhr.responseJSON.errors.forEach(function(error) {
+                    $('#' + error.field  + 'BError').text(error.defaultMessage);
+                });
+            }
+            else {
+                console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+            }
+        }
+    });
+}
+
+

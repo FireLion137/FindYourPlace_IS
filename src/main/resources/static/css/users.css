@@ -9,10 +9,13 @@
     width: 600px;
     padding: 10px;
 }
-#tab-content-form-notification{
+.formNot{
     margin: 5px auto;
     width: 600px;
     padding: 10px;
+}
+.form-field-input{
+    background-color: #424242;
 }
 
 .formContainer-title{
@@ -27,3 +30,18 @@
     margin: 20px;
     max-width: fit-content;
 }
+.errorMessage {
+    color: red;
+    margin: 8px 0;
+}
+.errorMessage:empty {
+    display: none;
+}
+.SuccessMessage {
+    color: green;
+    margin: 8px 0;
+}
+.SuccessMessage:empty {
+    display: none;
+}
+

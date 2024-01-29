@@ -3,14 +3,20 @@ package com.is.findyourplace.controller.gestioneAmministratori;
 import com.is.findyourplace.persistence.dto.NotificaDto;
 import com.is.findyourplace.service.gestioneAmministratori.NotificationService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 //Gestisce l'invio delle notifiche da parte di un Amministratore
 @Controller
@@ -49,16 +55,23 @@ public class NotificationController {
      * @return admin/notificaInviata.html
      */
     @PostMapping("/sendNotification")
-    public String invioNot(
-            @Valid @ModelAttribute
-            ("notifica") final NotificaDto notificaDto) {
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> invioNot(
+            @Valid @ModelAttribute("notifica")
+            final NotificaDto notificaDto,
+            final BindingResult result) {
+        Map<String, Object> response = new HashMap<>();
 
         notificaDto.setDataInvio(LocalDateTime.now());
         notificaDto.setDataScadenza(LocalDateTime.now().plusMonths(2));
 
+        if (result.hasErrors()) {
+            response.put("errors", result.getAllErrors());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
         notificationService.saveNotifica(notificaDto);
 
-        return "redirect:/admin/notificaInviata";
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**
@@ -67,15 +80,22 @@ public class NotificationController {
      * @return admin/notificaInviata.html
      */
     @PostMapping("/sendNotificationAll")
-    public String invioNotAll(
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> invioNotAll(
             @Valid @ModelAttribute("notifica")
-            final NotificaDto notificaDto) {
+            final NotificaDto notificaDto,
+            final BindingResult result) {
+        Map<String, Object> response = new HashMap<>();
 
         notificaDto.setDataInvio(LocalDateTime.now());
         notificaDto.setDataScadenza(LocalDateTime.now().plusMonths(2));
 
+        if (result.hasErrors()) {
+            response.put("errors", result.getAllErrors());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
         notificationService.saveNotificaBroadcast(notificaDto);
 
-        return "redirect:/admin/notificaInviata";
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
