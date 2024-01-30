@@ -35,7 +35,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     @Transactional
-    public void saveRicerca(RicercaDto ricercaDto) {
+    public Long saveRicerca(RicercaDto ricercaDto) {
         Ricerca ricerca = new Ricerca();
         ricerca.setCoordinate(
                 new Point(
@@ -74,6 +74,7 @@ public class SearchServiceImpl implements SearchService {
         }
 
         ricercaRepository.save(ricerca);
+        return ricerca.getIdRicerca();
     }
 
     @Override

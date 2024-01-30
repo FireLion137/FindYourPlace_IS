@@ -2,6 +2,7 @@ package com.is.findyourplace.controller.gestioneRicerca;
 
 import com.is.findyourplace.persistence.dto.LuogoDto;
 import com.is.findyourplace.persistence.dto.RicercaDto;
+import com.is.findyourplace.persistence.entity.LuogoTrovato;
 import com.is.findyourplace.service.gestioneRicerca.SearchService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,14 +47,34 @@ public class SearchController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        searchService.saveRicerca(ricercaDto);
+        Long idRicerca= searchService.saveRicerca(ricercaDto);
 
         //Call al modulo di IA
         //response.put()
 
         LuogoDto luogoDto = new LuogoDto();
-        //Temporaneo, va cambiato con i dati ricevuti dal modulo
+        // **** Temporaneo, va cambiato con i dati ricevuti dal modulo
+        luogoDto.setIdRicerca(idRicerca);
 
+        SecureRandom random = new SecureRandom();
+        StringBuilder builder = new StringBuilder(10);
+        String alphanumeric= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for (int i = 0; i < 10; i++) {
+            builder.append(alphanumeric.
+                    charAt(random.nextInt(alphanumeric.length())));
+        }
+        luogoDto.setNome(builder.toString());
+
+        luogoDto.setLatitude(ricercaDto.getLatitude());
+        luogoDto.setLongitude(ricercaDto.getLongitude());
+        luogoDto.setQualityIndex(50);
+        luogoDto.setCostoVita(LuogoTrovato.CostoVita.MEDIO);
+        luogoDto.setDanger(35);
+        luogoDto.setNumAbitanti(10000);
+        luogoDto.setNumNegozi(1000);
+        luogoDto.setNumRistoranti(5000);
+        luogoDto.setNumScuole(200);
+        // **** Temporaneo, va cambiato con i dati ricevuti dal modulo
 
         searchService.saveLuogoDto(luogoDto);
 
