@@ -77,7 +77,7 @@ public class Filtri {
      * Campo che definisce il numero di abitanti minimo.
      */
     @PositiveOrZero
-    @Max(1000000)
+    @Max(100000)
     private int numAbitantiMin;
 
     /**
@@ -85,7 +85,7 @@ public class Filtri {
      */
     @PositiveOrZero
     @Min(1000)
-    @Max(10000000)
+    @Max(3000000)
     private int numAbitantiMax;
 
     @PrePersist

@@ -30,7 +30,7 @@ public class SearchController {
 
     @PostMapping("/search")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> registration(
+    public ResponseEntity<Map<String, Object>> search(
             @Valid @ModelAttribute("ricerca") final RicercaDto ricercaDto,
             final BindingResult result) {
         Map<String, Object> response = new HashMap<>();
@@ -78,6 +78,7 @@ public class SearchController {
 
         searchService.saveLuogoDto(luogoDto);
 
+        response.put("ricerca", idRicerca);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

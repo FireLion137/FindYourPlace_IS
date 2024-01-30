@@ -62,15 +62,15 @@
             <label class="form-field-label" for="numAbitantiMin" id="numAbitantiMinValue">Numero abitanti minimo: 0</label>
             <div class="slidecontainer">
                 <input type="range" class="slider" id="numAbitantiMin" name="numAbitantiMin"
-                       min="0" max="1000000" th:value="0">
+                       min="0" max="100000" th:value="0">
             </div>
         </div>
 
         <div class="form-field">
-            <label class="form-field-label" for="numAbitantiMax" id="numAbitantiMaxValue">Numero abitanti massimo: 10000000</label>
+            <label class="form-field-label" for="numAbitantiMax" id="numAbitantiMaxValue">Numero abitanti massimo: 3000000</label>
             <div class="slidecontainer">
                 <input type="range" class="slider" id="numAbitantiMax" name="numAbitantiMax"
-                       min="1000" max="10000000" th:value="10000000">
+                       min="1000" max="3000000" style="width: 60%" th:value="3000000">
             </div>
         </div>
 
@@ -123,7 +123,7 @@
                 data: $('#searchForm').serialize(),
                 success: function(response, textStatus, xhr) {
                     if(xhr.status === 201) {
-                        window.location.href = "/";
+                        window.location.href = "/searchResult?ricerca=" + response.ricerca;
                     } else {
                         console.log("HTTP Status imprevisto: " + xhr.status)
                     }

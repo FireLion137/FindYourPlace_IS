@@ -16,6 +16,7 @@ main {
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
+    width: 45%;
 }
 .slider:hover {
     opacity: 1;

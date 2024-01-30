@@ -162,7 +162,7 @@ function confermaParametri() {
         alert("Numero abitanti massimo non valido!");
         return false;
     }
-    if(numAbitantiMin >= numAbitantiMax) {
+    if(parseInt(numAbitantiMin) >= parseInt(numAbitantiMax)) {
         alert("Numero abitanti minimo maggiore del massimo!");
         return false;
     }

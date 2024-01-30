@@ -101,21 +101,21 @@ public class LuogoTrovato {
      * Campo che definisce il numero di negozi.
      */
     @PositiveOrZero
-    @Max(1000)
+    @Max(100000)
     private int numNegozi;
 
     /**
      * Campo che definisce il numero di scuole.
      */
     @PositiveOrZero
-    @Max(100)
+    @Max(10000)
     private int numScuole;
 
     /**
      * Campo che definisce il numero di ristoranti.
      */
     @PositiveOrZero
-    @Max(10000)
+    @Max(1000000)
     private int numRistoranti;
 
     /**

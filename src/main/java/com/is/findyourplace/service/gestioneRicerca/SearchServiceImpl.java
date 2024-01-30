@@ -2,10 +2,8 @@ package com.is.findyourplace.service.gestioneRicerca;
 
 import com.is.findyourplace.persistence.dto.LuogoDto;
 import com.is.findyourplace.persistence.dto.RicercaDto;
-import com.is.findyourplace.persistence.entity.Filtri;
-import com.is.findyourplace.persistence.entity.Ricerca;
-import com.is.findyourplace.persistence.entity.Utente;
-import com.is.findyourplace.persistence.repository.FiltriRepository;
+import com.is.findyourplace.persistence.entity.*;
+import com.is.findyourplace.persistence.repository.LuogoRepository;
 import com.is.findyourplace.persistence.repository.RicercaRepository;
 import com.is.findyourplace.persistence.repository.UtenteRepository;
 import org.locationtech.jts.geom.Coordinate;
@@ -24,13 +22,15 @@ import java.time.LocalDateTime;
 public class SearchServiceImpl implements SearchService {
     private final RicercaRepository ricercaRepository;
     private final UtenteRepository utenteRepository;
+    private final LuogoRepository luogoRepository;
 
     public SearchServiceImpl(
             RicercaRepository ricercaRepository,
-            FiltriRepository filtriRepository,
-            UtenteRepository utenteRepository) {
+            UtenteRepository utenteRepository,
+            LuogoRepository luogoRepository) {
         this.ricercaRepository = ricercaRepository;
         this.utenteRepository = utenteRepository;
+        this.luogoRepository = luogoRepository;
     }
 
     @Override
@@ -45,7 +45,9 @@ public class SearchServiceImpl implements SearchService {
                                                 ricercaDto.getLongitude()
                                         )
                                 }),
-                        new GeometryFactory()));
+                        new GeometryFactory()
+                )
+        );
         ricerca.setRaggio(ricercaDto.getRaggio());
         ricerca.setDataRicerca(LocalDateTime.now());
 
@@ -78,7 +80,46 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    @Transactional
     public void saveLuogoDto(LuogoDto luogoDto) {
+        Luogo luogo;
 
+        if(!luogoRepository.existsByNome(luogoDto.getNome())) {
+            luogo = new Luogo();
+            luogo.setNome(luogoDto.getNome());
+            luogo.setCoordinate(
+                    new Point(
+                            new CoordinateArraySequence(new Coordinate[]{
+                                    new Coordinate(
+                                            luogoDto.getLatitude(),
+                                            luogoDto.getLongitude()
+                                    )
+                            }),
+                            new GeometryFactory()
+                    )
+            );
+        } else {
+            luogo = luogoRepository.findByNome(luogoDto.getNome());
+        }
+        luogo.setQualityIndex(luogoDto.getQualityIndex());
+        luogo.setLastFoundDate(LocalDateTime.now());
+
+        luogoRepository.save(luogo);
+
+        Ricerca ricerca = ricercaRepository.findByIdRicerca(
+                luogoDto.getIdRicerca()
+        );
+        LuogoTrovato luogoTrovato =
+                new LuogoTrovato(ricerca, luogo);
+        ricerca.getLuoghiTrovati().add(luogoTrovato);
+        luogo.getLuoghiTrovati().add(luogoTrovato);
+
+        luogoTrovato.setQualityIndex(luogoDto.getQualityIndex());
+        luogoTrovato.setCostoVita(luogoDto.getCostoVita());
+        luogoTrovato.setDanger(luogoDto.getDanger());
+        luogoTrovato.setNumAbitanti(luogoDto.getNumAbitanti());
+        luogoTrovato.setNumNegozi(luogoDto.getNumNegozi());
+        luogoTrovato.setNumRistoranti(luogoDto.getNumRistoranti());
+        luogoTrovato.setNumScuole(luogoDto.getNumScuole());
     }
 }
