@@ -106,3 +106,40 @@ $(function(){
         closeNav();
     });
 });
+
+$(document).ready(function (){
+    $.ajax({
+        type: 'POST',
+        url: '/retrieveNot',
+        success: function(response, textStatus, xhr) {
+            if(xhr.status === 200) {
+                let listaNot=$('#notify-item-list');
+                $("#countNot").innerText=response.notifiche.length;
+                response.notifiche.forEach(function (notifica){
+                    listaNot.innerHTML+=`
+                    <li>
+                        <div class="notify-item-wrapper">
+                            <div class="notify-item-author">`+notifica.autore+ `</div>
+                            <div class="notify-item-content">`+notifica.testo+ `</div>
+                            <div class="notify-item-dates">
+                                <span class="notify-send-date">`+notifica.dataInvio+ `</span>
+                                <span class="notify-expire-date">`+notifica.expireDate+ `</span>
+                            </div>
+                        </div>
+                    </li>
+                    `
+                })
+            } else {
+                console.log("HTTP Status imprevisto: " + xhr.status)
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            if(xhr.status === 401) {
+                console.log("L'utente non è loggato")
+            }
+            else {
+                console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+            }
+        }
+    });
+})

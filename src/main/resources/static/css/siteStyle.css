@@ -103,6 +103,7 @@ input[type=number] {
 }
 .mainHeader .wrapperHeader {
     display: flex;
+    justify-content: space-between;
     margin-left: auto;
     margin-right: auto;
     max-width: 75%;
@@ -154,122 +155,22 @@ input[type=number] {
         width: 61px;
     }
 }
-@media screen and (max-width: 512px) {
-    .site-logo-link {
-        display: none;
-    }
-    .logo {
-        margin-right: 0;
-    }
-}
 
 
-@media screen and (min-width: 1024px) {
-    .navBar {
-        align-items: center;
-        display: flex;
-        margin-left: auto;
-        margin-right: auto;
-        background: #1d2021;
-        border-bottom: none;
-        min-height: 46px;
-        padding-right: 25px;
-    }
-}
-@media screen and (max-width: 1023px) {
-    .navBar {
-        background: #0d0d0d;
-        left: 0;
-        overflow: hidden;
-        position: fixed;
-        top: 0;
-        transform: translateX(-100%);
-        transition: transform .2s linear;
-        width: 200px;
-        z-index: 100;
-    }
-}
-@media screen and (max-width: 1023px) {
-    .navBar--open {
-        transform: translateX(0);
-        transition-delay: .2s;
-    }
-}
 
-@media screen and (min-width: 1024px) {
-    .mobileHeader {
-        display: none;
-    }
-}
-@media screen and (max-width: 1023px) {
-    .mobileHeader {
-        align-items: center;
-        border-bottom: 1px solid #737373;
-        display: flex;
-        height: 55px;
-        margin: 0 10px;
-    }
-}
 
-.mobileHeader .homeBtn{
-    display: block;
-    font-size: 25px;
-    height: 0;
-    width: 0;
-}
-.mobileHeader .closeBtn {
-    display: block;
-    font-size: 25px;
-    height: 0;
-}
-.mobileHeader .goBack {
-    display: none;
-    font-size: 35px;
-    transform: scale(1.5,1);
-    height: 10px;
-    width: 0;
-}
 
-@media screen and (min-width: 1024px) {
-    .navListContainer {
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 1240px;
-    }
-}
-@media screen and (max-width: 1023px) {
-    .navListContainer {
-        height: 100vh;
-        padding-bottom: 50px;
-    }
-}
-@media screen and (min-width: 1024px) {
-    .navCategories {
-        display: flex;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        gap: 33px;
-    }
-}
-@media screen and (max-width: 1023px) {
-    .navCategories {
-        list-style: none;
-        padding: 0;
-        transition: all .2s linear;
-    }
-}
 
-@media screen and (min-width: 1024px) {
-    .navBarPrimaryCategory {
-        align-items: center;
-        display: flex;
-        height: 100%;
-        padding: 12px 20px;
-    }
-}
+
+
+
+
+
+
+
+
 @media screen and (max-width: 1023px) {
-    .navBarPrimaryCategory, .navBarSecondaryCategory{
+     .navBarSecondaryCategory{
         align-items: center;
         border-bottom: 1px solid #737373;
         display: flex;
@@ -296,11 +197,7 @@ input[type=number] {
     }
 }
 
-@media screen and (max-width: 1023px) {
-    .navCategories--sub {
-        transform: translateX(-100%);
-    }
-}
+
 @media screen and (max-width: 1023px) {
     .dropdown-content--active {
         display: block !important;
@@ -316,12 +213,7 @@ input[type=number] {
         list-style: none;
     }
 }
-.mobileHeader .homeBtn--remove{
-    display: none !important;
-}
-.mobileHeader .goBack--appear{
-    display: block !important;
-}
+
 
 @media screen and (min-width: 1024px) {
     .navBarSecondaryCategory {
@@ -336,10 +228,13 @@ input[type=number] {
     padding: 0;
     gap: 10px;
 }
-@media screen and (max-width: 1023px) {
-    .actions {
-        margin-left: auto;
-    }
+.leftPart-header{
+    align-self: center;
+    display: flex;
+}
+.notifications{
+    align-self: center;
+    margin-right: 20px;
 }
 .actions .account-btn, .actions .logout-btn {
     display: block;

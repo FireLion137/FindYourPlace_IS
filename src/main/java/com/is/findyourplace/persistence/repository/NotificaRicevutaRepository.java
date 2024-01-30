@@ -20,4 +20,5 @@ public interface NotificaRicevutaRepository
     @Query("SELECT n FROM NotificaRicevuta n "
             + "WHERE n.idNotificaRicevuta.idUtente=?1")
     List<NotificaRicevuta> findByIdUtente(Long idUtente);
+
 }

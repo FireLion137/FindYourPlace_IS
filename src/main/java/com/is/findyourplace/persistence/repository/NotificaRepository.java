@@ -27,4 +27,5 @@ public interface NotificaRepository extends JpaRepository<Notifica, Long> {
      */
     boolean existsByIdNotifica(long idNotifica);
     Notifica findFirstByAutoreAndTestoOrderByDataInvio(String autore,String testo);
+
 }
