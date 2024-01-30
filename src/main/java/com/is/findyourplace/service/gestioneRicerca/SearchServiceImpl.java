@@ -1,8 +1,8 @@
 package com.is.findyourplace.service.gestioneRicerca;
 
+import com.is.findyourplace.persistence.dto.LuogoDto;
 import com.is.findyourplace.persistence.dto.RicercaDto;
 import com.is.findyourplace.persistence.entity.Filtri;
-import com.is.findyourplace.persistence.entity.Luogo;
 import com.is.findyourplace.persistence.entity.Ricerca;
 import com.is.findyourplace.persistence.entity.Utente;
 import com.is.findyourplace.persistence.repository.FiltriRepository;
@@ -77,7 +77,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public void saveLuogo(Luogo luogo) {
+    public void saveLuogoDto(LuogoDto luogoDto) {
 
     }
 }

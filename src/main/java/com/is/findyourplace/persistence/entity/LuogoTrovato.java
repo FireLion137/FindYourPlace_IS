@@ -9,9 +9,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -62,7 +64,8 @@ public class LuogoTrovato {
      * Indice di Qualità in percentuale trovato al momento della ricerca.
      */
     @NotNull
-    @Size(min = 2, max = 100)
+    @DecimalMin("2")
+    @DecimalMax("100")
     private float qualityIndex;
 
     /**
@@ -83,35 +86,36 @@ public class LuogoTrovato {
     /**
      * Campo che definisce la pericolosità.
      */
-    @Size(min = 2, max = 100)
+    @DecimalMin("2")
+    @DecimalMax("100")
     private float danger;
 
     /**
      * Campo che definisce il numero di abitanti.
      */
     @PositiveOrZero
-    @Size(max = 10000000)
+    @Max(10000000)
     private int numAbitanti;
 
     /**
      * Campo che definisce il numero di negozi.
      */
     @PositiveOrZero
-    @Size(max = 10000)
+    @Max(1000)
     private int numNegozi;
 
     /**
      * Campo che definisce il numero di scuole.
      */
     @PositiveOrZero
-    @Size(max = 100)
+    @Max(100)
     private int numScuole;
 
     /**
      * Campo che definisce il numero di ristoranti.
      */
     @PositiveOrZero
-    @Size(max = 1000)
+    @Max(10000)
     private int numRistoranti;
 
     /**

@@ -1,5 +1,6 @@
 package com.is.findyourplace.controller.gestioneRicerca;
 
+import com.is.findyourplace.persistence.dto.LuogoDto;
 import com.is.findyourplace.persistence.dto.RicercaDto;
 import com.is.findyourplace.service.gestioneRicerca.SearchService;
 import jakarta.validation.Valid;
@@ -48,6 +49,12 @@ public class SearchController {
 
         //Call al modulo di IA
         //response.put()
+
+        LuogoDto luogoDto = new LuogoDto();
+        //Temporaneo, va cambiato con i dati ricevuti dal modulo
+
+
+        searchService.saveLuogoDto(luogoDto);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

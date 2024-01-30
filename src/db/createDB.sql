@@ -73,6 +73,7 @@ CREATE TABLE Filtri
 CREATE TABLE Luogo
 (
 	id_luogo 		bigint			PRIMARY KEY auto_increment,
+    nome            varchar(100)    NOT NULL UNIQUE,
     coordinate	 	point			NOT NULL,
     qualityIndex	decimal(5,2)	NOT NULL,
     lastFoundDate	datetime		NOT NULL
