@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
@@ -50,4 +51,27 @@ public class ReceiveNotificationController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PostMapping("/isReadNot")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> isReadNot(@RequestParam final Long idNotifica) {
+        Map<String, Object> response = new HashMap<>();
+
+        Authentication auth =
+                SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null
+                && auth.isAuthenticated()
+                && !(auth instanceof AnonymousAuthenticationToken)) {
+            Long idUtente=accountService.findByUsernameOrEmail(auth.getName()).getIdUtente();
+            NotificaRicevuta notificaRicevuta= receiveNotificationService.findByIdUtenteAndIdNotifica(idUtente,idNotifica);
+            receiveNotificationService.setRead(notificaRicevuta,true);
+        } else {
+            return new ResponseEntity<>(response,HttpStatus.UNAUTHORIZED);
+        }
+
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
 }

@@ -7,9 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -42,22 +40,10 @@ public class NotificationController {
         this.accountService = accountService;
     }
 
-    /**
-     * Mapping pagina di successo invio notifica.
-     * @param model Model
-     * @return admin/notificaInviata.html
-     */
-    @GetMapping("admin/notificaInviata")
-    public String sendNotForm(final Model model) {
-        NotificaDto n = new NotificaDto();
-        model.addAttribute("notifica", n);
-        return "admin/notificaInviata";
-    }
 
     /**
      * Mapping pagina per inviare notifica a un utente.
      * @param notificaDto NotificaDto
-     * @return admin/notificaInviata.html
      */
     @PostMapping("/sendNotification")
     @ResponseBody
@@ -88,7 +74,6 @@ public class NotificationController {
     /**
      * Mapping pagina per inviare notifica broadcast.
      * @param notificaDto NotificaDto
-     * @return admin/notificaInviata.html
      */
     @PostMapping("/sendNotificationAll")
     @ResponseBody

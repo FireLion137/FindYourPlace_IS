@@ -31,12 +31,24 @@ public class ReceiveNotificationServiceImpl implements ReceiveNotificationServic
         return mapToNotificaDto(notificaRepository.findByIdNotifica(id));
     }
 
+    @Override
+    public NotificaRicevuta findByIdUtenteAndIdNotifica(long idUtente, long idNotifica) {
+        return notificaRicevutaRepository.findByIdUtenteAndIdNotifica(idUtente,idNotifica);
+    }
+
+    @Override
+    public void setRead(NotificaRicevuta notificaRicevuta, boolean isRead) {
+        notificaRicevuta.setRead(isRead);
+        notificaRicevutaRepository.save(notificaRicevuta);
+    }
+
     private NotificaDto mapToNotificaDto(final Notifica n) {
         NotificaDto notificaDto = new NotificaDto();
         notificaDto.setAutore(n.getAutore());
         notificaDto.setTesto(n.getTesto());
         notificaDto.setDataInvio(n.getDataInvio());
         notificaDto.setDataScadenza(n.getExpireDate());
+        notificaDto.setIdNotifica(n.getIdNotifica());
 
         return notificaDto;
     }

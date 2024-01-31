@@ -27,7 +27,7 @@
                     <td>
                         <span th:if="${utente.getUsername() == #authentication.getName()}">Non puoi interagire con il tuo account.</span>
                         <div th:unless="${utente.getUsername() == #authentication.getName()}">
-                            <button class="buttonPrimary buttonHover" style="border: 0px;width: 180px;"
+                            <button class="buttonPrimary buttonHover" style="border: 0px;width: 190px;"
                                     th:href="@{/admin/dettagliUtente(username=${utente.getUsername()})}"
                                     onclick="location.replace(this.getAttribute('href'))">Modifica
                             </button>

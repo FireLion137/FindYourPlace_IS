@@ -6,29 +6,34 @@
 </head>
 <body>
 <header class="mainHeader" th:fragment="navbar">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <script src="../../static/js/header.js" th:src="@{/js/header.js}"></script>
     <div class="wrapperHeader">
         <div class="logo">
             <a th:href="@{/}" class="site-logo-link"></a>
         </div>
         <div class="leftPart-header">
-            <div class="notifications">
+            <div sec:authorize="isAuthenticated()" class="notifications">
                 <div class="notifications-number">
                     <span id="countNot" class="number-notify"></span>
                 </div>
 
                 <div class="notify-btn">
-                    <a sec:authorize="isAuthenticated()" onclick="actionOpen('Notification')">
+                    <a onclick="actionOpenNot()">
                         <i class="fa fa-bell"></i>
                     </a>
                 </div>
-                <div class="dropdown-content" id="drpCntNotification">
+                <div class="dropdown-contentNot" id="drpCntNotification">
                     <div class="notifications-header">
                         <span>Notifiche</span>
                     </div>
-                    <ul id="notify-item-list">
+                    <div>
+                        <ul id="notify-item-list">
 
-                    </ul>
+                        </ul>
+                    </div>
+
                 </div>
 
 
