@@ -31,7 +31,7 @@ public class TF2Test {
         public void testSendNot() throws Exception {
             NotificaDto notificaDto = new NotificaDto();
             notificaDto.setAutore("testautore");
-            notificaDto.setDestinatario("testdestinatario");
+            notificaDto.setDestinatario("ADMIN_ALE");
             notificaDto.setTesto("testtesto");
 
 
@@ -44,7 +44,7 @@ public class TF2Test {
         @Test
         public void testSendNotAutNull() throws Exception {
             NotificaDto notificaDto = new NotificaDto();
-            notificaDto.setDestinatario("testdestinatario");
+            notificaDto.setDestinatario("ADMIN_ALE");
             notificaDto.setTesto("testtesto");
 
 
@@ -69,7 +69,7 @@ public class TF2Test {
         public void testSendNotTextNull() throws Exception {
             NotificaDto notificaDto = new NotificaDto();
             notificaDto.setAutore("testautore");
-            notificaDto.setDestinatario("testdestinatario");
+            notificaDto.setDestinatario("ADMIN_ALE");
 
 
             mockMvc.perform(MockMvcRequestBuilders.post("/sendNotification")
