@@ -36,7 +36,6 @@ public class TF1Test {
         utenteDto.setUsername("testuser");
         utenteDto.setEmail("test@example.com");
         utenteDto.setPassword("Testpassword1!");
-
         Mockito.when(accountService.existsByUsername("testuser")).thenReturn(false);
         Mockito.when(accountService.existsByEmail("test@example.com")).thenReturn(false);
 
@@ -45,4 +44,108 @@ public class TF1Test {
                         .flashAttr("utenteR", utenteDto))
                 .andExpect(MockMvcResultMatchers.status().is(201));
     }
+    @Test
+    public void testRegistrationNullName() throws Exception {
+        UtenteDto utenteDto = new UtenteDto();
+        utenteDto.setCognome("testcognome");
+        utenteDto.setDataNascita(LocalDate.of(1998, 3,2));
+        utenteDto.setUsername("testuser");
+        utenteDto.setEmail("test@example.com");
+        utenteDto.setPassword("Testpassword1!");
+
+        Mockito.when(accountService.existsByUsername("testuser")).thenReturn(false);
+        Mockito.when(accountService.existsByEmail("test@example.com")).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/register")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .flashAttr("utenteR", utenteDto))
+                .andExpect(MockMvcResultMatchers.status().is(400));
+    }
+    @Test
+    public void testRegistrationNullSurname() throws Exception {
+        UtenteDto utenteDto = new UtenteDto();
+        utenteDto.setNome("testnome");
+        utenteDto.setDataNascita(LocalDate.of(1998, 3,2));
+        utenteDto.setUsername("testuser");
+        utenteDto.setEmail("test@example.com");
+        utenteDto.setPassword("Testpassword1!");
+
+        Mockito.when(accountService.existsByUsername("testuser")).thenReturn(false);
+        Mockito.when(accountService.existsByEmail("test@example.com")).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/register")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .flashAttr("utenteR", utenteDto))
+                .andExpect(MockMvcResultMatchers.status().is(400));
+    }
+    @Test
+    public void testRegistrationNullDate() throws Exception {
+        UtenteDto utenteDto = new UtenteDto();
+        utenteDto.setNome("testnome");
+        utenteDto.setCognome("testcognome");
+        utenteDto.setUsername("testuser");
+        utenteDto.setEmail("test@example.com");
+        utenteDto.setPassword("Testpassword1!");
+
+        Mockito.when(accountService.existsByUsername("testuser")).thenReturn(false);
+        Mockito.when(accountService.existsByEmail("test@example.com")).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/register")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .flashAttr("utenteR", utenteDto))
+                .andExpect(MockMvcResultMatchers.status().is(400));
+    }
+    @Test
+    public void testRegistrationNullUsername() throws Exception {
+        UtenteDto utenteDto = new UtenteDto();
+        utenteDto.setNome("testnome");
+        utenteDto.setCognome("testcognome");
+        utenteDto.setDataNascita(LocalDate.of(1998, 3,2));
+        utenteDto.setEmail("test@example.com");
+        utenteDto.setPassword("Testpassword1!");
+
+        Mockito.when(accountService.existsByUsername("testuser")).thenReturn(false);
+        Mockito.when(accountService.existsByEmail("test@example.com")).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/register")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .flashAttr("utenteR", utenteDto))
+                .andExpect(MockMvcResultMatchers.status().is(400));
+    }
+    @Test
+    public void testRegistrationNullEmail() throws Exception {
+        UtenteDto utenteDto = new UtenteDto();
+        utenteDto.setNome("testnome");
+        utenteDto.setCognome("testcognome");
+        utenteDto.setDataNascita(LocalDate.of(1998, 3,2));
+        utenteDto.setUsername("testuser");
+        utenteDto.setPassword("Testpassword1!");
+
+        Mockito.when(accountService.existsByUsername("testuser")).thenReturn(false);
+        Mockito.when(accountService.existsByEmail("test@example.com")).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/register")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .flashAttr("utenteR", utenteDto))
+                .andExpect(MockMvcResultMatchers.status().is(400));
+    }
+    @Test
+    public void testRegistrationNullPassword() throws Exception {
+        UtenteDto utenteDto = new UtenteDto();
+        utenteDto.setNome("testnome");
+        utenteDto.setCognome("testcognome");
+        utenteDto.setDataNascita(LocalDate.of(1998, 3,2));
+        utenteDto.setUsername("testuser");
+        utenteDto.setEmail("test@example.com");
+
+        Mockito.when(accountService.existsByUsername("testuser")).thenReturn(false);
+        Mockito.when(accountService.existsByEmail("test@example.com")).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/register")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .flashAttr("utenteR", utenteDto))
+                .andExpect(MockMvcResultMatchers.status().is(400));
+    }
+    
+
 }

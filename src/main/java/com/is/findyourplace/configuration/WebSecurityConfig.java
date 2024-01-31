@@ -49,6 +49,7 @@ public class WebSecurityConfig {
                     .requestMatchers("/editProfile",
                             "/editPreferences").authenticated()
                     .requestMatchers("/search").permitAll()
+                    .requestMatchers("/retrieveNot").permitAll()
                     .anyRequest().permitAll()
             )
             .formLogin((form) -> form
