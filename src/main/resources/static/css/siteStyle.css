@@ -240,6 +240,11 @@ input[type=number] {
     left: 65%;
     cursor: pointer;
 }
+#alert-no-notify{
+    margin: 5px;
+    padding: 20px;
+    background-color: #950000;
+}
 .notify-item-author{
     color: #970000;
     margin-top: 10px;

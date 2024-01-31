@@ -115,8 +115,9 @@ $(document).ready(function (){
                 let listaNot=$('#notify-item-list');
                 listaNot.html('');
                 $("#countNot").text(response.notifiche.length);
-                response.notifiche.forEach(function (notifica){
-                    let itemNot=`
+                if (response.notifiche.length>=1){
+                    response.notifiche.forEach(function (notifica){
+                        let itemNot=`
                     <li id="notify-item`+notifica.idNotifica+`">
                         <div class="notify-item-wrapper">
                         <div class="notify-item-readbtn">
@@ -131,8 +132,14 @@ $(document).ready(function (){
                         </div>
                     </li>
                     `
-                    listaNot.append(itemNot);
-                })
+                        listaNot.append(itemNot);
+                    })
+                }else{
+                    let alertNot=$("#alert-no-notify");
+                    alertNot.text("Attualmente non hai nessuna notifica!");
+                    alertNot.show();
+                }
+
             } else {
                 console.log("HTTP Status imprevisto: " + xhr.status)
             }
@@ -166,6 +173,11 @@ function readNot(idNot){
                 let updateCount=$("#countNot");
                 notItem.remove();
                 updateCount.text(parseInt(updateCount.text())-1);
+                if (updateCount.text()==="0" || document.getElementById("#alert-no-notify").innerText.trim().length === 0 ){
+                    let alertNot=$("#alert-no-notify");
+                    alertNot.text("Attualmente non hai nessuna notifica!");
+                    alertNot.show();
+                }
             } else {
                 console.log("HTTP Status imprevisto: " + xhr.status)
             }
