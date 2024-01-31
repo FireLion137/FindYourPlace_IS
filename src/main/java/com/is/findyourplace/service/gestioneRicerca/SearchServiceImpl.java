@@ -4,6 +4,7 @@ import com.is.findyourplace.persistence.dto.LuogoDto;
 import com.is.findyourplace.persistence.dto.RicercaDto;
 import com.is.findyourplace.persistence.entity.*;
 import com.is.findyourplace.persistence.repository.LuogoRepository;
+import com.is.findyourplace.persistence.repository.LuogoTrovatoRepository;
 import com.is.findyourplace.persistence.repository.RicercaRepository;
 import com.is.findyourplace.persistence.repository.UtenteRepository;
 import org.locationtech.jts.geom.Coordinate;
@@ -17,20 +18,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SearchServiceImpl implements SearchService {
     private final RicercaRepository ricercaRepository;
     private final UtenteRepository utenteRepository;
     private final LuogoRepository luogoRepository;
+    private final LuogoTrovatoRepository luogoTrovatoRepository;
 
     public SearchServiceImpl(
             RicercaRepository ricercaRepository,
             UtenteRepository utenteRepository,
-            LuogoRepository luogoRepository) {
+            LuogoRepository luogoRepository,
+            LuogoTrovatoRepository luogoTrovatoRepository) {
         this.ricercaRepository = ricercaRepository;
         this.utenteRepository = utenteRepository;
         this.luogoRepository = luogoRepository;
+        this.luogoTrovatoRepository = luogoTrovatoRepository;
     }
 
     @Override
@@ -80,7 +86,6 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    @Transactional
     public void saveLuogoDto(LuogoDto luogoDto) {
         Luogo luogo;
 
@@ -121,5 +126,39 @@ public class SearchServiceImpl implements SearchService {
         luogoTrovato.setNumNegozi(luogoDto.getNumNegozi());
         luogoTrovato.setNumRistoranti(luogoDto.getNumRistoranti());
         luogoTrovato.setNumScuole(luogoDto.getNumScuole());
+    }
+
+    @Override
+    public List<LuogoDto> findLuoghiByIdRicerca(Long idRicerca) {
+        List<LuogoDto> luoghiDto = new ArrayList<>();
+        for (LuogoTrovato luogoTrovato:
+                luogoTrovatoRepository.findByIdRicerca(idRicerca)) {
+            Luogo luogo = luogoRepository.findByIdLuogo(
+                    luogoTrovato.getIdLuogoTrovato().getIdLuogo());
+
+            luoghiDto.add(mapToLuogoDto(luogo, luogoTrovato));
+        }
+
+        return luoghiDto;
+    }
+
+    private LuogoDto mapToLuogoDto(
+            final Luogo luogo,
+            final LuogoTrovato luogoTrovato) {
+        LuogoDto luogoDto = new LuogoDto();
+
+        luogoDto.setNome(luogo.getNome());
+        luogoDto.setLatitude((float) luogo.getCoordinate().getX());
+        luogoDto.setLongitude((float) luogo.getCoordinate().getY());
+
+        luogoDto.setQualityIndex(luogoTrovato.getQualityIndex());
+        luogoDto.setCostoVita(luogoTrovato.getCostoVita());
+        luogoDto.setDanger(luogoTrovato.getDanger());
+        luogoDto.setNumAbitanti(luogoTrovato.getNumAbitanti());
+        luogoDto.setNumNegozi(luogoTrovato.getNumNegozi());
+        luogoDto.setNumRistoranti(luogoTrovato.getNumRistoranti());
+        luogoDto.setNumScuole(luogoTrovato.getNumScuole());
+
+        return luogoDto;
     }
 }
