@@ -8,6 +8,7 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
+import jakarta.persistence.FetchType;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.DecimalMax;
@@ -47,7 +48,7 @@ public class LuogoTrovato {
     /**
      * Ogni LuogoTrovato è collegato a una Ricerca.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idRicerca")
     @JoinColumn(name = "id_ricerca")
     Ricerca ricerca;
@@ -55,7 +56,7 @@ public class LuogoTrovato {
     /**
      * Ogni LuogoTrovato è collegato a un Luogo.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idLuogo")
     @JoinColumn(name = "id_luogo")
     Luogo luogo;

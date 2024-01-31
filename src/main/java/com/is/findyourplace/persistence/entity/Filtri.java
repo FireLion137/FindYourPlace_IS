@@ -11,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.FetchType;
 
 import jakarta.validation.constraints.*;
 
@@ -46,7 +47,7 @@ public class Filtri {
     /**
      * La chiave primaria deriva dalla chiave della ricerca.
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id_ricerca")
     private Ricerca ricerca;

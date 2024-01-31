@@ -2,11 +2,18 @@ package com.is.findyourplace.service.gestioneRicerca;
 
 import com.is.findyourplace.persistence.dto.LuogoDto;
 import com.is.findyourplace.persistence.dto.RicercaDto;
-import com.is.findyourplace.persistence.entity.*;
+import com.is.findyourplace.persistence.entity.Ricerca;
+import com.is.findyourplace.persistence.entity.Filtri;
+import com.is.findyourplace.persistence.entity.Luogo;
+import com.is.findyourplace.persistence.entity.LuogoTrovato;
+import com.is.findyourplace.persistence.entity.Utente;
+
 import com.is.findyourplace.persistence.repository.LuogoRepository;
 import com.is.findyourplace.persistence.repository.LuogoTrovatoRepository;
 import com.is.findyourplace.persistence.repository.RicercaRepository;
 import com.is.findyourplace.persistence.repository.UtenteRepository;
+import com.is.findyourplace.persistence.repository.FiltriRepository;
+
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -27,16 +34,19 @@ public class SearchServiceImpl implements SearchService {
     private final UtenteRepository utenteRepository;
     private final LuogoRepository luogoRepository;
     private final LuogoTrovatoRepository luogoTrovatoRepository;
+    private final FiltriRepository filtriRepository;
 
     public SearchServiceImpl(
             RicercaRepository ricercaRepository,
             UtenteRepository utenteRepository,
             LuogoRepository luogoRepository,
-            LuogoTrovatoRepository luogoTrovatoRepository) {
+            LuogoTrovatoRepository luogoTrovatoRepository,
+            FiltriRepository filtriRepository) {
         this.ricercaRepository = ricercaRepository;
         this.utenteRepository = utenteRepository;
         this.luogoRepository = luogoRepository;
         this.luogoTrovatoRepository = luogoTrovatoRepository;
+        this.filtriRepository = filtriRepository;
     }
 
     @Override
@@ -86,6 +96,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    @Transactional
     public void saveLuogoDto(LuogoDto luogoDto) {
         Luogo luogo;
 
@@ -140,6 +151,11 @@ public class SearchServiceImpl implements SearchService {
         }
 
         return luoghiDto;
+    }
+
+    @Override
+    public Filtri findFiltriByIdRicerca(Long idRicerca) {
+        return filtriRepository.findByIdRicerca(idRicerca);
     }
 
     private LuogoDto mapToLuogoDto(

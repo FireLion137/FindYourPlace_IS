@@ -2,6 +2,7 @@ package com.is.findyourplace.controller.gestioneRicerca;
 
 import com.is.findyourplace.persistence.dto.LuogoDto;
 import com.is.findyourplace.persistence.dto.RicercaDto;
+import com.is.findyourplace.persistence.entity.Filtri;
 import com.is.findyourplace.persistence.entity.LuogoTrovato;
 import com.is.findyourplace.service.gestioneRicerca.SearchService;
 import jakarta.validation.Valid;
@@ -93,7 +94,9 @@ public class SearchController {
             final Model model) {
 
         List<LuogoDto> luoghi = searchService.findLuoghiByIdRicerca(ricerca);
+        Filtri filtriUsati = searchService.findFiltriByIdRicerca(ricerca);
         model.addAttribute("luoghi", luoghi);
+        model.addAttribute("filtri", filtriUsati);
         return "ricerca/ricercaResult";
     }
 }

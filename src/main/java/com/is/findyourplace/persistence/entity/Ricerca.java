@@ -12,6 +12,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.FetchType;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -79,7 +80,7 @@ public class Ricerca {
     /**
      * Utente che ha effettuato la ricerca.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idUtente")
     @JoinColumn(name = "id_utente")
     Utente utente;

@@ -100,6 +100,9 @@ $(function(){
     let outputnumAbitantiMax = document.getElementById("numAbitantiMaxValue");
     slidernumAbitantiMax.oninput = function() {
         outputnumAbitantiMax.innerHTML = "Numero abitanti massimo: " + this.value;
+        if(this.value === "1000000") {
+            outputnumAbitantiMax.innerHTML+= " +";
+        }
     }
 
     let slidernumNegoziMin = document.getElementById("numNegoziMin");

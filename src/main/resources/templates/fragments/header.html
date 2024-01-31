@@ -8,7 +8,7 @@
 <header class="mainHeader" th:fragment="navbar">
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <script src="../../static/js/header.js" th:src="@{/js/header.js}"></script>
+    <script th:src="@{/js/header.js}"></script>
     <div class="wrapperHeader">
         <div class="logo">
             <a th:href="@{/}" class="site-logo-link"></a>

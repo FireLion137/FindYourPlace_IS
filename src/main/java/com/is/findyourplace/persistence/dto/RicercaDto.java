@@ -72,7 +72,7 @@ public class RicercaDto {
      * Campo che definisce il numero di abitanti minimo.
      */
     @PositiveOrZero
-    @Max(1000000)
+    @Max(100000)
     private int numAbitantiMin;
 
     /**
@@ -80,7 +80,7 @@ public class RicercaDto {
      */
     @PositiveOrZero
     @Min(1000)
-    @Max(10000000)
+    @Max(1000000)
     private int numAbitantiMax;
 
     /**
