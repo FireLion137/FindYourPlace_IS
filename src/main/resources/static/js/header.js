@@ -55,6 +55,13 @@ function actionOpen(drpName) {
     else
         closeAct.className = "closeAction";
 }
+function actionOpenNot() {
+    let drpCnt= document.getElementById("drpCntNotification");
+    if (drpCnt.className === "dropdown-contentNot")
+        drpCnt.className = "dropdown-contentNot dropdown-contentNot--active";
+    else
+        drpCnt.className = "dropdown-contentNot";
+}
 function actionClose() {
     let drpCntArr= document.getElementsByClassName("dropdown-content");
 
@@ -93,8 +100,90 @@ window.addEventListener("scroll", function() {
 
 });
 
+
+$(document).ready(function (){
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+    $.ajax({
+        type: 'POST',
+        url: '/retrieveNot',
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        success: function(response, textStatus, xhr) {
+            if(xhr.status === 200) {
+                let listaNot=$('#notify-item-list');
+                listaNot.html('');
+                $("#countNot").text(response.notifiche.length);
+                response.notifiche.forEach(function (notifica){
+                    let itemNot=`
+                    <li id="notify-item`+notifica.idNotifica+`">
+                        <div class="notify-item-wrapper">
+                        <div class="notify-item-readbtn">
+                            <a onclick="readNot(`+notifica.idNotifica+`)">Segna come letta</a>
+                        </div>
+                            <div class="notify-item-author">`+notifica.autore+ `</div>
+                            <div class="notify-item-content">`+notifica.testo+ `</div>
+                            <div class="notify-item-dates">
+                                <span class="notify-send-date">`+notifica.dataInvio+ `</span>
+                                <span class="notify-expire-date">`+notifica.dataScadenza+ `</span>
+                            </div>
+                        </div>
+                    </li>
+                    `
+                    listaNot.append(itemNot);
+                })
+            } else {
+                console.log("HTTP Status imprevisto: " + xhr.status)
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            if(xhr.status === 401) {
+                console.log("L'utente non è loggato")
+            }
+            else {
+                console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+            }
+        }
+    });
+})
+
+function readNot(idNot){
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+    $.ajax({
+        type: 'POST',
+        url: '/isReadNot',
+        data: {
+            "idNotifica" : idNot
+        },
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        success: function(response, textStatus, xhr) {
+            if(xhr.status === 200) {
+                let notItem=$('#notify-item'+idNot);
+                let updateCount=$("#countNot");
+                notItem.remove();
+                updateCount.text(parseInt(updateCount.text())-1);
+            } else {
+                console.log("HTTP Status imprevisto: " + xhr.status)
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            if(xhr.status === 401) {
+                console.log("L'utente non è loggato")
+            }
+            else {
+                console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+            }
+        }
+    });
+
+}
+
 $(function() {
-        $('#drpCntAccount, .account-btn, #myNavBar, .menuIcon').click(function(e) {
+        $('#drpCntAccount, .account-btn, #myNavBar, .menuIcon,.notify-btn').click(function(e) {
         e.stopPropagation();
     });
 });
@@ -102,7 +191,6 @@ $(function() {
 $(function(){
     $(document).click(function(){
         actionClose();
-        subCatClose();
-        closeNav();
     });
 });
+

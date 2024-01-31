@@ -18,6 +18,12 @@ public interface NotificaRicevutaRepository
      * @return Lista di notifiche ricevute di quell' Utente
      */
     @Query("SELECT n FROM NotificaRicevuta n "
-            + "WHERE n.idNotificaRicevuta.idUtente=?1")
+            + "WHERE n.idNotificaRicevuta.idUtente=?1 and " +
+            "n.isRead=false ")
     List<NotificaRicevuta> findByIdUtente(Long idUtente);
+    @Query("SELECT n FROM NotificaRicevuta n "
+            + "WHERE n.idNotificaRicevuta.idUtente=?1 and " +
+            "n.idNotificaRicevuta.idNotifica=?2")
+    NotificaRicevuta findByIdUtenteAndIdNotifica(Long idUtente, Long idNotifica);
+
 }

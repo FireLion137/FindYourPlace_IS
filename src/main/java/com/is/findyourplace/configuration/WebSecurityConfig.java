@@ -48,6 +48,7 @@ public class WebSecurityConfig {
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .requestMatchers("/editProfile",
                             "/editPreferences").authenticated()
+                    .requestMatchers("/retrieveNot").permitAll()
                     .anyRequest().permitAll()
             )
             .formLogin((form) -> form

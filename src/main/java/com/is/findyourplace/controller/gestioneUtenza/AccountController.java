@@ -6,6 +6,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +17,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Gestisce Registrazione, Login e Logout di un Utente.
@@ -67,16 +73,17 @@ public class AccountController {
      * Mapping method to handle user registration form submit request.
      * @param utenteDto UtenteDto con tutti i dati.
      * @param result BindingResult, contiene gli errori.
-     * @param model Model
      * @param request HttpServletRequest
      * @return account/accountAuth.html
      */
     @PostMapping("/register")
-    public String registration(
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> registration(
             @Valid @ModelAttribute("utenteR") final UtenteDto utenteDto,
             final BindingResult result,
-            final Model model,
             final HttpServletRequest request) {
+        Map<String, Object> response = new HashMap<>();
+
         if (accountService.existsByUsername(utenteDto.getUsername())) {
             result.rejectValue("username", "null",
                     "Username già usato!");
@@ -87,15 +94,14 @@ public class AccountController {
                     "Email già usata!");
         }
 
-        if (utenteDto.getPassword().isBlank()) {
+        if (utenteDto.getPassword()==null || utenteDto.getPassword().isBlank()) {
             result.rejectValue("password", "null",
                     "Pattern Password errato!");
         }
 
         if (result.hasErrors()) {
-            model.addAttribute("utenteR", utenteDto);
-            model.addAttribute("utenteL", new UtenteDto());
-            return "account/accountAuth";
+            response.put("errors", result.getAllErrors());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         accountService.saveUtente(utenteDto);
@@ -108,6 +114,6 @@ public class AccountController {
                 throw new RuntimeException(e);
             }
         }
-        return "redirect:/";
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
