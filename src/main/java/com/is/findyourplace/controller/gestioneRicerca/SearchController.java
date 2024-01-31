@@ -23,16 +23,29 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Gestisce la Ricerca
+ * Gestisce la Ricerca.
  */
 @Controller
 public class SearchController {
+    /**
+     * Service usato per la ricerca.
+     */
     private final SearchService searchService;
 
-    public SearchController(SearchService searchService) {
+    /**
+     * Costruttore del controller.
+     * @param searchService SearchService
+     */
+    public SearchController(final SearchService searchService) {
         this.searchService = searchService;
     }
 
+    /**
+     * Pagina che effettua la ricerca.
+     * @param ricercaDto Parametri passati dal form
+     * @param result Contiene gli errori
+     * @return 201 CREATED / 400 BAD REQUEST
+     */
     @PostMapping("/search")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> search(
@@ -52,7 +65,7 @@ public class SearchController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        Long idRicerca= searchService.saveRicerca(ricercaDto);
+        Long idRicerca = searchService.saveRicerca(ricercaDto);
 
         //Call al modulo di IA
         //response.put()
@@ -63,7 +76,9 @@ public class SearchController {
 
         SecureRandom random = new SecureRandom();
         StringBuilder builder = new StringBuilder(10);
-        String alphanumeric= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                + "abcdefghijklmnopqrstuvwxyz"
+                + "0123456789";
         for (int i = 0; i < 10; i++) {
             builder.append(alphanumeric.
                     charAt(random.nextInt(alphanumeric.length())));
@@ -87,7 +102,12 @@ public class SearchController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-
+    /**
+     * Pagina del risultato della ricerca effettuata.
+     * @param ricerca Id della ricerca
+     * @param model Model
+     * @return ricerca/ricercaResult.html
+     */
     @GetMapping("/searchResult")
     public String searchResult(
             @Valid @RequestParam final Long ricerca,

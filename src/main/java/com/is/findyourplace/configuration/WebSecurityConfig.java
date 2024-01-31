@@ -48,7 +48,7 @@ public class WebSecurityConfig {
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .requestMatchers("/editProfile",
                             "/editPreferences").authenticated()
-                    .requestMatchers("/search").permitAll()
+                    .requestMatchers("/search", "/searchResult").permitAll()
                     .requestMatchers("/retrieveNot").permitAll()
                     .anyRequest().permitAll()
             )

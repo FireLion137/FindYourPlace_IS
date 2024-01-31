@@ -34,7 +34,7 @@ public class RicercaDto {
      * Latitudine su cui verrà eseguita la Ricerca.
      */
     @NotNull
-    @DecimalMin(value= "36.619987291")
+    @DecimalMin(value = "36.619987291")
     @DecimalMax(value = "47.1153931748")
     private float latitude;
 
@@ -42,7 +42,7 @@ public class RicercaDto {
      * Longitudine su cui verrà eseguita la Ricerca.
      */
     @NotNull
-    @DecimalMin(value= "6.7499552751")
+    @DecimalMin(value = "6.7499552751")
     @DecimalMax(value = "18.4802470232")
     private float longitude;
 

@@ -13,7 +13,11 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.FetchType;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -93,7 +97,10 @@ public class Filtri {
     @PreUpdate
     private void validateNumAbitanti() {
         if (numAbitantiMax <= numAbitantiMin) {
-            throw new IllegalStateException("Il numero massimo di abitanti deve essere maggiore del numero minimo");
+            throw new IllegalStateException(
+                    "Il numero massimo di abitanti deve essere"
+                            + " maggiore del numero minimo"
+            );
         }
     }
 
@@ -120,15 +127,15 @@ public class Filtri {
 
     @Override
     public String toString() {
-        return "Filtri{" +
-                "idRicerca=" + idRicerca +
-                ", costoVita=" + costoVita +
-                ", dangerMax=" + dangerMax +
-                ", numAbitantiMin=" + numAbitantiMin +
-                ", numAbitantiMax=" + numAbitantiMax +
-                ", numNegoziMin=" + numNegoziMin +
-                ", numScuoleMin=" + numScuoleMin +
-                ", numRistorantiMin=" + numRistorantiMin +
-                '}';
+        return "Filtri{"
+                + "idRicerca=" + idRicerca
+                + ", costoVita=" + costoVita
+                + ", dangerMax=" + dangerMax
+                + ", numAbitantiMin=" + numAbitantiMin
+                + ", numAbitantiMax=" + numAbitantiMax
+                + ", numNegoziMin=" + numNegoziMin
+                + ", numScuoleMin=" + numScuoleMin
+                + ", numRistorantiMin=" + numRistorantiMin
+                + '}';
     }
 }

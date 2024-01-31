@@ -46,7 +46,7 @@ public class Luogo {
     private Long idLuogo;
 
     /**
-     * Nome del Luogo
+     * Nome del Luogo.
      */
     @Size(min = 2, max = 100)
     @Column(unique = true)

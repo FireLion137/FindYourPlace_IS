@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RedirectController {
     /**
      * Mapping della homepage.
+     * @param model Model
      * @return index.html
      */
     @RequestMapping(value = {"/", "/index"})

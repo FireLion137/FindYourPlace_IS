@@ -18,12 +18,21 @@ public interface NotificaRicevutaRepository
      * @return Lista di notifiche ricevute di quell' Utente
      */
     @Query("SELECT n FROM NotificaRicevuta n "
-            + "WHERE n.idNotificaRicevuta.idUtente=?1 and " +
-            "n.isRead=false ")
+            + "WHERE n.idNotificaRicevuta.idUtente=?1 and "
+            + "n.isRead=false ")
     List<NotificaRicevuta> findByIdUtente(Long idUtente);
+    /**
+     * Query custom per recuperare una specifica Notifica Ricevuta.
+     * @param idUtente Id dell' Utente
+     * @param idNotifica Id della Notidica
+     * @return Lista di notifiche ricevute di quell' Utente
+     */
     @Query("SELECT n FROM NotificaRicevuta n "
-            + "WHERE n.idNotificaRicevuta.idUtente=?1 and " +
-            "n.idNotificaRicevuta.idNotifica=?2")
-    NotificaRicevuta findByIdUtenteAndIdNotifica(Long idUtente, Long idNotifica);
+            + "WHERE n.idNotificaRicevuta.idUtente=?1 and "
+            + "n.idNotificaRicevuta.idNotifica=?2")
+    NotificaRicevuta findByIdUtenteAndIdNotifica(
+            Long idUtente,
+            Long idNotifica
+    );
 
 }

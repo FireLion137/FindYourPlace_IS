@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Classe Dto di un Luogo con tutte le informazioni trovate
+ * Classe Dto di un Luogo con tutte le informazioni trovate.
  */
 @Data
 @NoArgsConstructor
@@ -29,7 +29,7 @@ public class LuogoDto {
     private Long idRicerca;
 
     /**
-     * Nome del Luogo
+     * Nome del Luogo.
      */
     @Size(min = 2, max = 100)
     @NotNull
@@ -39,7 +39,7 @@ public class LuogoDto {
      * Latitudine del Luogo.
      */
     @NotNull
-    @DecimalMin(value= "36.619987291")
+    @DecimalMin(value = "36.619987291")
     @DecimalMax(value = "47.1153931748")
     private float latitude;
 
@@ -47,7 +47,7 @@ public class LuogoDto {
      * Longitudine del Luogo.
      */
     @NotNull
-    @DecimalMin(value= "6.7499552751")
+    @DecimalMin(value = "6.7499552751")
     @DecimalMax(value = "18.4802470232")
     private float longitude;
 

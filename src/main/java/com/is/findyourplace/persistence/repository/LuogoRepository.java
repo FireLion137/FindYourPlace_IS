@@ -13,7 +13,17 @@ public interface LuogoRepository extends JpaRepository<Luogo, Long> {
      */
     Luogo findByIdLuogo(long idLuogo);
 
+    /**
+     * Query per controllare se esiste un Luogo usando il suo nome.
+     * @param nome Nome del Luogo
+     * @return true/false
+     */
     boolean existsByNome(String nome);
 
+    /**
+     * Query per trovare un Luogo usando il suo nome.
+     * @param nome Nome del luogo
+     * @return Luogo
+     */
     Luogo findByNome(String nome);
 }

@@ -30,18 +30,41 @@ import java.util.List;
 
 @Service
 public class SearchServiceImpl implements SearchService {
+    /**
+     * Repository della Ricerca.
+     */
     private final RicercaRepository ricercaRepository;
+    /**
+     * Repository dell' Utente.
+     */
     private final UtenteRepository utenteRepository;
+    /**
+     * Repository del Luogo.
+     */
     private final LuogoRepository luogoRepository;
+    /**
+     * Repository di LuogoTrovato.
+     */
     private final LuogoTrovatoRepository luogoTrovatoRepository;
+    /**
+     * Repository di Filtri.
+     */
     private final FiltriRepository filtriRepository;
 
+    /**
+     * Costruttore del Service.
+     * @param ricercaRepository RicercaRepository
+     * @param utenteRepository UtenteRepository
+     * @param luogoRepository LuogoRepository
+     * @param luogoTrovatoRepository LuogoTrovatoRepository
+     * @param filtriRepository FiltriRepository
+     */
     public SearchServiceImpl(
-            RicercaRepository ricercaRepository,
-            UtenteRepository utenteRepository,
-            LuogoRepository luogoRepository,
-            LuogoTrovatoRepository luogoTrovatoRepository,
-            FiltriRepository filtriRepository) {
+            final RicercaRepository ricercaRepository,
+            final UtenteRepository utenteRepository,
+            final LuogoRepository luogoRepository,
+            final LuogoTrovatoRepository luogoTrovatoRepository,
+            final FiltriRepository filtriRepository) {
         this.ricercaRepository = ricercaRepository;
         this.utenteRepository = utenteRepository;
         this.luogoRepository = luogoRepository;
@@ -51,7 +74,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     @Transactional
-    public Long saveRicerca(RicercaDto ricercaDto) {
+    public Long saveRicerca(final RicercaDto ricercaDto) {
         Ricerca ricerca = new Ricerca();
         ricerca.setCoordinate(
                 new Point(
@@ -82,7 +105,7 @@ public class SearchServiceImpl implements SearchService {
 
         Authentication auth =
                 SecurityContextHolder.getContext().getAuthentication();
-        if(auth != null
+        if (auth != null
                 && auth.isAuthenticated()
                 && !(auth instanceof AnonymousAuthenticationToken)) {
             Utente utente = utenteRepository.findByUsername(auth.getName());
@@ -97,10 +120,10 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     @Transactional
-    public void saveLuogoDto(LuogoDto luogoDto) {
+    public void saveLuogoDto(final LuogoDto luogoDto) {
         Luogo luogo;
 
-        if(!luogoRepository.existsByNome(luogoDto.getNome())) {
+        if (!luogoRepository.existsByNome(luogoDto.getNome())) {
             luogo = new Luogo();
             luogo.setNome(luogoDto.getNome());
             luogo.setCoordinate(
@@ -140,10 +163,10 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<LuogoDto> findLuoghiByIdRicerca(Long idRicerca) {
+    public List<LuogoDto> findLuoghiByIdRicerca(final Long idRicerca) {
         List<LuogoDto> luoghiDto = new ArrayList<>();
-        for (LuogoTrovato luogoTrovato:
-                luogoTrovatoRepository.findByIdRicerca(idRicerca)) {
+        for (LuogoTrovato luogoTrovato
+                : luogoTrovatoRepository.findByIdRicerca(idRicerca)) {
             Luogo luogo = luogoRepository.findByIdLuogo(
                     luogoTrovato.getIdLuogoTrovato().getIdLuogo());
 
@@ -154,7 +177,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Filtri findFiltriByIdRicerca(Long idRicerca) {
+    public Filtri findFiltriByIdRicerca(final Long idRicerca) {
         return filtriRepository.findByIdRicerca(idRicerca);
     }
 

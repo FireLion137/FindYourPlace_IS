@@ -21,14 +21,31 @@ import java.util.Map;
 
 @Controller
 public class ReceiveNotificationController {
+    /**
+     * Service usato per gestire le notifiche ricevute.
+     */
     private final ReceiveNotificationService receiveNotificationService;
+    /**
+     * Service usato per gestire gli account degli utenti.
+     */
     private final AccountService accountService;
 
-    public ReceiveNotificationController(ReceiveNotificationService receiveNotificationService, AccountService accountService) {
+    /**
+     * Costruttore del controller.
+     * @param receiveNotificationService ReceiveNotificationService
+     * @param accountService AccountService
+     */
+    public ReceiveNotificationController(
+            final ReceiveNotificationService receiveNotificationService,
+            final AccountService accountService) {
         this.receiveNotificationService = receiveNotificationService;
         this.accountService = accountService;
     }
 
+    /**
+     * Pagina per recuperare le notifiche.
+     * @return 200 OK / 401 UNAUTHORIZED
+     */
     @PostMapping("/retrieveNot")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getNotifiche() {
@@ -39,22 +56,37 @@ public class ReceiveNotificationController {
         if (auth != null
                 && auth.isAuthenticated()
                 && !(auth instanceof AnonymousAuthenticationToken)) {
-            Long idUtente=accountService.findByUsernameOrEmail(auth.getName()).getIdUtente();
-            List<NotificaDto> notifiche= new ArrayList<>();
-            for (NotificaRicevuta n:receiveNotificationService.findAllNotificheRicevuteByIdUtente(idUtente)){
-                notifiche.add(receiveNotificationService.findByIdNotifica(n.getIdNotificaRicevuta().getIdNotifica()));
+            Long idUtente = accountService
+                    .findByUsernameOrEmail(auth.getName())
+                    .getIdUtente();
+            List<NotificaDto> notifiche = new ArrayList<>();
+            for (NotificaRicevuta n: receiveNotificationService
+                            .findAllNotificheRicevuteByIdUtente(idUtente)) {
+                notifiche.add(
+                        receiveNotificationService
+                                .findByIdNotifica(
+                                        n.getIdNotificaRicevuta()
+                                                .getIdNotifica()
+                                )
+                );
             }
-            response.put("notifiche",notifiche);
+            response.put("notifiche", notifiche);
         } else {
-          return new ResponseEntity<>(response,HttpStatus.UNAUTHORIZED);
+          return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Pagina per impostare una notifica come letta.
+     * @param idNotifica Id della notifica.
+     * @return 200 OK / 401 UNAUTHORIZED
+     */
     @PostMapping("/isReadNot")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> isReadNot(@RequestParam final Long idNotifica) {
+    public ResponseEntity<Map<String, Object>> isReadNot(
+            @RequestParam final Long idNotifica) {
         Map<String, Object> response = new HashMap<>();
 
         Authentication auth =
@@ -62,16 +94,18 @@ public class ReceiveNotificationController {
         if (auth != null
                 && auth.isAuthenticated()
                 && !(auth instanceof AnonymousAuthenticationToken)) {
-            Long idUtente=accountService.findByUsernameOrEmail(auth.getName()).getIdUtente();
-            NotificaRicevuta notificaRicevuta= receiveNotificationService.findByIdUtenteAndIdNotifica(idUtente,idNotifica);
-            receiveNotificationService.setRead(notificaRicevuta,true);
+            Long idUtente = accountService.findByUsernameOrEmail(
+                    auth.getName()).getIdUtente();
+            NotificaRicevuta notificaRicevuta =
+                    receiveNotificationService.findByIdUtenteAndIdNotifica(
+                            idUtente,
+                            idNotifica
+                    );
+            receiveNotificationService.setRead(notificaRicevuta, true);
         } else {
-            return new ResponseEntity<>(response,HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
-
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-
 }

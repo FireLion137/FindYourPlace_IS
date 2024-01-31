@@ -80,7 +80,7 @@ public class TC21Test {
 
     new WebDriverWait(driver, Duration.ofSeconds(5))
             .until(ExpectedConditions.urlToBe("http://localhost:8080/admin/users?continue"));
-    notificaRepository.deleteById(notificaRepository.findFirstByAutoreAndTestoOrderByDataInvio(autore,"test notifica").getIdNotifica());
+    notificaRepository.deleteById(notificaRepository.findFirstByAutoreAndTestoOrderByDataInvioDesc(autore,"test notifica").getIdNotifica());
     assertEquals("http://localhost:8080/admin/users?continue", driver.getCurrentUrl());
 
     //driver.close();

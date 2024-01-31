@@ -31,7 +31,8 @@ public class NotificaDto {
      */
     @NotEmpty
     @Size(max = 30)
-    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,29}$",message = "Autore non valido")
+    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,29}$",
+            message = "Autore non valido")
     private String autore;
 
      /**
@@ -40,7 +41,7 @@ public class NotificaDto {
 
     @NotEmpty
     @Size(max = 501)
-    @Pattern(regexp = "^[\\s\\S]{2,500}$",message = "Testo non valido")
+    @Pattern(regexp = "^[\\s\\S]{2,500}$", message = "Testo non valido")
     private String testo;
 
     /**
@@ -61,6 +62,7 @@ public class NotificaDto {
      * questo campo sarà null.
      */
     @Size(max = 30)
-    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,29}$",message = "Destinatario non valido")
+    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,29}$",
+            message = "Destinatario non valido")
     private String destinatario;
 }
