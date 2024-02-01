@@ -10,34 +10,53 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ReceiveNotificationServiceImpl implements ReceiveNotificationService{
+public class ReceiveNotificationServiceImpl
+        implements ReceiveNotificationService {
+    /**
+     * Repository di Notifica.
+     */
     private final NotificaRepository notificaRepository;
+    /**
+     * Repository di NotificaRicevuta.
+     */
     private final NotificaRicevutaRepository notificaRicevutaRepository;
 
-    public ReceiveNotificationServiceImpl(NotificaRepository notificaRepository, NotificaRicevutaRepository notificaRicevutaRepository) {
+    /**
+     * Costruttore del Service.
+     * @param notificaRepository NotificaRepository
+     * @param notificaRicevutaRepository NotificaRicevutaRepository
+     */
+    public ReceiveNotificationServiceImpl(
+            final NotificaRepository notificaRepository,
+            final NotificaRicevutaRepository notificaRicevutaRepository) {
         this.notificaRepository = notificaRepository;
         this.notificaRicevutaRepository = notificaRicevutaRepository;
     }
 
 
     @Override
-    public List<NotificaRicevuta> findAllNotificheRicevuteByIdUtente(Long id) {
+    public List<NotificaRicevuta>
+    findAllNotificheRicevuteByIdUtente(final Long id) {
         return notificaRicevutaRepository.findByIdUtente(id);
     }
 
     @Override
-    public NotificaDto findByIdNotifica(long id) {
-
+    public NotificaDto findByIdNotifica(final long id) {
         return mapToNotificaDto(notificaRepository.findByIdNotifica(id));
     }
 
     @Override
-    public NotificaRicevuta findByIdUtenteAndIdNotifica(long idUtente, long idNotifica) {
-        return notificaRicevutaRepository.findByIdUtenteAndIdNotifica(idUtente,idNotifica);
+    public NotificaRicevuta findByIdUtenteAndIdNotifica(
+            final long idUtente,
+            final long idNotifica) {
+        return notificaRicevutaRepository
+                .findByIdUtenteAndIdNotifica(idUtente, idNotifica);
     }
 
     @Override
-    public void setRead(NotificaRicevuta notificaRicevuta, boolean isRead) {
+    public void setRead(
+            final NotificaRicevuta notificaRicevuta,
+            final boolean isRead) {
         notificaRicevuta.setRead(isRead);
         notificaRicevutaRepository.save(notificaRicevuta);
     }

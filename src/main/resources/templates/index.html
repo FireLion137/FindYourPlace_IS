@@ -26,14 +26,15 @@
         <button class="search-addressBtn" type="button" onclick="searchAddress()">Cerca</button>
     </div>
 
-    <form id="searchForm" th:action="@{/search}" th:object="${search}" method="POST" role="form">
+    <form id="searchForm" th:action="@{/search}" th:object="${ricerca}" method="POST" role="form">
         <input type="hidden" id="latitude" name="latitude">
         <input type="hidden" id="longitude" name="longitude">
 
         <div class="form-field">
             <label class="form-field-label" for="raggio" id="raggioValue">Raggio in Km: 25</label>
             <div class="slidecontainer">
-                <input type="range" class="slider" id="raggio" name="raggio" min="10" max="500" value="25" required>
+                <input type="range" class="slider" id="raggio" name="raggio"
+                       min="10" max="500" th:value="25" required>
             </div>
         </div>
 
@@ -42,61 +43,107 @@
         <div class="form-field">
             <label class="form-field-label" for="costoVita">Costo della vita:</label>
             <select class="form-field-input" id="costoVita" name="costoVita">
-                <option value="QUALSIASI">QUALSIASI</option>
-                <option value="BASSO">BASSO</option>
-                <option value="MEDIO">MEDIO</option>
-                <option value="ALTO">ALTO</option>
+                <option th:value="QUALSIASI">QUALSIASI</option>
+                <option th:value="BASSO">BASSO</option>
+                <option th:value="MEDIO">MEDIO</option>
+                <option th:value="ALTO">ALTO</option>
             </select>
         </div>
 
         <div class="form-field">
             <label class="form-field-label" for="dangerMax" id="dangerMaxValue">Pericolosità massima: 100%</label>
             <div class="slidecontainer">
-                <input type="range" class="slider" id="dangerMax" name="dangerMax" min="25" max="100" value="100">
+                <input type="range" class="slider" id="dangerMax" name="dangerMax"
+                       min="25" max="100" th:value="100">
             </div>
         </div>
 
         <div class="form-field">
             <label class="form-field-label" for="numAbitantiMin" id="numAbitantiMinValue">Numero abitanti minimo: 0</label>
             <div class="slidecontainer">
-                <input type="range" class="slider" id="numAbitantiMin" name="numAbitantiMin" min="0" max="1000000" value="0">
+                <input type="range" class="slider" id="numAbitantiMin" name="numAbitantiMin"
+                       min="0" max="100000" th:value="0">
             </div>
         </div>
 
         <div class="form-field">
-            <label class="form-field-label" for="numAbitantiMax" id="numAbitantiMaxValue">Numero abitanti massimo: 10000000</label>
+            <label class="form-field-label" for="numAbitantiMax" id="numAbitantiMaxValue">Numero abitanti massimo: 1000000</label>
             <div class="slidecontainer">
-                <input type="range" class="slider" id="numAbitantiMax" name="numAbitantiMax" min="1000" max="10000000" value="10000000">
+                <input type="range" class="slider" id="numAbitantiMax" name="numAbitantiMax"
+                       min="1000" max="1000000" th:value="1000000">
             </div>
         </div>
 
         <div class="form-field">
             <label class="form-field-label" for="numNegoziMin" id="numNegoziMinValue">Numero negozi minimo: 0</label>
             <div class="slidecontainer">
-                <input type="range" class="slider" id="numNegoziMin" name="numNegoziMin" min="0" max="1000" value="0">
+                <input type="range" class="slider" id="numNegoziMin" name="numNegoziMin"
+                       min="0" max="1000" th:value="0">
             </div>
         </div>
 
         <div class="form-field">
             <label class="form-field-label" for="numRistorantiMin" id="numRistorantiMinValue">Numero ristoranti minimo: 0</label>
             <div class="slidecontainer">
-                <input type="range" class="slider" id="numRistorantiMin" name="numRistorantiMin" min="0" max="10000" value="0">
+                <input type="range" class="slider" id="numRistorantiMin" name="numRistorantiMin"
+                       min="0" max="10000" th:value="0">
             </div>
         </div>
 
         <div class="form-field">
             <label class="form-field-label" for="numScuoleMin" id="numScuoleMinValue">Numero scuole minimo: 0</label>
             <div class="slidecontainer">
-                <input type="range" class="slider" id="numScuoleMin" name="numScuoleMin" min="0" max="100" value="0">
+                <input type="range" class="slider" id="numScuoleMin" name="numScuoleMin"
+                       min="0" max="100" th:value="0">
             </div>
         </div>
 
         <div class="form-buttons">
-            <button class="form-submitButton" type="submit">Cerca</button>
+            <button class="form-submitButton" onclick="return confermaParametri()" type="submit">
+                Cerca
+                <i id="submitS-spinner" class="fa fa-spinner fa-spin"></i>
+            </button>
         </div>
     </form>
 </main>
 
 <div th:insert="fragments/footer :: footer"></div>
 </body>
+
+<script>
+    $(document).ready(function() {
+        $('#searchForm').submit(function(e) {
+            e.preventDefault();
+
+            let spinner= $('#submitS-spinner');
+            spinner.show();
+            $.ajax({
+                type: 'POST',
+                url: '/search',
+                data: $('#searchForm').serialize(),
+                success: function(response, textStatus, xhr) {
+                    if(xhr.status === 201) {
+                        window.location.href = "/searchResult?ricerca=" + response.ricerca;
+                    } else {
+                        console.log("HTTP Status imprevisto: " + xhr.status)
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    if(xhr.status === 400) {
+                        $('[id$=Error]').text('');
+                        xhr.responseJSON.errors.forEach(function(error) {
+                            $('#' + error.field + 'SError').text(error.defaultMessage);
+                        });
+                    }
+                    else {
+                        console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+                    }
+                },
+                complete: function() {
+                    spinner.hide();
+                }
+            });
+        });
+    });
+</script>
 </html>

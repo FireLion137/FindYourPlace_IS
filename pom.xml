@@ -11,7 +11,6 @@
     <groupId>com.is</groupId>
     <artifactId>FindYourPlace</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
     <name>FindYourPlace</name>
     <description>FindYourPlace Web App  -  Progetto FindYourPlace per l'esame di Ingegneria del Software</description>
     <properties>
@@ -114,6 +113,11 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-spatial</artifactId>
+            <version>6.4.2.Final</version>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -140,6 +144,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <classifier>exec</classifier>
                 </configuration>
             </plugin>
 
@@ -195,12 +200,54 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <excludes>
-
-                    </excludes>
+                    <includes>
+                        <include>**/TF*.java</include>
+                    </includes>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <!-- select non-aggregate reports -->
+                            <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>checkstyle</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>

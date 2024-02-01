@@ -6,6 +6,7 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.FetchType;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -37,7 +38,7 @@ public class Preferiti {
     /**
      * Ogni luogo Preferito è collegata a un Utente.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idUtente")
     @JoinColumn(name = "id_utente")
     Utente utente;
@@ -45,7 +46,7 @@ public class Preferiti {
     /**
      * Ogni luogo Preferito è collegato a un Luogo.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idLuogo")
     @JoinColumn(name = "id_luogo")
     Luogo luogo;

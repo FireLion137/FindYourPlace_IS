@@ -16,6 +16,7 @@ main {
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
+    width: 45%;
 }
 .slider:hover {
     opacity: 1;
@@ -53,4 +54,18 @@ main {
     cursor: pointer;
     font-weight: 700;
     padding: 8px 20px;
+}
+
+#submitS-spinner{
+    display: none;
+    color: white;
+    margin-left: 20px;
+}
+
+.errorMessage {
+    color: red;
+    margin: 8px 0;
+}
+.errorMessage:empty {
+    display: none;
 }

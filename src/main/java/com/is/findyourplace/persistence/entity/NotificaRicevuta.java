@@ -6,6 +6,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.FetchType;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -34,7 +35,7 @@ public class NotificaRicevuta {
     /**
      * Ogni NotificaRicevuta è collegata a un Utente.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idUtente")
     @JoinColumn(name = "id_utente")
     Utente utente;
@@ -42,7 +43,7 @@ public class NotificaRicevuta {
     /**
      * Ogni NotificaRicevuta è collegata a una Notifica.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idNotifica")
     @JoinColumn(name = "id_notifica")
     Notifica notifica;

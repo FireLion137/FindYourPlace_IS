@@ -11,9 +11,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.FetchType;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import lombok.AllArgsConstructor;
@@ -42,14 +45,13 @@ public class Filtri {
      * Id della ricerca.
      */
     @Id
-    @NotNull
     @Column(name = "id_ricerca")
-    private long idRicerca;
+    private Long idRicerca;
 
     /**
      * La chiave primaria deriva dalla chiave della ricerca.
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id_ricerca")
     private Ricerca ricerca;
@@ -61,7 +63,7 @@ public class Filtri {
         /**
          * Costo della vita Basso, Medio o Alto per regione.
          */
-        BASSO, MEDIO, ALTO
+        QUALSIASI, BASSO, MEDIO, ALTO
     }
     /**
      * Campo che definisce il costo della vita della regione.
@@ -72,28 +74,33 @@ public class Filtri {
     /**
      * Campo che definisce la pericolosità massima.
      */
-    @Size(min = 2, max = 100)
+    @DecimalMin(value = "2")
+    @DecimalMax(value = "100")
     private float dangerMax;
 
     /**
      * Campo che definisce il numero di abitanti minimo.
      */
     @PositiveOrZero
-    @Size(max = 1000000)
+    @Max(100000)
     private int numAbitantiMin;
 
     /**
      * Campo che definisce il numero di abitanti massimo.
      */
     @PositiveOrZero
-    @Size(min = 1000, max = 10000000)
+    @Min(1000)
+    @Max(3000000)
     private int numAbitantiMax;
 
     @PrePersist
     @PreUpdate
     private void validateNumAbitanti() {
         if (numAbitantiMax <= numAbitantiMin) {
-            throw new IllegalStateException("Il numero massimo di abitanti deve essere maggiore del numero minimo");
+            throw new IllegalStateException(
+                    "Il numero massimo di abitanti deve essere"
+                            + " maggiore del numero minimo"
+            );
         }
     }
 
@@ -101,34 +108,34 @@ public class Filtri {
      * Campo che definisce il numero di negozi minimo.
      */
     @PositiveOrZero
-    @Size(max = 1000)
+    @Max(1000)
     private int numNegoziMin;
 
     /**
      * Campo che definisce il numero di scuole minimo.
      */
     @PositiveOrZero
-    @Size(max = 100)
+    @Max(100)
     private int numScuoleMin;
 
     /**
      * Campo che definisce il numero di ristoranti minimo.
      */
     @PositiveOrZero
-    @Size(max = 10000)
+    @Max(10000)
     private int numRistorantiMin;
 
     @Override
     public String toString() {
-        return "Filtri{" +
-                "idRicerca=" + idRicerca +
-                ", costoVita=" + costoVita +
-                ", dangerMax=" + dangerMax +
-                ", numAbitantiMin=" + numAbitantiMin +
-                ", numAbitantiMax=" + numAbitantiMax +
-                ", numNegoziMin=" + numNegoziMin +
-                ", numScuoleMin=" + numScuoleMin +
-                ", numRistorantiMin=" + numRistorantiMin +
-                '}';
+        return "Filtri{"
+                + "idRicerca=" + idRicerca
+                + ", costoVita=" + costoVita
+                + ", dangerMax=" + dangerMax
+                + ", numAbitantiMin=" + numAbitantiMin
+                + ", numAbitantiMax=" + numAbitantiMax
+                + ", numNegoziMin=" + numNegoziMin
+                + ", numScuoleMin=" + numScuoleMin
+                + ", numRistorantiMin=" + numRistorantiMin
+                + '}';
     }
 }

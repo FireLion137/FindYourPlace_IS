@@ -1,47 +1,3 @@
-function openNav() {
-    let el= document.getElementById("myNavBar");
-    if (el.className === "navBar")
-        el.className = "navBar navBar--open";
-}
-function closeNav() {
-    let el= document.getElementById("myNavBar");
-    if (el.className === "navBar navBar--open")
-        el.className = "navBar";
-}
-
-function subCatOpen(drpCntNumber) {
-    let nav= document.getElementById("navCats");
-    let drpCnt= document.getElementById("drpCnt"+drpCntNumber);
-    if (nav.className === "navCategories")
-        nav.className = "navCategories navCategories--sub";
-    if (drpCnt.className === "dropdown-content")
-        drpCnt.className = "dropdown-content dropdown-content--active";
-
-    let hmBtn= document.getElementById("hmBtn");
-    if (hmBtn.className === "homeBtn")
-        hmBtn.className = "homeBtn homeBtn--remove";
-    let goBck= document.getElementById("goBck");
-    if (goBck.className === "goBack")
-        goBck.className = "goBack goBack--appear";
-}
-function subCatClose() {
-    let nav= document.getElementById("navCats");
-    let drpCntArr= document.getElementsByClassName("dropdown-content");
-    if (nav.className === "navCategories navCategories--sub")
-        nav.className = "navCategories";
-    for (let drpCnt of drpCntArr) {
-        if (drpCnt.className === "dropdown-content dropdown-content--active")
-            drpCnt.className = "dropdown-content";
-    }
-
-    let hmBtn= document.getElementById("hmBtn");
-    if (hmBtn.className === "homeBtn homeBtn--remove")
-        hmBtn.className = "homeBtn";
-    let goBck= document.getElementById("goBck");
-    if (goBck.className === "goBack goBack--appear")
-        goBck.className = "goBack";
-}
-
 function actionOpen(drpName) {
     let drpCnt= document.getElementById("drpCnt"+drpName);
     if (drpCnt.className === "dropdown-content")
@@ -55,13 +11,6 @@ function actionOpen(drpName) {
     else
         closeAct.className = "closeAction";
 }
-function actionOpenNot() {
-    let drpCnt= document.getElementById("drpCntNotification");
-    if (drpCnt.className === "dropdown-contentNot")
-        drpCnt.className = "dropdown-contentNot dropdown-contentNot--active";
-    else
-        drpCnt.className = "dropdown-contentNot";
-}
 function actionClose() {
     let drpCntArr= document.getElementsByClassName("dropdown-content");
 
@@ -73,6 +22,18 @@ function actionClose() {
     let closeAct= document.getElementById("closeAct");
     if (closeAct.className === "closeAction closeAction--appear")
         closeAct.className = "closeAction";
+}
+
+function actionOpenNot() {
+    let drpCnt= document.getElementById("drpCntNotification");
+    if (drpCnt.className === "dropdown-contentNot")
+        drpCnt.className = "dropdown-contentNot dropdown-contentNot--active";
+    else
+        drpCnt.className = "dropdown-contentNot";
+}
+function actionCloseNot() {
+    let drpCnt= document.getElementById("drpCntNotification");
+    drpCnt.className = "dropdown-contentNot";
 }
 
 
@@ -115,8 +76,9 @@ $(document).ready(function (){
                 let listaNot=$('#notify-item-list');
                 listaNot.html('');
                 $("#countNot").text(response.notifiche.length);
-                response.notifiche.forEach(function (notifica){
-                    let itemNot=`
+                if (response.notifiche.length>=1){
+                    response.notifiche.forEach(function (notifica){
+                        let itemNot=`
                     <li id="notify-item`+notifica.idNotifica+`">
                         <div class="notify-item-wrapper">
                         <div class="notify-item-readbtn">
@@ -131,8 +93,14 @@ $(document).ready(function (){
                         </div>
                     </li>
                     `
-                    listaNot.append(itemNot);
-                })
+                        listaNot.append(itemNot);
+                    })
+                }else{
+                    let alertNot=$("#alert-no-notify");
+                    alertNot.text("Attualmente non hai nessuna notifica!");
+                    alertNot.show();
+                }
+
             } else {
                 console.log("HTTP Status imprevisto: " + xhr.status)
             }
@@ -166,6 +134,11 @@ function readNot(idNot){
                 let updateCount=$("#countNot");
                 notItem.remove();
                 updateCount.text(parseInt(updateCount.text())-1);
+                if (updateCount.text()==="0" || document.getElementById("#alert-no-notify").innerText.trim().length === 0 ){
+                    let alertNot=$("#alert-no-notify");
+                    alertNot.text("Attualmente non hai nessuna notifica!");
+                    alertNot.show();
+                }
             } else {
                 console.log("HTTP Status imprevisto: " + xhr.status)
             }
@@ -183,7 +156,7 @@ function readNot(idNot){
 }
 
 $(function() {
-        $('#drpCntAccount, .account-btn, #myNavBar, .menuIcon,.notify-btn').click(function(e) {
+        $('#drpCntAccount, .account-btn, .notify-btn').click(function(e) {
         e.stopPropagation();
     });
 });
@@ -191,6 +164,7 @@ $(function() {
 $(function(){
     $(document).click(function(){
         actionClose();
+        actionCloseNot();
     });
 });
 

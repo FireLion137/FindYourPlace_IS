@@ -25,6 +25,9 @@ public class NotificationController {
      * inviate da un amministratore.
      */
     private final NotificationService notificationService;
+    /**
+     * Service usato per gestire gli account degli utenti.
+     */
     private final AccountService accountService;
 
 
@@ -35,7 +38,8 @@ public class NotificationController {
      * @param accountService AccountService
      */
     public NotificationController(
-            final NotificationService notificationService, AccountService accountService) {
+            final NotificationService notificationService,
+            final AccountService accountService) {
         this.notificationService = notificationService;
         this.accountService = accountService;
     }
@@ -44,6 +48,8 @@ public class NotificationController {
     /**
      * Mapping pagina per inviare notifica a un utente.
      * @param notificaDto NotificaDto
+     * @param result Contiene gli errori
+     * @return 201 CREATED / 400 BAD REQUEST
      */
     @PostMapping("/sendNotification")
     @ResponseBody
@@ -55,9 +61,10 @@ public class NotificationController {
 
         notificaDto.setDataInvio(LocalDateTime.now());
         notificaDto.setDataScadenza(LocalDateTime.now().plusMonths(2));
-        if (notificaDto.getDestinatario()==null
+        if (notificaDto.getDestinatario() == null
                 || notificaDto.getDestinatario().isBlank()
-                || !accountService.existsByUsername(notificaDto.getDestinatario()) ){
+                || !accountService.existsByUsername(
+                        notificaDto.getDestinatario())) {
             result.rejectValue("destinatario", "null",
                     "Destinatario non valido!");
         }
@@ -74,6 +81,8 @@ public class NotificationController {
     /**
      * Mapping pagina per inviare notifica broadcast.
      * @param notificaDto NotificaDto
+     * @param result Contiene gli errori
+     * @return 201 CREATED / 400 BAD REQUEST
      */
     @PostMapping("/sendNotificationAll")
     @ResponseBody

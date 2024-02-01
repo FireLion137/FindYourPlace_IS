@@ -18,7 +18,7 @@ import java.time.Duration;
 import java.util.*;
 
 @SpringBootTest()
-public class TC11Test {
+public class TF1_1 {
   private WebDriver driver;
   private Map<String, Object> vars;
   JavascriptExecutor js;

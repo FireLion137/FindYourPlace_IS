@@ -73,6 +73,7 @@ CREATE TABLE Filtri
 CREATE TABLE Luogo
 (
 	id_luogo 		bigint			PRIMARY KEY auto_increment,
+    nome            varchar(100)    NOT NULL UNIQUE,
     coordinate	 	point			NOT NULL,
     qualityIndex	decimal(5,2)	NOT NULL,
     lastFoundDate	datetime		NOT NULL
@@ -86,9 +87,9 @@ CREATE TABLE LuogoTrovato
     costoVita	 	varchar(10)		NOT NULL,
     danger			decimal(5,2)	NOT NULL,
     numAbitanti		int				NOT NULL,
-    numNegozi		smallint		NOT NULL,
-    numScuole		smallint		NOT NULL,
-    numRistoranti	smallint		NOT NULL,
+    numNegozi		int		        NOT NULL,
+    numScuole		int		        NOT NULL,
+    numRistoranti	int		        NOT NULL,
     
     FOREIGN KEY (id_ricerca) REFERENCES Ricerca(id_ricerca) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (id_luogo) REFERENCES Luogo(id_luogo) ON DELETE CASCADE ON UPDATE CASCADE,

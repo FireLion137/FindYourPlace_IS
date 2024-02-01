@@ -113,7 +113,7 @@ function InvioNotificaSingola(x){
         success: function(response, textStatus, xhr) {
             if(xhr.status === 201) {
                 $('#SubmitSendnot' + username + 'Success').text("Notifica inviata correttamente");
-                $('#textSendnot' + username).val('');
+                $('#testoSendnot' + username).val('');
             } else {
                 console.log("HTTP Status imprevisto: " + xhr.status)
             }
@@ -148,7 +148,7 @@ function InvioNotificaAll(){
         success: function(response, textStatus, xhr) {
             if(xhr.status === 201) {
                 $('#SubmitSendnotBSuccess').text("Notifica inviata correttamente");
-                $('#textSendnotB' ).val('');
+                $('#testoSendnotB' ).val('');
             } else {
                 console.log("HTTP Status imprevisto: " + xhr.status)
             }
@@ -183,7 +183,7 @@ function InvioNotificaSingolaDetUser(){
         success: function(response, textStatus, xhr) {
             if(xhr.status === 201) {
                 $('#SubmitSendnotSuccess').text("Notifica inviata correttamente");
-                $('#textSendnot' ).val('');
+                $('#testoSendnot' ).val('');
             } else {
                 console.log("HTTP Status imprevisto: " + xhr.status)
             }

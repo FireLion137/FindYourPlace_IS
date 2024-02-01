@@ -8,6 +8,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -16,7 +18,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,10 +41,17 @@ public class Luogo {
      * Id del Luogo.
      */
     @Id
-    @NotNull
     @Column(name = "id_luogo")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idLuogo;
+    private Long idLuogo;
+
+    /**
+     * Nome del Luogo.
+     */
+    @Size(min = 2, max = 100)
+    @Column(unique = true)
+    @NotNull
+    private String nome;
 
     /**
      * Coordinate del Luogo.
@@ -55,7 +64,8 @@ public class Luogo {
      * ogni qual volta il luogo viene trovato in una ricerca.
      */
     @NotNull
-    @Size(min = 2, max = 100)
+    @DecimalMin("2")
+    @DecimalMax("100")
     private float qualityIndex;
 
     /**

@@ -7,6 +7,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.FetchType;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -38,7 +39,7 @@ public class Preferenze {
     /**
      * La chiave primaria deriva dalla chiave dell' utente.
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id_utente")
     private Utente utente;

@@ -12,16 +12,17 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.FetchType;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,10 +46,9 @@ public class Ricerca {
      * Id dell Ricerca.
      */
     @Id
-    @NotNull
     @Column(name = "id_ricerca")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idRicerca;
+    private Long idRicerca;
 
     /**
      * Data e ora della Ricerca.
@@ -67,20 +67,20 @@ public class Ricerca {
      */
     @NotNull
     @PositiveOrZero
-    @Size(min = 2, max = 500)
+    @Min(2)
+    @Max(500)
     private int raggio;
 
     /**
      * Id dell' utente che ha effettuato la ricerca.
      */
-    @NotNull
     @Column(name = "id_utente")
-    private long idUtente;
+    private Long idUtente;
 
     /**
      * Utente che ha effettuato la ricerca.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idUtente")
     @JoinColumn(name = "id_utente")
     Utente utente;
