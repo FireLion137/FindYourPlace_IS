@@ -20,7 +20,7 @@ import java.time.LocalDate;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = FindYourPlaceApplication.class )
 @AutoConfigureMockMvc()
-public class TF1Test {
+public class TF1_1 {
     @MockBean
     private AccountService accountService;
 

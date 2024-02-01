@@ -20,7 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.Duration;
 import java.util.*;
 @SpringBootTest()
-public class TC21Test {
+public class TF2_1 {
   private WebDriver driver;
   private Map<String, Object> vars;
   JavascriptExecutor js;

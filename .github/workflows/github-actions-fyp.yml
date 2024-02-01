@@ -10,16 +10,6 @@ jobs:
   Build_and_Test:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_DATABASE: FindYourPlace
-          MYSQL_ROOT_PASSWORD: password
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-        ports:
-          - 3306
-
     steps:
       - uses: mirromutth/mysql-action@v1.1
         with:
