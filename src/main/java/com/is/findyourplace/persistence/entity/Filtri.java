@@ -23,6 +23,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 /**
  * Classe relativa ai Filtri di una ricerca.<br>
  * I campi sono:
@@ -137,5 +139,28 @@ public class Filtri {
                 + ", numScuoleMin=" + numScuoleMin
                 + ", numRistorantiMin=" + numRistorantiMin
                 + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Filtri filtri = (Filtri) o;
+        return Float.compare(dangerMax, filtri.dangerMax) == 0
+                && numAbitantiMin == filtri.numAbitantiMin
+                && numAbitantiMax == filtri.numAbitantiMax
+                && numNegoziMin == filtri.numNegoziMin
+                && numScuoleMin == filtri.numScuoleMin
+                && numRistorantiMin == filtri.numRistorantiMin
+                && Objects.equals(idRicerca, filtri.idRicerca)
+                && costoVita == filtri.costoVita;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                idRicerca, costoVita, dangerMax,
+                numAbitantiMin, numAbitantiMax,
+                numNegoziMin, numScuoleMin, numRistorantiMin);
     }
 }

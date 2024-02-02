@@ -2,7 +2,10 @@ package com.is.findyourplace.persistence.repository;
 
 import com.is.findyourplace.persistence.entity.Utente;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface UtenteRepository extends JpaRepository<Utente, Long> {
@@ -51,4 +54,20 @@ public interface UtenteRepository extends JpaRepository<Utente, Long> {
      * @return Utente
      */
     Utente findByIdUtente(Long idUtente);
+
+    /**
+     * Query personalizzata per restituire una lista di utenti
+     * che hanno salvato un luogo e le cui notifiche sono attive,
+     * in base a quanto sono distanti gli indici di qualità tra
+     * il luogo salvato e il luogo in generale.
+     * @param idLuogo Id del Luogo salvato dall'utente
+     * @param idqDistance Distanza tra gli indici di qualità
+     * @return Lista di utenti
+     */
+    @Query("SELECT u FROM Utente u "
+            + "INNER JOIN Preferiti p ON u.idUtente=p.idPreferiti.idUtente "
+            + "INNER JOIN Luogo l ON p.idPreferiti.idLuogo = l.idLuogo "
+            + "WHERE p.idPreferiti.idLuogo=?1 AND p.notifiche=true "
+            + "AND ABS(p.qualityIndex - l.qualityIndex)>?2")
+    List<Utente> findUtentiByIdLuogoPreferito(Long idLuogo, int idqDistance);
 }

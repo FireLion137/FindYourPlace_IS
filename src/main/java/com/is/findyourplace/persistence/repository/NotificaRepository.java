@@ -4,6 +4,7 @@ import com.is.findyourplace.persistence.entity.Notifica;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -37,5 +38,19 @@ public interface NotificaRepository extends JpaRepository<Notifica, Long> {
     Notifica findFirstByAutoreAndTestoOrderByDataInvioDesc(
             String autore,
             String testo
+    );
+
+    /**
+     * Query per controllare se esiste una notifica
+     * con autore e testo specificati con la data di scadenza passata
+     * @param autore Autore della notifica
+     * @param testo Testo della notifica
+     * @param localDateTime Data oltre cui non bisogna andare
+     * @return boolean
+     */
+    boolean existsByAutoreAndTestoAndExpireDateAfter(
+            String autore,
+            String testo,
+            LocalDateTime localDateTime
     );
 }
