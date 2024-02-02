@@ -6,16 +6,13 @@ import com.is.findyourplace.persistence.entity.Filtri;
 import com.is.findyourplace.persistence.entity.LuogoTrovato;
 import com.is.findyourplace.service.gestioneRicerca.SearchService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.security.SecureRandom;
 import java.util.HashMap;
@@ -27,6 +24,11 @@ import java.util.Map;
  */
 @Controller
 public class SearchController {
+    /**
+     * Template per le chiamate REST utilizzato
+     * per comunicare con il server Flask.
+     */
+    private final RestTemplate restTemplate = new RestTemplate();
     /**
      * Service usato per la ricerca.
      */
@@ -68,6 +70,21 @@ public class SearchController {
         Long idRicerca = searchService.saveRicerca(ricercaDto);
 
         //Call al modulo di IA
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        String flaskServerUrl = "http://127.0.0.1:5000/start-module";
+
+        // Effettua una chiamata REST al server Flask per avviare il modulo
+        ResponseEntity<Map<String, Object>> responseEntity =
+                restTemplate.exchange(
+                        flaskServerUrl,
+                        HttpMethod.POST,
+                        entity,
+                        new ParameterizedTypeReference<Map<String, Object>>() {
+                        });
+        Map<String, Object> responseBody = responseEntity.getBody();
+
         //response.put()
 
         LuogoDto luogoDto = new LuogoDto();

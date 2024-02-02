@@ -156,7 +156,7 @@ function readNot(idNot){
 }
 
 $(function() {
-        $('#drpCntAccount, .account-btn, .notify-btn').click(function(e) {
+        $('#drpCntAccount, .account-btn, .notify-btn, #drpCntNotification').click(function(e) {
         e.stopPropagation();
     });
 });

@@ -1,7 +1,6 @@
 package com.is.findyourplace.persistence.repository;
 
 import com.is.findyourplace.persistence.entity.Ricerca;
-import com.is.findyourplace.persistence.entity.Utente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,8 +16,15 @@ public interface RicercaRepository extends JpaRepository<Ricerca, Long> {
     Ricerca findByIdRicerca(long idRicerca);
     /**
      * Query per trovare la lista delle ricerche di un utente.
-     * @param utente Utente
+     * @param idUtente Id dell' Utente
      * @return Lista di ricerche
      */
-    List<Ricerca> findByUtente(Utente utente);
+    List<Ricerca> findByIdUtente(Long idUtente);
+    /**
+     * Query per trovare una Ricerca fatta da un utente.
+     * @param idRicerca Id della Ricerca
+     * @param idUtente Id dell' Utente
+     * @return Ricerca
+     */
+    Ricerca findByIdRicercaAndIdUtente(long idRicerca, long idUtente);
 }

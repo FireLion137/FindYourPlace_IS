@@ -2,17 +2,9 @@ package com.is.findyourplace.service.gestioneRicerca;
 
 import com.is.findyourplace.persistence.dto.LuogoDto;
 import com.is.findyourplace.persistence.dto.RicercaDto;
-import com.is.findyourplace.persistence.entity.Ricerca;
-import com.is.findyourplace.persistence.entity.Filtri;
-import com.is.findyourplace.persistence.entity.Luogo;
-import com.is.findyourplace.persistence.entity.LuogoTrovato;
-import com.is.findyourplace.persistence.entity.Utente;
+import com.is.findyourplace.persistence.entity.*;
 
-import com.is.findyourplace.persistence.repository.LuogoRepository;
-import com.is.findyourplace.persistence.repository.LuogoTrovatoRepository;
-import com.is.findyourplace.persistence.repository.RicercaRepository;
-import com.is.findyourplace.persistence.repository.UtenteRepository;
-import com.is.findyourplace.persistence.repository.FiltriRepository;
+import com.is.findyourplace.persistence.repository.*;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -50,6 +42,10 @@ public class SearchServiceImpl implements SearchService {
      * Repository di Filtri.
      */
     private final FiltriRepository filtriRepository;
+    /**
+     * Repository di Notifica.
+     */
+    private final NotificaRepository notificaRepository;
 
     /**
      * Costruttore del Service.
@@ -58,18 +54,21 @@ public class SearchServiceImpl implements SearchService {
      * @param luogoRepository LuogoRepository
      * @param luogoTrovatoRepository LuogoTrovatoRepository
      * @param filtriRepository FiltriRepository
+     * @param notificaRepository NotificaRepository
      */
     public SearchServiceImpl(
             final RicercaRepository ricercaRepository,
             final UtenteRepository utenteRepository,
             final LuogoRepository luogoRepository,
             final LuogoTrovatoRepository luogoTrovatoRepository,
-            final FiltriRepository filtriRepository) {
+            final FiltriRepository filtriRepository,
+            final NotificaRepository notificaRepository) {
         this.ricercaRepository = ricercaRepository;
         this.utenteRepository = utenteRepository;
         this.luogoRepository = luogoRepository;
         this.luogoTrovatoRepository = luogoTrovatoRepository;
         this.filtriRepository = filtriRepository;
+        this.notificaRepository = notificaRepository;
     }
 
     @Override
@@ -160,6 +159,37 @@ public class SearchServiceImpl implements SearchService {
         luogoTrovato.setNumNegozi(luogoDto.getNumNegozi());
         luogoTrovato.setNumRistoranti(luogoDto.getNumRistoranti());
         luogoTrovato.setNumScuole(luogoDto.getNumScuole());
+
+        //Invio notifica di cambiamento Indice di Qualità
+        String autoreNotIdQ = "FYPIdQ";
+        String testoNotIdQ = "Il luogo " + luogo.getNome()
+                + " ha cambiato Indice di Qualità!";
+
+        if(!notificaRepository.existsByAutoreAndTestoAndExpireDateAfter(
+                autoreNotIdQ, testoNotIdQ, LocalDateTime.now())) {
+            Notifica notifica = new Notifica();
+            notifica.setAutore(autoreNotIdQ);
+            notifica.setTesto(testoNotIdQ);
+            notifica.setDataInvio(LocalDateTime.now());
+            notifica.setExpireDate(LocalDateTime.now().plusDays(5));
+
+            List<Utente> utentiNotPref =
+                    utenteRepository.findUtentiByIdLuogoPreferito(
+                            luogo.getIdLuogo(),
+                            5
+                    );
+            if(!utentiNotPref.isEmpty()) {
+                notificaRepository.save(notifica);
+
+                for(Utente utente : utentiNotPref) {
+                    NotificaRicevuta notificaRicevuta =
+                            new NotificaRicevuta(utente, notifica);
+                    utente.getNotificheRicevute().add(notificaRicevuta);
+                    notifica.getNotificheRicevute().add(notificaRicevuta);
+                }
+            }
+
+        }
     }
 
     @Override

@@ -19,4 +19,6 @@ public interface PreferitiRepository
      */
     @Query("SELECT p FROM Preferiti p WHERE p.idPreferiti.idUtente=?1")
     List<Preferiti> findByIdUtente(Long idUtente);
+
+    Preferiti findByIdPreferiti(PreferitiKey preferitiKey);
 }

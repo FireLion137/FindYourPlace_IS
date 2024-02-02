@@ -49,6 +49,10 @@ public class WebSecurityConfig {
                     .requestMatchers("/editProfile",
                             "/editPreferences").authenticated()
                     .requestMatchers("/search", "/searchResult").permitAll()
+                    .requestMatchers("/searchHistory",
+                            "/searchHistory/deleteSearch",
+                            "/savedPlaces",
+                            "/savedPlaces/deletePlace").authenticated()
                     .requestMatchers("/retrieveNot").permitAll()
                     .anyRequest().permitAll()
             )

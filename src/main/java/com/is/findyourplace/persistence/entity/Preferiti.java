@@ -8,8 +8,9 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.FetchType;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -56,7 +57,8 @@ public class Preferiti {
      * al momento del salvataggio nei preferiti.
      */
     @NotNull
-    @Size(min = 2, max = 100)
+    @DecimalMin("2")
+    @DecimalMax("100")
     private float qualityIndex;
 
     /**
