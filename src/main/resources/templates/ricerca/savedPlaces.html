@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>FindYourPlace | Luoghi Preferiti</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/settings.css}">
+    <link rel="stylesheet" th:href="@{/css/siteStyle.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script th:src="@{/js/jquery-3.7.1.js}"></script>
+</head>
+<body>
+<div th:insert="fragments/header :: navbar"></div>
+
+<main class="profile-page">
+    <div class="col-sidebar">
+        <div class="col-bg">
+            <ul class="menu">
+                <li class="menu-item">
+                    <a th:href="@{/editProfile}">
+                        <i class="fa fa-pencil"></i>
+                        &nbsp;&nbsp;Impostazioni
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/editPreferences}">
+                        <i class="fa fa-user-plus"></i>
+                        &nbsp;Preferenze
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/searchHistory}">
+                        <i class="fa fa-history"></i>
+                        &nbsp;Cronologia Ricerche
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a th:href="@{/savedPlaces}">
+                        <i class="fa fa-star"></i>
+                        &nbsp;Luoghi Preferiti
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/logout}">
+                        <i class="fa fa-sign-out"></i>
+                        &nbsp;&nbsp;Esci
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-mainEdit">
+        <div class="edit-title">
+            <span class="title">Luoghi preferiti</span>
+        </div>
+        <div class="col-bg">
+            <div class="edit-body">
+                <div id="alert-no-places" style="display: none;padding:20px 0;"></div>
+                <div th:if="${luoghiPreferiti.size() == 0}" style="padding:20px 0;">
+                    Non hai nessun luogo salvato nei preferiti!
+                </div>
+                <ul id="place-list">
+                    <li class="list-item" th:each="luogo : ${luoghiPreferiti}" th:id="'place-'+${luogo.getIdLuogo()}">
+                        <div class="saved-place">
+                            <div class="saved-place-header">
+                                <span class="saved-place-title" th:text="${luogo.getNome()}"></span>
+                                <div class="saved-place-actions">
+                                    <div class="clickable-action setNot-action" th:id="'notify-'+${luogo.getIdLuogo()}"
+                                         th:attr="onclick=|return setNot('${luogo.getIdLuogo()}', ${luogo.isNotifiche()})|">
+                                        <i class="setNot-clickable-icon fa fa-bell" th:if="${luogo.isNotifiche()}"></i>
+                                        <i class="setNot-clickable-icon fa fa-bell-slash" th:unless="${luogo.isNotifiche()}"></i>
+                                    </div>
+                                    <div class="clickable-action" th:attr="onclick=|return deletePlace('${luogo.getIdLuogo()}')|">
+                                        <i class="delete-clickable-icon fa fa-trash"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="saved-place-content">
+                                <span th:text="${'Coordinate: ' + luogo.latitude + ', ' + luogo.longitude}"></span>
+                            </div>
+                            <div class="saved-place-idq">
+                                <span class="place-idqFound"
+                                      th:text="${'Indice di Qualità salvato: '+luogo.getQualityIndexFound()}"></span>
+                                <br>
+                                <span class="place-idqLuogo"
+                                      th:text="${'Indice di Qualità attuale: '+luogo.getQualityIndexLuogo()}"></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:insert="fragments/footer :: footer"></div>
+</body>
+
+<script>
+    function deletePlace(idLuogo) {
+        if(!confirm("Vuoi rimuovere dai preferiti questa luogo?"))
+            return false;
+
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            type: 'POST',
+            url: '/savedPlaces/deletePlace',
+            data: {
+                "idLuogo" : idLuogo
+            },
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function(response, textStatus, xhr) {
+                if(xhr.status === 200) {
+                    let placeItem=$('#place-'+idLuogo);
+                    placeItem.remove();
+                    if($('#place-list').children().length<=0) {
+                        let alertPlace=$("#alert-no-places");
+                        alertPlace.text("Non hai nessun luogo salvato nei preferiti!");
+                        alertPlace.show();
+                    }
+                } else {
+                    console.log("HTTP Status imprevisto: " + xhr.status)
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                if(xhr.status === 401) {
+                    console.log("L'utente non è loggato")
+                }
+                else {
+                    console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+                }
+            }
+        });
+    }
+
+    function setNot(idLuogo, isActive) {
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            type: 'POST',
+            url: '/savedPlaces/setNot',
+            data: {
+                "idLuogo" : idLuogo,
+                "isActive" : isActive
+            },
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function(response, textStatus, xhr) {
+                if(xhr.status === 200) {
+                    let placeItem=$('#notify-'+idLuogo);
+                    placeItem.removeAttr('onClick');
+                    placeItem.attr('onClick', 'setNot(\''+ idLuogo +'\', '+ !isActive +')');
+                    placeItem.children('i').eq(0).removeClass("fa fa-bell fa-bell-slash")
+                    if(!isActive) {
+                        placeItem.children('i').eq(0).addClass("fa fa-bell");
+                    } else {
+                        placeItem.children('i').eq(0).addClass("fa fa-bell-slash");
+                    }
+
+                } else {
+                    console.log("HTTP Status imprevisto: " + xhr.status)
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                if(xhr.status === 401) {
+                    console.log("L'utente non è loggato")
+                }
+                else {
+                    console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+                }
+            }
+        });
+    }
+</script>
+</html>

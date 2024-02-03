@@ -98,7 +98,7 @@
     text-indent: 30px;
 }
 
-#search-list {
+#search-list, #place-list {
     padding: 0 10px;
 }
 
@@ -108,13 +108,13 @@
     list-style-type: none;
 }
 
-.past-search {
+.past-search, .saved-place {
     border-bottom: 1px solid #303030;
     padding: 10px 2%;
     font-weight: 700;
 }
 
-.past-search-title {
+.past-search-title, .saved-place-title {
     font-size: 17px;
     color: #0b5d28;
 }
@@ -125,12 +125,23 @@
     display: inline-block;
     float: right;
 }
+.saved-place-actions {
+    float: right;
+    display: flex;
+    gap: 15px;
+}
 .clickable-action {
     display: inline-block;
     cursor: pointer;
 }
 .delete-clickable-icon {
     color: #e83838;
+}
+.setNot-clickable-icon {
+    color: #0b5d28;
+}
+.setNot-action {
+    font-size: 18px;
 }
 
 .search-time {
@@ -142,7 +153,27 @@
     font-size: 11px;
 }
 
-.past-search-content {
+.saved-place-idq {
+    height: 10px;
+}
+.place-idqFound {
+    color: #0b5d28;
+    font-weight: 500;
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    font-size: 14px;
+}
+.place-idqLuogo {
+    color: #b71313;
+    font-weight: 500;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 14px;
+}
+
+.past-search-content, .saved-place-content {
     margin: 0.1em 0 2em;
     overflow: hidden;
     font-weight: 500;

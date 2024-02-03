@@ -44,7 +44,7 @@ public class SavedSearchesController {
         }
         List<LuogoPreferitoDto> luoghiPreferitiDto =
                 savedPlacesService.findLuoghiPreferitiDtoByIdUtente(
-                        accountService.findByUsername(auth.getName())
+                        accountService.findByUsernameOrEmail(auth.getName())
                                 .getIdUtente()
                 );
 
@@ -70,6 +70,31 @@ public class SavedSearchesController {
                 return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
             }
             savedPlacesService.deletePreferito(preferito);
+        } else {
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/savedPlaces/setNot")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> setNot(
+            @RequestParam final Long idLuogo,
+            @RequestParam final boolean isActive) {
+        Map<String, Object> response = new HashMap<>();
+
+        Authentication auth =
+                SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null
+                && auth.isAuthenticated()
+                && !(auth instanceof AnonymousAuthenticationToken)) {
+            Long idUtente = accountService.findByUsernameOrEmail(
+                    auth.getName()).getIdUtente();
+            Preferiti preferito = savedPlacesService.findPreferito(idUtente, idLuogo);
+            if(preferito == null) {
+                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            }
+            savedPlacesService.updateNotPreferito(preferito, !isActive);
         } else {
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
