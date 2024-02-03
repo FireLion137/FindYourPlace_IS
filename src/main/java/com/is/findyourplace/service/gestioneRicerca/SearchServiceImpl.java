@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -202,7 +203,8 @@ public class SearchServiceImpl implements SearchService {
 
             luoghiDto.add(mapToLuogoDto(luogo, luogoTrovato));
         }
-
+        // Ordina la lista in base al QualityIndex in modo decrescente
+        luoghiDto.sort(Comparator.comparingDouble(LuogoDto::getQualityIndex).reversed());
         return luoghiDto;
     }
 
@@ -215,6 +217,7 @@ public class SearchServiceImpl implements SearchService {
             final Luogo luogo,
             final LuogoTrovato luogoTrovato) {
         LuogoDto luogoDto = new LuogoDto();
+        luogoDto.setIdLuogo(luogo.getIdLuogo());
 
         luogoDto.setNome(luogo.getNome());
         luogoDto.setLatitude((float) luogo.getCoordinate().getX());

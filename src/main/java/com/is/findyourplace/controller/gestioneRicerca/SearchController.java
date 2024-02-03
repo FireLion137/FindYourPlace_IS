@@ -2,12 +2,17 @@ package com.is.findyourplace.controller.gestioneRicerca;
 
 import com.is.findyourplace.persistence.dto.LuogoDto;
 import com.is.findyourplace.persistence.dto.RicercaDto;
-import com.is.findyourplace.persistence.entity.Filtri;
 import com.is.findyourplace.persistence.entity.LuogoTrovato;
+import com.is.findyourplace.persistence.entity.Preferiti;
+import com.is.findyourplace.service.gestioneRicerca.SavedPlacesService;
 import com.is.findyourplace.service.gestioneRicerca.SearchService;
+import com.is.findyourplace.service.gestioneUtenza.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,13 +38,20 @@ public class SearchController {
      * Service usato per la ricerca.
      */
     private final SearchService searchService;
+    private final SavedPlacesService savedPlacesService;
+    private final AccountService accountService;
 
     /**
      * Costruttore del controller.
-     * @param searchService SearchService
+     *
+     * @param searchService      SearchService
+     * @param savedPlacesService
+     * @param accountService
      */
-    public SearchController(final SearchService searchService) {
+    public SearchController(final SearchService searchService, SavedPlacesService savedPlacesService, AccountService accountService) {
         this.searchService = searchService;
+        this.savedPlacesService = savedPlacesService;
+        this.accountService = accountService;
     }
 
     /**
@@ -86,34 +98,36 @@ public class SearchController {
         Map<String, Object> responseBody = responseEntity.getBody();
 
         //response.put()
+        for (int k=0;k<5;k++){
+            LuogoDto luogoDto = new LuogoDto();
+            // **** Temporaneo, va cambiato con i dati ricevuti dal modulo
+            luogoDto.setIdRicerca(idRicerca);
 
-        LuogoDto luogoDto = new LuogoDto();
-        // **** Temporaneo, va cambiato con i dati ricevuti dal modulo
-        luogoDto.setIdRicerca(idRicerca);
+            SecureRandom random = new SecureRandom();
+            StringBuilder builder = new StringBuilder(10);
+            String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    + "abcdefghijklmnopqrstuvwxyz"
+                    + "0123456789";
+            for (int i = 0; i < 10; i++) {
+                builder.append(alphanumeric.
+                        charAt(random.nextInt(alphanumeric.length())));
+            }
+            luogoDto.setNome(builder.toString());
 
-        SecureRandom random = new SecureRandom();
-        StringBuilder builder = new StringBuilder(10);
-        String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                + "abcdefghijklmnopqrstuvwxyz"
-                + "0123456789";
-        for (int i = 0; i < 10; i++) {
-            builder.append(alphanumeric.
-                    charAt(random.nextInt(alphanumeric.length())));
+            luogoDto.setLatitude(ricercaDto.getLatitude());
+            luogoDto.setLongitude(ricercaDto.getLongitude());
+            luogoDto.setQualityIndex(50);
+            luogoDto.setCostoVita(LuogoTrovato.CostoVita.MEDIO);
+            luogoDto.setDanger(35);
+            luogoDto.setNumAbitanti(10000);
+            luogoDto.setNumNegozi(1000);
+            luogoDto.setNumRistoranti(5000);
+            luogoDto.setNumScuole(200);
+            // **** Temporaneo, va cambiato con i dati ricevuti dal modulo
+
+            searchService.saveLuogoDto(luogoDto);
         }
-        luogoDto.setNome(builder.toString());
 
-        luogoDto.setLatitude(ricercaDto.getLatitude());
-        luogoDto.setLongitude(ricercaDto.getLongitude());
-        luogoDto.setQualityIndex(50);
-        luogoDto.setCostoVita(LuogoTrovato.CostoVita.MEDIO);
-        luogoDto.setDanger(35);
-        luogoDto.setNumAbitanti(10000);
-        luogoDto.setNumNegozi(1000);
-        luogoDto.setNumRistoranti(5000);
-        luogoDto.setNumScuole(200);
-        // **** Temporaneo, va cambiato con i dati ricevuti dal modulo
-
-        searchService.saveLuogoDto(luogoDto);
 
         response.put("ricerca", idRicerca);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -129,11 +143,17 @@ public class SearchController {
     public String searchResult(
             @Valid @RequestParam final Long ricerca,
             final Model model) {
-
+        Preferiti preferito;
         List<LuogoDto> luoghi = searchService.findLuoghiByIdRicerca(ricerca);
-        Filtri filtriUsati = searchService.findFiltriByIdRicerca(ricerca);
+        Authentication auth =
+                SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || auth instanceof AnonymousAuthenticationToken) {
+            preferito=null;
+        }else {
+             preferito= savedPlacesService.findPreferito(accountService.findByUsernameOrEmail(auth.getName()).getIdUtente(),luoghi.get(0).getIdLuogo());
+        }
+        model.addAttribute("preferito",preferito);
         model.addAttribute("luoghi", luoghi);
-        model.addAttribute("filtri", filtriUsati);
         return "ricerca/ricercaResult";
     }
 }
