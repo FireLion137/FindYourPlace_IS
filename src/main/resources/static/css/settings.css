@@ -3,9 +3,9 @@
     max-width: 1000px;
     padding-right: 15px;
     padding-left: 15px;
-    margin: 25px auto;
     display: flex;
     flex-wrap: wrap;
+    margin: 25px auto auto;
 }
 
 @media (min-width: 1024px) {
@@ -29,6 +29,7 @@
 .col-bg {
     padding: 10px;
     background: #222;
+    margin-bottom: 25px
 }
 
 .menu {
@@ -95,4 +96,59 @@
 .form-passwordInput {
     padding-right: 50px !important;
     text-indent: 30px;
+}
+
+#search-list {
+    padding: 0 10px;
+}
+
+.list-item {
+    border-bottom: 1px solid #303030;
+    position: relative;
+    list-style-type: none;
+}
+
+.past-search {
+    border-bottom: 1px solid #303030;
+    padding: 10px 2%;
+    font-weight: 700;
+}
+
+.past-search-title {
+    font-size: 17px;
+    color: #0b5d28;
+}
+.past-search-title a {
+    color: #0b5d28;
+}
+.past-search-actions {
+    display: inline-block;
+    float: right;
+}
+.clickable-action {
+    display: inline-block;
+    cursor: pointer;
+}
+.delete-clickable-icon {
+    color: #e83838;
+}
+
+.search-time {
+    color: #6d6d6d;
+    font-weight: 200;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    font-size: 11px;
+}
+
+.past-search-content {
+    margin: 0.1em 0 2em;
+    overflow: hidden;
+    font-weight: 500;
+    font-size: 11px;
+    color: #ababab;
+}
+.past-search-content a {
+    color: #ababab;
 }

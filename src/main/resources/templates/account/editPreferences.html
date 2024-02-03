@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>FindYourPlace | Modifica Preferenze</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" th:href="@{/css/editProfile.css}">
+    <link rel="stylesheet" th:href="@{/css/settings.css}">
     <link rel="stylesheet" th:href="@{/css/siteStyle.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script th:src="@{/js/jquery-3.7.1.js}"></script>
@@ -27,6 +27,18 @@
                     <a th:href="@{/editPreferences}">
                         <i class="fa fa-user-plus"></i>
                         &nbsp;Preferenze
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/searchHistory}">
+                        <i class="fa fa-history"></i>
+                        &nbsp;Cronologia Ricerche
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/savedPlaces}">
+                        <i class="fa fa-star"></i>
+                        &nbsp;Luoghi Preferiti
                     </a>
                 </li>
                 <li class="menu-item">
