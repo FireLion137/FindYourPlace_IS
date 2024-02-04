@@ -43,7 +43,7 @@ public class HistoryController {
         }
         List<RicercaDto> ricerche =
                 historyService.findRicercheDtoByIdUtente(
-                        accountService.findByUsername(auth.getName())
+                        accountService.findByUsernameOrEmail(auth.getName())
                                 .getIdUtente()
                 );
 

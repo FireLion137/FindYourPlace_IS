@@ -1,10 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Cronologia Ricerche | FindYourPlace</title>
+    <title>FindYourPlace | Cronologia Ricerche</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/settings.css}">
+    <link rel="stylesheet" th:href="@{/css/siteStyle.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script th:src="@{/js/jquery-3.7.1.js}"></script>
 </head>
 <body>
+<div th:insert="fragments/header :: navbar"></div>
 
+<main class="profile-page">
+    <div class="col-sidebar">
+        <div class="col-bg">
+            <ul class="menu">
+                <li class="menu-item">
+                    <a th:href="@{/editProfile}">
+                        <i class="fa fa-pencil"></i>
+                        &nbsp;&nbsp;Impostazioni
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/editPreferences}">
+                        <i class="fa fa-user-plus"></i>
+                        &nbsp;Preferenze
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a th:href="@{/searchHistory}">
+                        <i class="fa fa-history"></i>
+                        &nbsp;Cronologia Ricerche
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/savedPlaces}">
+                        <i class="fa fa-star"></i>
+                        &nbsp;Luoghi Preferiti
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/logout}">
+                        <i class="fa fa-sign-out"></i>
+                        &nbsp;&nbsp;Esci
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-mainEdit">
+        <div class="edit-title">
+            <span class="title">Cronologia ricerche effettuate</span>
+        </div>
+        <div class="col-bg">
+            <div class="edit-body">
+                <div id="alert-no-searches" style="display: none;padding:20px 0;"></div>
+                <div th:if="${ricerche.size() == 0}" style="padding:20px 0;">
+                    Non hai nessuna ricerca nella cronologia!
+                </div>
+                <ul id="search-list">
+                    <li class="list-item" th:each="ricerca : ${ricerche}" th:id="'search-'+${ricerca.getIdRicerca()}">
+                        <div class="past-search">
+                            <div class="past-search-header">
+                                <span class="past-search-title">
+                                    <a th:href="@{/searchResult(ricerca=${ricerca.getIdRicerca()})}"
+                                       th:idricerca="${ricerca.idRicerca}"
+                                       th:lat="${ricerca.latitude}" th:lon="${ricerca.longitude}"
+                                       th:id="'ricerca-text' + ${ricerca.getIdRicerca()}">
+                                        Ricerca
+                                    </a>
+                                </span>
+                                <div class="past-search-actions">
+                                    <div class="clickable-action" th:attr="onclick=|return deleteSearch('${ricerca.getIdRicerca()}')|">
+                                        <i class="delete-clickable-icon fa fa-trash"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="past-search-time">
+                                <span class="search-time" th:text="${ricerca.dataRicerca}"></span>
+                            </div>
+                            <div class="past-search-content">
+                                <a th:href="@{/searchResult(ricerca=${ricerca.getIdRicerca()})}"
+                                   th:text="${'Coordinate: ' + ricerca.latitude + ', ' + ricerca.longitude}">
+                                </a>
+                                <br>
+                                <a th:href="@{/searchResult(ricerca=${ricerca.getIdRicerca()})}"
+                                   th:text="${'Raggio: ' + ricerca.raggio + ' Km'}">
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:insert="fragments/footer :: footer"></div>
 </body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let ricerche = document.getElementsByClassName("past-search-title");
+        for (let i = 0; i < ricerche.length; i++) {
+            let ricerca = ricerche[i].querySelector('a');
+            reverseGeocode(ricerca);
+        }
+    });
+
+    function reverseGeocode(ricerca) {
+        let url = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat="
+            + ricerca.getAttribute("lat") + "&lon=" + ricerca.getAttribute("lon");
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function(data) {
+                let comune = data.address.city || data.address.town || data.address.village || data.address.hamlet;
+                $('#ricerca-text'+ricerca.getAttribute("idricerca")).text("Ricerca effettuata a partire da: " + comune);
+            },
+            error: function() {
+                $('#ricerca-text'+ricerca.getAttribute("idricerca")).text("Ricerca effettuata a partire da: Comune non trovato");
+            }
+        });
+    }
+
+    function deleteSearch(idRicerca){
+        if(!confirm("Vuoi cancellare dalla cronologia questa ricerca?"))
+            return false;
+
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            type: 'POST',
+            url: '/searchHistory/deleteSearch',
+            data: {
+                "idRicerca" : idRicerca
+            },
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function(response, textStatus, xhr) {
+                if(xhr.status === 200) {
+                    let searchItem=$('#search-'+idRicerca);
+                    searchItem.remove();
+                    if($('#search-list').children().length<=0) {
+                        let alertSearch=$("#alert-no-searches");
+                        alertSearch.text("Non hai nessuna ricerca nella cronologia!");
+                        alertSearch.show();
+                    }
+                } else {
+                    console.log("HTTP Status imprevisto: " + xhr.status)
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                if(xhr.status === 401) {
+                    console.log("L'utente non è loggato")
+                }
+                else {
+                    console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+                }
+            }
+        });
+    }
+</script>
 </html>

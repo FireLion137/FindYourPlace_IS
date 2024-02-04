@@ -46,7 +46,11 @@ main {
 }
 
 .form-buttons {
-    padding: 0 15.5% 15px 15%;
+    padding: 0 15% 15px 15%;
+}
+.form-submitButton {
+    max-width: fit-content;
+    align-self: center;
 }
 
 .search-addressBtn {

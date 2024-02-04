@@ -64,6 +64,20 @@
                                     <i class="fa fa-user" style="margin-left: 5px"></i>
                                 </a>
                             </div>
+                            <div class="navBarSecondaryCategory"
+                                 th:href="@{/searchHistory}" onclick="location.replace(this.getAttribute('href'))">
+                                <a th:href="@{/searchHistory}">
+                                    Cronologia Ricerche
+                                    <i class="fa fa-history" style="margin-left: 5px"></i>
+                                </a>
+                            </div>
+                            <div class="navBarSecondaryCategory"
+                                 th:href="@{/savedPlaces}" onclick="location.replace(this.getAttribute('href'))">
+                                <a th:href="@{/savedPlaces}">
+                                    Luoghi Preferiti
+                                    <i class="fa fa-star" style="margin-left: 5px"></i>
+                                </a>
+                            </div>
                             <div sec:authorize="hasRole('ROLE_ADMIN')" class="navBarSecondaryCategory"
                                  th:href="@{/admin/users}" onclick="location.replace(this.getAttribute('href'))">
                                 <a th:href="@{/admin/users}">

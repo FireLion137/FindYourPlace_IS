@@ -65,9 +65,11 @@ public interface UtenteRepository extends JpaRepository<Utente, Long> {
      * @return Lista di utenti
      */
     @Query("SELECT u FROM Utente u "
+            + "INNER JOIN Preferenze pref ON u.idUtente=pref.idUtente "
             + "INNER JOIN Preferiti p ON u.idUtente=p.idPreferiti.idUtente "
             + "INNER JOIN Luogo l ON p.idPreferiti.idLuogo = l.idLuogo "
-            + "WHERE p.idPreferiti.idLuogo=?1 AND p.notifiche=true "
+            + "WHERE pref.notifiche=true AND p.notifiche=true "
+            + "AND p.idPreferiti.idLuogo=?1 "
             + "AND ABS(p.qualityIndex - l.qualityIndex)>?2")
     List<Utente> findUtentiByIdLuogoPreferito(Long idLuogo, int idqDistance);
 }

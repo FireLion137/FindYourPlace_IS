@@ -66,6 +66,12 @@ public class SavedPlacesServiceImpl implements SavedPlacesService {
         preferitiRepository.delete(luogoSalvato);
     }
 
+    @Override
+    public void updateNotPreferito(Preferiti preferito, boolean notifiche) {
+        preferito.setNotifiche(notifiche);
+        preferitiRepository.save(preferito);
+    }
+
     private LuogoPreferitoDto mapToLuogoPreferitoDto(
             Luogo luogo, Preferiti preferiti) {
         LuogoPreferitoDto luogoPreferitoDto = new LuogoPreferitoDto();
