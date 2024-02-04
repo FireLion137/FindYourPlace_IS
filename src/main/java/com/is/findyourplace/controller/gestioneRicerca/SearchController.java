@@ -162,6 +162,12 @@ public class SearchController {
             final Model model) {
         Preferiti preferito;
         List<LuogoDto> luoghi = searchService.findLuoghiByIdRicerca(ricerca);
+        if (luoghi.isEmpty()) {
+            model.addAttribute("errorMessage",
+                    "La ricerca non possiede risultati!");
+            return "error";
+        }
+
         Authentication auth =
                 SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || auth instanceof AnonymousAuthenticationToken) {
