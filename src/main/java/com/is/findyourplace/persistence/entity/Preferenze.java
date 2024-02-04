@@ -14,6 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 /**
  * Classe relativa alle Preferenze di un utente.<br>
  * I campi sono:
@@ -70,5 +72,25 @@ public class Preferenze {
                 + ", studente=" + studente
                 + ", genitore=" + genitore
                 + '}';
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Preferenze that = (Preferenze) o;
+        return idUtente == that.idUtente
+                && notifiche == that.notifiche
+                && studente == that.studente
+                && genitore == that.genitore;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idUtente, notifiche, studente, genitore);
     }
 }
