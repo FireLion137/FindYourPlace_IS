@@ -76,6 +76,50 @@ $(document).ready(function (){
 
 
 
+function setPref(idLuogo, ispref) {
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+
+    $.ajax({
+        type: 'POST',
+        url: '/savedPlaces/setPref',
+        data: {
+            "idLuogo" : idLuogo,
+            "isPref" : ispref
+        },
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        success: function(response, textStatus, xhr) {
+            if(xhr.status === 200) {
+                let setpref=$('#SearchResult-isPref');
+                setpref.removeAttr('onClick');
+                setpref.attr('onClick', 'setPref(\''+ idLuogo +'\', '+ !ispref +')');
+                setpref.children('i').eq(0).removeClass("fa fa-star fa-star-o")
+                if(!ispref) {
+                    setpref.children('i').eq(0).addClass("fa fa-star");
+                } else {
+                    setpref.children('i').eq(0).addClass("fa fa-star-o");
+                }
+
+            } else {
+                console.log("HTTP Status imprevisto: " + xhr.status)
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            if(xhr.status === 401) {
+                console.log("L'utente non è loggato")
+            }
+            else {
+                console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+            }
+        }
+    });
+}
+
+
+
+
 
 
 

@@ -18,7 +18,8 @@
 <div th:insert="fragments/header :: navbar"></div>
  <div class="main-SearchResult">
        <div class="SearchResult-MainResult">
-           <div sec:authorize="isAuthenticated()" class="SearchResult-addPref">
+           <div sec:authorize="isAuthenticated()" class="SearchResult-addPref" id="SearchResult-isPref"
+               th:attr="onclick=|return setPref('${luoghi[0].getIdLuogo()}', ${preferito==null ? false : true})|">
                <i th:if="${preferito}==null" class="fa fa-star-o"></i>
                <i th:unless="${preferito}==null" class="fa fa-star"></i>
            </div>

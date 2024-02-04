@@ -37,8 +37,6 @@ public class SavedPlacesServiceImpl implements SavedPlacesService {
         Preferiti luogoSalvato = new Preferiti(utente, luogo);
         utente.getPreferiti().add(luogoSalvato);
         luogo.getPreferiti().add(luogoSalvato);
-
-        preferitiRepository.save(luogoSalvato);
     }
 
     @Override
