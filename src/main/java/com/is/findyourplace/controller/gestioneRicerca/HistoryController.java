@@ -21,19 +21,34 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Gestisce la cronologia delle ricerche
+ * Gestisce la cronologia delle ricerche.
  */
 @Controller
 public class HistoryController {
+    /**
+     * Service per la cronologia delle ricerche.
+     */
     private final HistoryService historyService;
+    /**
+     * Service per la gestione degli account.
+     */
     private final AccountService accountService;
+    /**
+     * Construttore del controller.
+     * @param accountService Service per la gestione degli account.
+     * @param historyService Service per la cronologia delle ricerche.
+     */
     public HistoryController(
-            HistoryService historyService,
-            AccountService accountService) {
+            final HistoryService historyService,
+            final AccountService accountService) {
         this.historyService = historyService;
         this.accountService = accountService;
     }
-
+    /**
+     * Mapping per la pagina della cronologia di ricerche.
+     * @param model Model
+     * @return ricerca/searchHistory.html
+     */
     @GetMapping("/searchHistory")
     public String searchHistory(final Model model) {
         Authentication auth =
@@ -50,7 +65,11 @@ public class HistoryController {
         model.addAttribute("ricerche", ricerche);
         return "ricerca/searchHistory";
     }
-
+    /**
+     * Mapping per cancellare una ricerca dalla cronologia.
+     * @param idRicerca id della ricerca
+     * @return 200 OK / 401 UNAUTHORIZED
+     */
     @PostMapping("/searchHistory/deleteSearch")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> deleteSearch(
@@ -65,7 +84,7 @@ public class HistoryController {
             Long idUtente = accountService.findByUsernameOrEmail(
                     auth.getName()).getIdUtente();
             Ricerca ricerca = historyService.findRicerca(idRicerca, idUtente);
-            if(ricerca == null) {
+            if (ricerca == null) {
                 return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
             }
             historyService.removeIdUtente(ricerca);

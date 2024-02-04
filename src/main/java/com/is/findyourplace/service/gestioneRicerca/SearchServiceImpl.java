@@ -2,10 +2,21 @@ package com.is.findyourplace.service.gestioneRicerca;
 
 import com.is.findyourplace.persistence.dto.LuogoDto;
 import com.is.findyourplace.persistence.dto.RicercaDto;
-import com.is.findyourplace.persistence.entity.*;
 
-import com.is.findyourplace.persistence.repository.*;
+import com.is.findyourplace.persistence.entity.Ricerca;
+import com.is.findyourplace.persistence.entity.Filtri;
+import com.is.findyourplace.persistence.entity.Utente;
+import com.is.findyourplace.persistence.entity.Luogo;
+import com.is.findyourplace.persistence.entity.LuogoTrovato;
+import com.is.findyourplace.persistence.entity.Notifica;
+import com.is.findyourplace.persistence.entity.NotificaRicevuta;
 
+import com.is.findyourplace.persistence.repository.RicercaRepository;
+import com.is.findyourplace.persistence.repository.UtenteRepository;
+import com.is.findyourplace.persistence.repository.NotificaRepository;
+import com.is.findyourplace.persistence.repository.LuogoRepository;
+import com.is.findyourplace.persistence.repository.LuogoTrovatoRepository;
+import com.is.findyourplace.persistence.repository.FiltriRepository;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -166,7 +177,7 @@ public class SearchServiceImpl implements SearchService {
         String testoNotIdQ = "Il luogo " + luogo.getNome()
                 + " ha cambiato Indice di Qualità!";
 
-        if(!notificaRepository.existsByAutoreAndTestoAndExpireDateAfter(
+        if (!notificaRepository.existsByAutoreAndTestoAndExpireDateAfter(
                 autoreNotIdQ, testoNotIdQ, LocalDateTime.now())) {
             Notifica notifica = new Notifica();
             notifica.setAutore(autoreNotIdQ);
@@ -179,10 +190,10 @@ public class SearchServiceImpl implements SearchService {
                             luogo.getIdLuogo(),
                             5
                     );
-            if(!utentiNotPref.isEmpty()) {
+            if (!utentiNotPref.isEmpty()) {
                 notificaRepository.save(notifica);
 
-                for(Utente utente : utentiNotPref) {
+                for (Utente utente : utentiNotPref) {
                     NotificaRicevuta notificaRicevuta =
                             new NotificaRicevuta(utente, notifica);
                     utente.getNotificheRicevute().add(notificaRicevuta);
@@ -204,7 +215,8 @@ public class SearchServiceImpl implements SearchService {
             luoghiDto.add(mapToLuogoDto(luogo, luogoTrovato));
         }
         // Ordina la lista in base al QualityIndex in modo decrescente
-        luoghiDto.sort(Comparator.comparingDouble(LuogoDto::getQualityIndex).reversed());
+        luoghiDto.sort(Comparator.comparingDouble(
+                LuogoDto::getQualityIndex).reversed());
         return luoghiDto;
     }
 

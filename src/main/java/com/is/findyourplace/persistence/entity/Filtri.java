@@ -142,9 +142,13 @@ public class Filtri {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Filtri filtri = (Filtri) o;
         return Float.compare(dangerMax, filtri.dangerMax) == 0
                 && numAbitantiMin == filtri.numAbitantiMin

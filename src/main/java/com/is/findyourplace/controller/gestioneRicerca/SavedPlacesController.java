@@ -22,20 +22,37 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Gestisce il salvataggio e visualizzazione dei luoghi preferiti
+ * Gestisce il salvataggio e visualizzazione dei luoghi preferiti.
  */
 @Controller
 public class SavedPlacesController {
+    /**
+     *  Service dei luoghi preferiti.
+     */
     private final SavedPlacesService savedPlacesService;
+    /**
+     * Service della gestione degli account.
+     */
     private final AccountService accountService;
 
+    /**
+     *  Construttore del controller.
+     * @param savedPlacesService Service della gestione degli account
+     * @param accountService Service dei luoghi preferiti
+     */
+
     public SavedPlacesController(
-            SavedPlacesService savedPlacesService,
-            AccountService accountService) {
+            final SavedPlacesService savedPlacesService,
+            final AccountService accountService) {
         this.savedPlacesService = savedPlacesService;
         this.accountService = accountService;
     }
 
+    /**
+     * Mapping della pagina dei luoghi preferiti.
+     * @param model Model
+     * @return ricerca/savedPlaces.html
+     */
     @GetMapping("/savedPlaces")
     public String searchHistory(final Model model) {
         Authentication auth =
@@ -53,6 +70,11 @@ public class SavedPlacesController {
         return "ricerca/savedPlaces";
     }
 
+    /**
+     * Mapping per cancellare un luogo dai preferiti.
+     * @param idLuogo id del Luogo
+     * @return 200 OK / 401 UNAUTHORIZED
+     */
     @PostMapping("/savedPlaces/deletePlace")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> deleteSearch(
@@ -66,8 +88,9 @@ public class SavedPlacesController {
                 && !(auth instanceof AnonymousAuthenticationToken)) {
             Long idUtente = accountService.findByUsernameOrEmail(
                     auth.getName()).getIdUtente();
-            Preferiti preferito = savedPlacesService.findPreferito(idUtente, idLuogo);
-            if(preferito == null) {
+            Preferiti preferito =
+                    savedPlacesService.findPreferito(idUtente, idLuogo);
+            if (preferito == null) {
                 return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
             }
             savedPlacesService.deletePreferito(preferito);
@@ -77,6 +100,12 @@ public class SavedPlacesController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Mapping per la gestione delle notifiche di un luogo preferito.
+     * @param idLuogo id del luogo
+     * @param isActive campo che definisce se le notifiche sono attive
+     * @return 200 OK / 401 UNAUTHORIZED
+     */
     @PostMapping("/savedPlaces/setNot")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> setNot(
@@ -91,8 +120,9 @@ public class SavedPlacesController {
                 && !(auth instanceof AnonymousAuthenticationToken)) {
             Long idUtente = accountService.findByUsernameOrEmail(
                     auth.getName()).getIdUtente();
-            Preferiti preferito = savedPlacesService.findPreferito(idUtente, idLuogo);
-            if(preferito == null) {
+            Preferiti preferito =
+                    savedPlacesService.findPreferito(idUtente, idLuogo);
+            if (preferito == null) {
                 return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
             }
             savedPlacesService.updateNotPreferito(preferito, !isActive);
@@ -101,6 +131,13 @@ public class SavedPlacesController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    /**
+     * Mapping per l'aggiunta o la rimozione del luogo tra i preferiti.
+     * @param idLuogo id del luogo
+     * @param isPref campo che definisce se il luogo è tra i preferiti
+     * @return 200 OK / 401 UNAUTHORIZED
+     */
 
     @PostMapping("/savedPlaces/setPref")
     @ResponseBody
@@ -121,14 +158,16 @@ public class SavedPlacesController {
                             utente.getIdUtente(),
                             idLuogo
                     );
-            if ((preferito == null && isPref) || (preferito != null && !isPref)) {
+            if ((preferito == null && isPref)
+                    || (preferito != null && !isPref)) {
                 return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
             }
 
             if (isPref) {
                 savedPlacesService.deletePreferito(preferito);
             } else {
-                savedPlacesService.savePreferito(utente, savedPlacesService.findLuogoById(idLuogo));
+                savedPlacesService.savePreferito(utente,
+                savedPlacesService.findLuogoById(idLuogo));
             }
         } else {
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);

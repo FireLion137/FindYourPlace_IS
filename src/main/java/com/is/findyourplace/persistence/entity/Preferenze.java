@@ -75,9 +75,13 @@ public class Preferenze {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Preferenze that = (Preferenze) o;
         return idUtente == that.idUtente
                 && notifiche == that.notifiche

@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Classe Dto di un LuogoPreferito
+ * Classe Dto di un LuogoPreferito.
  */
 @Data
 @NoArgsConstructor

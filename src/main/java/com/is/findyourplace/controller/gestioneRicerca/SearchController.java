@@ -9,14 +9,23 @@ import com.is.findyourplace.service.gestioneRicerca.SearchService;
 import com.is.findyourplace.service.gestioneUtenza.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.SecureRandom;
@@ -38,17 +47,25 @@ public class SearchController {
      * Service usato per la ricerca.
      */
     private final SearchService searchService;
+    /**
+     *  Service dei luoghi preferiti.
+     */
     private final SavedPlacesService savedPlacesService;
+    /**
+     *  Service per la gestione degli account.
+     */
     private final AccountService accountService;
 
     /**
      * Costruttore del controller.
      *
-     * @param searchService      SearchService
-     * @param savedPlacesService
-     * @param accountService
+     * @param searchService  searchService
+     * @param savedPlacesService savedPlacesService
+     * @param accountService accountService
      */
-    public SearchController(final SearchService searchService, SavedPlacesService savedPlacesService, AccountService accountService) {
+    public SearchController(final SearchService searchService,
+                            final SavedPlacesService savedPlacesService,
+                            final AccountService accountService) {
         this.searchService = searchService;
         this.savedPlacesService = savedPlacesService;
         this.accountService = accountService;
@@ -98,7 +115,7 @@ public class SearchController {
         Map<String, Object> responseBody = responseEntity.getBody();
 
         //response.put()
-        for (int k=0;k<5;k++){
+        for (int k = 0; k < 5; k++) {
             LuogoDto luogoDto = new LuogoDto();
             // **** Temporaneo, va cambiato con i dati ricevuti dal modulo
             luogoDto.setIdRicerca(idRicerca);
@@ -148,11 +165,16 @@ public class SearchController {
         Authentication auth =
                 SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || auth instanceof AnonymousAuthenticationToken) {
-            preferito=null;
-        }else {
-             preferito= savedPlacesService.findPreferito(accountService.findByUsernameOrEmail(auth.getName()).getIdUtente(),luoghi.get(0).getIdLuogo());
+            preferito = null;
+        } else {
+             preferito = savedPlacesService.findPreferito(
+                     accountService.findByUsernameOrEmail(
+                             auth.getName()
+                     ).getIdUtente(),
+                     luoghi.get(0).getIdLuogo()
+             );
         }
-        model.addAttribute("preferito",preferito);
+        model.addAttribute("preferito", preferito);
         model.addAttribute("luoghi", luoghi);
         return "ricerca/ricercaResult";
     }

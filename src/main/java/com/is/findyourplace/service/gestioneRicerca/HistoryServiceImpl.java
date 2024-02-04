@@ -17,13 +17,17 @@ public class HistoryServiceImpl implements HistoryService {
      */
     private final RicercaRepository ricercaRepository;
 
-    public HistoryServiceImpl(RicercaRepository ricercaRepository) {
+    /**
+     * Construttore del service.
+     * @param ricercaRepository ricercaRepository
+     */
+    public HistoryServiceImpl(final RicercaRepository ricercaRepository) {
         this.ricercaRepository = ricercaRepository;
     }
 
 
     @Override
-    public List<RicercaDto> findRicercheDtoByIdUtente(Long idUtente) {
+    public List<RicercaDto> findRicercheDtoByIdUtente(final Long idUtente) {
         List<Ricerca> ricerche = ricercaRepository.findByIdUtente(idUtente);
         return ricerche.stream()
                 .map(this::mapToRicercaDto)
@@ -31,13 +35,15 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-    public Ricerca findRicerca(Long idRicerca, Long idUtente) {
-        return ricercaRepository.findByIdRicercaAndIdUtente(idRicerca, idUtente);
+    public Ricerca findRicerca(final Long idRicerca, final Long idUtente) {
+        return ricercaRepository.findByIdRicercaAndIdUtente(
+                idRicerca, idUtente
+        );
     }
 
     @Override
     @Transactional
-    public void removeIdUtente(Ricerca ricerca) {
+    public void removeIdUtente(final Ricerca ricerca) {
         Utente utente = ricerca.getUtente();
         utente.getRicerche().remove(ricerca);
         ricerca.setUtente(null);
@@ -46,7 +52,7 @@ public class HistoryServiceImpl implements HistoryService {
         ricercaRepository.save(ricerca);
     }
 
-    private RicercaDto mapToRicercaDto(Ricerca ricerca) {
+    private RicercaDto mapToRicercaDto(final Ricerca ricerca) {
         RicercaDto ricercaDto = new RicercaDto();
 
         ricercaDto.setIdRicerca(ricerca.getIdRicerca());

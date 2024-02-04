@@ -24,16 +24,21 @@ public class SavedPlacesServiceImpl implements SavedPlacesService {
      */
     private final LuogoRepository luogoRepository;
 
+    /**
+     * Costruttore del service.
+     * @param preferitiRepository preferitiRepository
+     * @param luogoRepository luogoRepository
+     */
     public SavedPlacesServiceImpl(
-            PreferitiRepository preferitiRepository,
-            LuogoRepository luogoRepository) {
+            final PreferitiRepository preferitiRepository,
+            final LuogoRepository luogoRepository) {
         this.preferitiRepository = preferitiRepository;
         this.luogoRepository = luogoRepository;
     }
 
     @Override
     @Transactional
-    public void savePreferito(Utente utente, Luogo luogo) {
+    public void savePreferito(final Utente utente, final Luogo luogo) {
         Preferiti luogoSalvato = new Preferiti(utente, luogo);
         utente.getPreferiti().add(luogoSalvato);
         luogo.getPreferiti().add(luogoSalvato);
@@ -41,9 +46,9 @@ public class SavedPlacesServiceImpl implements SavedPlacesService {
 
     @Override
     public List<LuogoPreferitoDto>
-    findLuoghiPreferitiDtoByIdUtente(Long idUtente) {
+    findLuoghiPreferitiDtoByIdUtente(final Long idUtente) {
         List<LuogoPreferitoDto> luoghiPreferitiDto = new ArrayList<>();
-        for(Preferiti preferito
+        for (Preferiti preferito
                 : preferitiRepository.findByIdUtente(idUtente)) {
             Luogo luogo = luogoRepository.findByIdLuogo(
                     preferito.getIdPreferiti().getIdLuogo());
@@ -53,30 +58,31 @@ public class SavedPlacesServiceImpl implements SavedPlacesService {
     }
 
     @Override
-    public Preferiti findPreferito(Long idUtente, Long idLuogo) {
+    public Preferiti findPreferito(final Long idUtente, final Long idLuogo) {
         return preferitiRepository.findByIdPreferiti(
                 new PreferitiKey(idUtente, idLuogo)
         );
     }
 
     @Override
-    public void deletePreferito(Preferiti luogoSalvato) {
+    public void deletePreferito(final Preferiti luogoSalvato) {
         preferitiRepository.delete(luogoSalvato);
     }
 
     @Override
-    public void updateNotPreferito(Preferiti preferito, boolean notifiche) {
+    public void updateNotPreferito(final Preferiti preferito,
+                                   final boolean notifiche) {
         preferito.setNotifiche(notifiche);
         preferitiRepository.save(preferito);
     }
 
     @Override
-    public Luogo findLuogoById(Long idLuogo) {
+    public Luogo findLuogoById(final Long idLuogo) {
         return luogoRepository.findByIdLuogo(idLuogo);
     }
 
     private LuogoPreferitoDto mapToLuogoPreferitoDto(
-            Luogo luogo, Preferiti preferiti) {
+            final Luogo luogo, final Preferiti preferiti) {
         LuogoPreferitoDto luogoPreferitoDto = new LuogoPreferitoDto();
 
         luogoPreferitoDto.setIdLuogo(preferiti.getIdPreferiti().getIdLuogo());

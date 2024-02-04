@@ -42,7 +42,7 @@ public interface NotificaRepository extends JpaRepository<Notifica, Long> {
 
     /**
      * Query per controllare se esiste una notifica
-     * con autore e testo specificati con la data di scadenza passata
+     * con autore e testo specificati con la data di scadenza passata.
      * @param autore Autore della notifica
      * @param testo Testo della notifica
      * @param localDateTime Data oltre cui non bisogna andare

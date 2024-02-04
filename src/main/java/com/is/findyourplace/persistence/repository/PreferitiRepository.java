@@ -20,5 +20,11 @@ public interface PreferitiRepository
     @Query("SELECT p FROM Preferiti p WHERE p.idPreferiti.idUtente=?1")
     List<Preferiti> findByIdUtente(Long idUtente);
 
+    /**
+     * Query per recuperare il luogo preferito tramite il suo id.
+     * @param preferitiKey id luogo preferito
+     * @return Luogo preferito con l'id indicato
+     */
+
     Preferiti findByIdPreferiti(PreferitiKey preferitiKey);
 }
