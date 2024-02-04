@@ -72,6 +72,11 @@ public class SavedPlacesServiceImpl implements SavedPlacesService {
         preferitiRepository.save(preferito);
     }
 
+    @Override
+    public Luogo findLuogoById(Long idLuogo) {
+        return luogoRepository.findByIdLuogo(idLuogo);
+    }
+
     private LuogoPreferitoDto mapToLuogoPreferitoDto(
             Luogo luogo, Preferiti preferiti) {
         LuogoPreferitoDto luogoPreferitoDto = new LuogoPreferitoDto();
