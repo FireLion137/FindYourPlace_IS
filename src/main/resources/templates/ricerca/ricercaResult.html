@@ -8,44 +8,67 @@
     <link rel="stylesheet" th:href="@{/css/ricercaResult.css}">
     <link rel="stylesheet" th:href="@{/css/SearchResult.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script th:src="@{/js/jquery-3.7.1.js}"></script>
     <script th:inline="javascript" >  let list =[[${luoghi}]] </script>
-
 </head>
 <body>
 <div th:insert="fragments/header :: navbar"></div>
  <div class="main-SearchResult">
        <div class="SearchResult-MainResult">
-           <div sec:authorize="isAuthenticated()" class="SearchResult-addPref" id="SearchResult-isPref"
-               th:attr="onclick=|return setPref('${luoghi[0].getIdLuogo()}', ${preferito==null ? false : true})|">
-               <i th:if="${preferito}==null" class="fa fa-star-o"></i>
-               <i th:unless="${preferito}==null" class="fa fa-star"></i>
-           </div>
           <div class="SearchResult-luogo">
               <h2 class="SearchResult-luogo-text" >Il luogo che fa per te è:</h2>
               <h1 class="SearchResult-luogo-actualresult"  th:text="${luoghi[0].nome}"></h1>
               <div class="SearchResult-idq">
-                  <div class="SearchResult-idq-value" >
-                      <span class="good-result" th:if="${luoghi[0].qualityIndex}>=65" th:text="${luoghi[0].qualityIndex+'%'}"></span>
-                      <span class="medium-result" th:if="${luoghi[0].qualityIndex}>=40 and ${luoghi[0].qualityIndex}<=64" th:text="${luoghi[0].qualityIndex+'%'}"></span>
-                      <span class="bad-result" th:if="${luoghi[0].qualityIndex}<=39" th:text="${luoghi[0].qualityIndex+'%'}"></span>
-
+                  <div class="SearchResult-idq-value"
+                       th:with="idqToDisplay = ${(luoghi[0].qualityIndex % 1 == 0
+                       ? #strings.replace(luoghi[0].qualityIndex, '.0', '')
+                       : luoghi[0].qualityIndex) + '%'}">
+                      <span class="good-result" th:if="${luoghi[0].qualityIndex}>=65"
+                            th:text="${idqToDisplay}">
+                      </span>
+                      <span class="medium-result" th:if="${luoghi[0].qualityIndex}>=40 and ${luoghi[0].qualityIndex}<=64"
+                            th:text="${idqToDisplay}">
+                      </span>
+                      <span class="bad-result" th:if="${luoghi[0].qualityIndex}<=39"
+                            th:text="${idqToDisplay}">
+                      </span>
                   </div>
                   <div class="SearchResult-idq-comment" >
-                      <span class="good-result" th:if="${luoghi[0].qualityIndex}>=65">La qualità di vita è ottima! </span>
-                      <span class="medium-result" th:if="${luoghi[0].qualityIndex}>=40 and ${luoghi[0].qualityIndex}<=64">La qualità di vita è discreta </span>
-                      <span class="bad-result" th:if="${luoghi[0].qualityIndex}<=39">La qualità è pessima </span>
+                      <span class="good-result" th:if="${luoghi[0].qualityIndex}>=65">
+                          La Qualità di Vita calcolata è ottima!
+                      </span>
+                      <span class="medium-result" th:if="${luoghi[0].qualityIndex}>=40 and ${luoghi[0].qualityIndex}<=64">
+                          La Qualità di Vita calcolata è discreta.
+                      </span>
+                      <span class="bad-result" th:if="${luoghi[0].qualityIndex}<=39">
+                          La Qualità di Vita calcolata è pessima...
+                      </span>
                   </div>
               </div>
+
+              <div sec:authorize="isAuthenticated()" class="SearchResult-addPref" id="SearchResult-isPref"
+                   th:attr="onclick=|return setPref('${luoghi[0].getIdLuogo()}', ${preferito==null ? false : true})|">
+                  <i th:if="${preferito}==null" class="fa fa-star-o"></i>
+                  <i th:unless="${preferito}==null" class="fa fa-star"></i>
+              </div>
+
               <div class="SearchResult-luogo-otherParameters">
-                  <span class="SearchResult-luogo-costoVita" th:text="${'Costovita: '+luoghi[0].costoVita}">costovita:</span>
-                  <span class="SearchResult-luogo-danger" th:text="${'Pericolosità: '+luoghi[0].danger}"></span>
-                  <span class="SearchResult-luogo-numAbitanti" th:text="${'Numero Abitanti: '+luoghi[0].numAbitanti}"></span>
-                  <span class="SearchResult-luogo-numNegozzi" th:text="${'Numero Negozzi: '+luoghi[0].numNegozi}"></span>
-                  <span class="SearchResult-luogo-numRistoranti" th:text="${'Numero Ristoranti: '+luoghi[0].numRistoranti}"></span>
-                  <span class="SearchResult-luogo-numScuole" th:text="${'Numero Scuole: '+luoghi[0].numScuole}"></span>
+                  <span class="SearchResult-luogo-costoVita"
+                        th:text="${'Costo Vita: ' +
+                        #strings.capitalize(#strings.toLowerCase(luoghi[0].costoVita))}"></span>
+                  <span class="SearchResult-luogo-danger"
+                        th:text="${'Pericolosità: ' + (luoghi[0].danger % 1 == 0
+                        ? #strings.replace(luoghi[0].danger, '.0', '')
+                        : luoghi[0].danger) + '%'}"></span>
+                  <span class="SearchResult-luogo-numAbitanti"
+                        th:text="${'Numero Abitanti: '+luoghi[0].numAbitanti}"></span>
+                  <span class="SearchResult-luogo-numNegozzi"
+                        th:text="${'Numero Negozi: '+luoghi[0].numNegozi}"></span>
+                  <span class="SearchResult-luogo-numRistoranti"
+                        th:text="${'Numero Ristoranti: '+luoghi[0].numRistoranti}"></span>
+                  <span class="SearchResult-luogo-numScuole"
+                        th:text="${'Numero Scuole: '+luoghi[0].numScuole}"></span>
               </div>
           </div>
            <div class="SearchResult-secondaryResults">
