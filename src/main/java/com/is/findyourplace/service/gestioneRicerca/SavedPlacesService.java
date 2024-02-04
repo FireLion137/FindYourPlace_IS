@@ -13,4 +13,5 @@ public interface SavedPlacesService {
     Preferiti findPreferito(Long idUtente, Long idLuogo);
     void deletePreferito(Preferiti luogoSalvato);
     void updateNotPreferito(Preferiti preferito, boolean notifiche);
+    Luogo findLuogoById(Long idLuogo);
 }
