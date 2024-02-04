@@ -16,15 +16,19 @@
         position: relative;
         top: unset;
         right: unset;
-        bottom: 70px;
+        bottom: 50px;
     }
 }
 
 .SearchResult-addPref i {
     position: relative;
     top: 2px;
-    font-size: 22px;
+    font-size: 24px;
     cursor: pointer;
+    color: #FF6384;
+}
+.SearchResult-addPref i:hover {
+    color: #ff4168;
 }
 
 .SearchResult-luogo {
@@ -34,6 +38,7 @@
 
 .graph-wrapper{
     width: 30vw;
+    height: 40vh;
 }
 #SearchResult-charts{
     grid-template-areas: "graph1 graph2 graph3";
