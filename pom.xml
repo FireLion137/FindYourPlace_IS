@@ -157,6 +157,7 @@
                     <excludes>
                         <exclude>com/is/findyourplace/persistence/**</exclude>
                         <exclude>**/ManageUsers*.*</exclude>
+                        <exclude>**/EmailService.*</exclude>
                         <exclude>**/ReceiveNotification*.*</exclude>
                         <exclude>**/UserDetails*.*</exclude>
                         <exclude>**/History*.*</exclude>

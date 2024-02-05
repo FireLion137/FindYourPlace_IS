@@ -8,6 +8,8 @@ import com.is.findyourplace.service.gestioneUtenza.ProfileService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +19,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Gestisce le operazioni su un profilo Utente.
@@ -67,14 +73,16 @@ public class ProfileController {
      * @param result BindingResult, contiene gli errori.
      * @param model Model
      * @param request HttpServletRequest
-     * @return account/editProfile.html
+     * @return OK 200 / 400 BAD_REQUEST
      */
     @PostMapping("/editProfile")
-    public String editProfile(
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> editProfile(
             @Valid @ModelAttribute("utente") final UtenteDto utenteDto,
             final BindingResult result,
             final Model model,
-            final HttpServletRequest request) {
+            final HttpServletRequest request) throws ServletException {
+        Map<String, Object> response = new HashMap<>();
         Authentication auth =
                 SecurityContextHolder.getContext().getAuthentication();
         Utente userToUpdate =
@@ -98,25 +106,19 @@ public class ProfileController {
 
         if (result.hasErrors()) {
             model.addAttribute("utente", utenteDto);
-            return "account/editProfile";
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
         utenteDto.setIdUtente(userToUpdate.getIdUtente());
-        if (!userToUpdate.getIdUtente().equals(utenteDto.getIdUtente())) {
-            return "redirect:/serverError";
-        }
 
         profileService.updateUtente(utenteDto);
         if (!utenteDto.getPassword().isBlank()
                 || !isUsernameEqual) {
-            try {
-                request.logout();
-                return "redirect:/accountAuth";
-            } catch (ServletException e) {
-                throw new RuntimeException(e);
-            }
+            request.logout();
+            response.put("redirect", "/editProfile");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
-        return "redirect:/editProfile?success";
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -146,30 +148,19 @@ public class ProfileController {
     /**
      * Mapping per la richiesta di modifica preferenze.
      * @param preferenze Preferenze
-     * @param result BindingResult, contiene gli errori.
-     * @param model Model
-     * @return account/editProfile.html
+     * @return OK 200 / 400 BAD_REQUEST
      */
     @PostMapping("/editPreferences")
-    public String editPreferences(
-            @Valid @ModelAttribute("preferenze") final Preferenze preferenze,
-            final BindingResult result,
-            final Model model) {
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> editPreferences(
+            @Valid @ModelAttribute("preferenze") final Preferenze preferenze) {
+        Map<String, Object> response = new HashMap<>();
         Authentication auth =
                 SecurityContextHolder.getContext().getAuthentication();
         Utente user = accountService.findByUsernameOrEmail(auth.getName());
-
         preferenze.setIdUtente(user.getIdUtente());
-        if (!user.getIdUtente().equals(preferenze.getIdUtente())) {
-            return "redirect:/serverError";
-        }
-
-        if (result.hasErrors()) {
-            model.addAttribute("preferenze", preferenze);
-            return "account/editPreferences";
-        }
 
         profileService.updatePreferenze(preferenze);
-        return "redirect:/editPreferences?success";
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

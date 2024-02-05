@@ -189,3 +189,15 @@
     color: green;
     margin: 5px 0 15px;
 }
+.errorMessage {
+    color: red;
+    margin: 8px 0;
+}
+.errorMessage:empty {
+    display: none;
+}
+#submit-spinner{
+    display: none;
+    color: white;
+    margin-left: 20px;
+}

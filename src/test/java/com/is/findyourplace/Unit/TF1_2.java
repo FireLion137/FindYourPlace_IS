@@ -12,9 +12,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
@@ -31,6 +33,17 @@ public class TF1_2 {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Test
+    public void testViewAuthPage() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/accountAuth"))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/accountAuth")
+                        .with(SecurityMockMvcRequestPostProcessors.user("test")))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/"));
+    }
 
     @Test
     public void testLoginUsername() throws Exception {
