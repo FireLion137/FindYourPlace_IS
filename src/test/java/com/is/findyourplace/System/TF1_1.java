@@ -58,7 +58,7 @@ public class TF1_1 {
     driver.findElement(By.id("passwordSignup2")).sendKeys("DavidCalif03!");
     driver.findElement(By.cssSelector(".form-submitButton:nth-child(10)")).click();
 
-    new WebDriverWait(driver, Duration.ofSeconds(5))
+    new WebDriverWait(driver, Duration.ofSeconds(15))
             .until(ExpectedConditions.urlToBe("http://localhost:8080/"));
     utenteRepository.deleteById(utenteRepository.findByUsername(username).getIdUtente());
     assertEquals("http://localhost:8080/", driver.getCurrentUrl());

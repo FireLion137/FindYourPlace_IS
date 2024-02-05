@@ -59,27 +59,26 @@
                 <div class="edit-title" style="margin-bottom: 25px">
                     <span class="title-2">Preferenze</span>
                 </div>
-                <form th:action="@{/editPreferences}" th:object="${preferenze}" method="post" role="form">
+                <p class="SuccessMessage" id="SubmitEditPreferencesSuccess"></p>
+                <form id="editPreferencesForm" th:action="@{/editPreferences}" th:object="${preferenze}" method="post" role="form">
                     <div class="form-field">
                         <label class="form-field-label" for="notificheUpdate">Notifiche attive</label>
                         <input class="form-field-input" id="notificheUpdate" name="notifiche" type="checkbox" th:checked="*{notifiche}">
-                        <p style="color: red" th:errors = "*{notifiche}" th:if="${#fields.hasErrors('notifiche')}"></p>
                     </div>
                     <div class="form-field">
                         <label class="form-field-label" for="isStudenteUpdate">Sei uno studente?</label>
                         <input class="form-field-input" id="isStudenteUpdate" name="studente" type="checkbox" th:checked="*{studente}">
-                        <p style="color: red" th:errors = "*{studente}" th:if="${#fields.hasErrors('studente')}"></p>
                     </div>
                     <div class="form-field">
                         <label class="form-field-label" for="isGenitoreUpdate">Sei un genitore?</label>
                         <input class="form-field-input" id="isGenitoreUpdate" name="genitore" type="checkbox" th:checked="*{genitore}">
-                        <p style="color: red" th:errors = "*{genitore}" th:if="${#fields.hasErrors('genitore')}"></p>
                     </div>
 
                     <div class="form-buttons">
                         <button class="buttonPrimary buttonHover" style="text-transform: none;" type="submit">
                             <i class="fa fa-save"></i>
                             &nbsp;&nbsp;Salva preferenze
+                            <i id="submit-spinner" class="fa fa-spinner fa-spin"></i>
                         </button>
                     </div>
                 </form>
@@ -90,4 +89,37 @@
 
 <div th:insert="fragments/footer :: footer"></div>
 </body>
+
+<script>
+    $(document).ready(function() {
+        $('#editPreferencesForm').submit(function(e) {
+            e.preventDefault();
+
+            let spinner= $('#submit-spinner');
+            spinner.show();
+            $.ajax({
+                type: 'POST',
+                url: '/editPreferences',
+                data: $('#editPreferencesForm').serialize(),
+                success: function(response, textStatus, xhr) {
+                    if(xhr.status === 200) {
+                        if(response.redirect) {
+                            window.location.href = response.redirect;
+                        }
+
+                        $('#SubmitEditPreferencesSuccess').text("Preferenze modificate con successo!");
+                    } else {
+                        console.log("HTTP Status imprevisto: " + xhr.status)
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+                },
+                complete: function() {
+                    spinner.hide();
+                }
+            });
+        });
+    });
+</script>
 </html>

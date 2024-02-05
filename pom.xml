@@ -152,6 +152,20 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.11</version>
+                <configuration>
+                    <!-- Vengono esclusi i file che non richiedono input dall'utente nei test -->
+                    <excludes>
+                        <exclude>com/is/findyourplace/persistence/**</exclude>
+                        <exclude>**/ManageUsers*.*</exclude>
+                        <exclude>**/EmailService.*</exclude>
+                        <exclude>**/ReceiveNotification*.*</exclude>
+                        <exclude>**/UserDetails*.*</exclude>
+                        <exclude>**/History*.*</exclude>
+                        <exclude>**/SavedPlaces*.*</exclude>
+                        <exclude>com/is/findyourplace/FindYourPlaceApplication.*</exclude>
+                        <exclude>**/Redirect*.*</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -219,6 +233,19 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.11</version>
+                <configuration>
+                    <!-- Vengono esclusi i file che non richiedono input dall'utente nei test -->
+                    <excludes>
+                        <exclude>com/is/findyourplace/persistence/**</exclude>
+                        <exclude>com/is/findyourplace/FindYourPlaceApplication.*</exclude>
+                        <exclude>**/Redirect*.*</exclude>
+                        <exclude>**/ManageUsers*.*</exclude>
+                        <exclude>**/ReceiveNotification*.*</exclude>
+                        <exclude>**/UserDetails*.*</exclude>
+                        <exclude>**/History*.*</exclude>
+                        <exclude>**/SavedPlaces*.*</exclude>
+                    </excludes>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <reports>

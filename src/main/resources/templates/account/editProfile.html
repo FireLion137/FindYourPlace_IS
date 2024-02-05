@@ -59,31 +59,32 @@
                 <div class="edit-title" style="margin-bottom: 25px">
                     <span class="title-2">Account</span>
                 </div>
-                <form th:action="@{/editProfile}" th:object="${utente}" method="post" role="form">
+                <p class="SuccessMessage" id="SubmitEditProfileSuccess"></p>
+                <form id="editProfileForm" th:action="@{/editProfile}" th:object="${utente}" method="post" role="form">
                     <div class="form-field">
                         <label class="form-field-label" for="nameUpdate">Nome</label>
                         <input class="form-field-input" id="nameUpdate" name="nome" type="text" th:value="*{nome}" autocomplete="off" required>
-                        <p style="color: red" th:errors = "*{nome}" th:if="${#fields.hasErrors('nome')}"></p>
+                        <p class="errorMessage" id="nomeError"></p>
                     </div>
                     <div class="form-field">
                         <label class="form-field-label" for="lastnameUpdate">Cognome</label>
                         <input class="form-field-input" id="lastnameUpdate" name="cognome" type="text" th:value="*{cognome}" autocomplete="off" required>
-                        <p style="color: red" th:errors = "*{cognome}" th:if="${#fields.hasErrors('cognome')}"></p>
+                        <p class="errorMessage" id="cognomeError"></p>
                     </div>
                     <div class="form-field">
                         <label class="form-field-label" for="phoneUpdate">Numero di Telefono (Opzionale)</label>
                         <input class="form-field-input" id="phoneUpdate" name="numeroTel" type="text" th:value="*{numeroTel}" autocomplete="off">
-                        <p style="color: red" th:errors = "*{numeroTel}" th:if="${#fields.hasErrors('numeroTel')}"></p>
+                        <p class="errorMessage" id="numeroTelError"></p>
                     </div>
                     <div class="form-field">
                         <label class="form-field-label" for="birthDateUpdate">Data di Nascita</label>
                         <input class="form-field-input" id="birthDateUpdate" name="dataNascita" th:value="*{dataNascita}" type="date" required>
-                        <p style="color: red" th:errors = "*{dataNascita}" th:if="${#fields.hasErrors('dataNascita')}"></p>
+                        <p class="errorMessage" id="dataNascitaError"></p>
                     </div>
                     <div class="form-field">
                         <label class="form-field-label" for="usernameUpdate">Username</label>
                         <input class="form-field-input" id="usernameUpdate" name="username" type="text" th:value="*{username}" autocomplete="off" required>
-                        <p style="color: red" th:errors = "*{username}" th:if="${#fields.hasErrors('username')}"></p>
+                        <p class="errorMessage" id="usernameError"></p>
                         <div class="form-field-comment">
                             <span style="color: orange">Modificando l'username verrai disconnesso!</span><br>
                             Minimo 5 caratteri, Massimo 30 caratteri. Accetta lettere, numeri e trattino basso.
@@ -92,7 +93,7 @@
                     <div class="form-field">
                         <label class="form-field-label" for="emailUpdate">Email</label>
                         <input class="form-field-input field-center" id="emailUpdate" name="email" type="email" th:value="*{email}" autocomplete="off" required>
-                        <p style="color: red" th:errors = "*{email}" th:if="${#fields.hasErrors('email')}"></p>
+                        <p class="errorMessage" id="emailError"></p>
                     </div>
                     <div class="form-field">
                         <label class="form-field-label" for="passwordUpdate1">Password</label>
@@ -100,7 +101,7 @@
                             <input class="form-field-input form-passwordInput" id="passwordUpdate1" name="password" type="password" th:field="*{password}" minlength="8" autocomplete="off">
                             <span class="password-eye" onclick="revealPassword('Update1')"><i class="fa fa-eye" id="passEyeUpdate1" title="Mostra Password"></i></span>
                         </div>
-                        <p style="color: red" th:errors = "*{password}" th:if="${#fields.hasErrors('password')}"></p>
+                        <p class="errorMessage" id="passwordError"></p>
                         <div class="form-field-comment">
                             <span style="color: orange">Modificando la password verrai disconnesso!</span><br>
                             Minimo 8 caratteri, Massimo 30 caratteri. Deve contenere lettere maiuscole, minuscole, numeri e caratteri speciali tranne slash.
@@ -121,6 +122,7 @@
                         <button class="buttonPrimary buttonHover" style="text-transform: none;" onclick="return (confermaParametriEditProfile())" type="submit">
                             <i class="fa fa-save"></i>
                             &nbsp;&nbsp;Salva impostazioni
+                            <i id="submit-spinner" class="fa fa-spinner fa-spin"></i>
                         </button>
                     </div>
                 </form>
@@ -131,4 +133,46 @@
 
 <div th:insert="fragments/footer :: footer"></div>
 </body>
+
+<script>
+    $(document).ready(function() {
+        $('#editProfileForm').submit(function(e) {
+            e.preventDefault();
+
+            let spinner= $('#submit-spinner');
+            spinner.show();
+            $.ajax({
+                type: 'POST',
+                url: '/editProfile',
+                data: $('#editProfileForm').serialize(),
+                success: function(response, textStatus, xhr) {
+                    if(xhr.status === 200) {
+                        if(response.redirect) {
+                            window.location.href = response.redirect;
+                        }
+
+                        $('#SubmitEditProfileSuccess').text("Profilo modificato con successo!");
+                        $('#passwordUpdate1' ).val('');
+                        $('#passwordUpdate2' ).val('');
+                    } else {
+                        console.log("HTTP Status imprevisto: " + xhr.status)
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    if(xhr.status === 400) {
+                        xhr.responseJSON.errors.forEach(function(error) {
+                            $('#' + error.field + 'Error').text(error.defaultMessage);
+                        });
+                    }
+                    else {
+                        console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
+                    }
+                },
+                complete: function() {
+                    spinner.hide();
+                }
+            });
+        });
+    });
+</script>
 </html>

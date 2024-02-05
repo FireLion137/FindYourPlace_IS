@@ -79,7 +79,10 @@ public class TF2_1 {
     driver.findElement(By.id("SubmitNot"+username)).click();
 
     new WebDriverWait(driver, Duration.ofSeconds(5))
-            .until(ExpectedConditions.urlToBe("http://localhost:8080/admin/users?continue"));
+            .until(ExpectedConditions.textToBePresentInElementLocated(
+                    By.id("SubmitSendnot"+username+"Success"),
+                    "Notifica inviata correttamente")
+            );
     notificaRepository.deleteById(notificaRepository.findFirstByAutoreAndTestoOrderByDataInvioDesc(autore,"test notifica").getIdNotifica());
     assertEquals("http://localhost:8080/admin/users?continue", driver.getCurrentUrl());
 

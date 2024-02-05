@@ -9,8 +9,6 @@ import com.is.findyourplace.persistence.repository.UtenteRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 public class NotificationServiceImpl implements NotificationService {
     /**
@@ -71,32 +69,5 @@ public class NotificationServiceImpl implements NotificationService {
             utente.getNotificheRicevute().add(notificaRicevuta);
             notifica.getNotificheRicevute().add(notificaRicevuta);
         }
-    }
-
-    @Override
-    public Notifica findByIdNotifica(final Long idNotifica) {
-        return notificaRepository.findByIdNotifica(idNotifica);
-    }
-
-
-    @Override
-    public List<Notifica> findByAutore(final String autore) {
-        return notificaRepository.findByAutore(autore);
-    }
-
-    @Override
-    public boolean existsByIdNotifica(final Long idNotifica) {
-        return notificaRepository.existsByIdNotifica(idNotifica);
-    }
-
-    private NotificaDto mapToNotificaDto(final Notifica n) {
-        NotificaDto notificaDto = new NotificaDto();
-        notificaDto.setIdNotifica(n.getIdNotifica());
-        notificaDto.setAutore(n.getAutore());
-        notificaDto.setTesto(n.getTesto());
-        notificaDto.setDataInvio(n.getDataInvio());
-        notificaDto.setDataScadenza(n.getExpireDate());
-
-        return notificaDto;
     }
 }
