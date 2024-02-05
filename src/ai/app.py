@@ -17,7 +17,7 @@ Returns:
     # Va sostituito con il modulo di IA
     idList = random.sample(range(1, 20), 5)
 
-    # Crea una risposta JSON contenente l'elenco casuale di ID agricoltori
+    # Crea una risposta JSON
     dati=jsonify({'id_list': idList})
     return dati
 
