@@ -114,25 +114,9 @@ public class ProfileController {
             } catch (ServletException e) {
                 throw new RuntimeException(e);
             }
-
-            /* Not Secure
-            UserDetails userDetails=
-                    customUserDetailsService.loadUserByUsername(
-                            utenteDto.getUsername()
-                    );
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            userDetails.getPassword(),
-                            userDetails.getAuthorities()
-                    );
-
-            SecurityContextHolder.getContext()
-                    .setAuthentication(authenticationToken);
-            */
         }
 
-        return "account/editProfile";
+        return "redirect:/editProfile?success";
     }
 
     /**
@@ -186,6 +170,6 @@ public class ProfileController {
         }
 
         profileService.updatePreferenze(preferenze);
-        return "account/editPreferences";
+        return "redirect:/editPreferences?success";
     }
 }

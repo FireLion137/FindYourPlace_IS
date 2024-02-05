@@ -59,6 +59,7 @@
                 <div class="edit-title" style="margin-bottom: 25px">
                     <span class="title-2">Preferenze</span>
                 </div>
+                <p th:if="${param.success}" class="SuccessMessage">Preferenze modificate con successo!</p>
                 <form th:action="@{/editPreferences}" th:object="${preferenze}" method="post" role="form">
                     <div class="form-field">
                         <label class="form-field-label" for="notificheUpdate">Notifiche attive</label>

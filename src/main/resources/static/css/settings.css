@@ -183,3 +183,9 @@
 .past-search-content a {
     color: #ababab;
 }
+
+.SuccessMessage {
+    text-align: center;
+    color: green;
+    margin: 5px 0 15px;
+}
