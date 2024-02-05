@@ -158,7 +158,6 @@
                         <exclude>com/is/findyourplace/persistence/**</exclude>
                         <exclude>**/ManageUsers*.*</exclude>
                         <exclude>**/ReceiveNotification*.*</exclude>
-                        <exclude>**/CustomUserDetails*.*</exclude>
                         <exclude>**/UserDetails*.*</exclude>
                         <exclude>**/History*.*</exclude>
                         <exclude>**/SavedPlaces*.*</exclude>
@@ -241,7 +240,6 @@
                         <exclude>**/Redirect*.*</exclude>
                         <exclude>**/ManageUsers*.*</exclude>
                         <exclude>**/ReceiveNotification*.*</exclude>
-                        <exclude>**/CustomUserDetails*.*</exclude>
                         <exclude>**/UserDetails*.*</exclude>
                         <exclude>**/History*.*</exclude>
                         <exclude>**/SavedPlaces*.*</exclude>
