@@ -234,6 +234,43 @@ public class TF1_3 {
     }
 
     @Test
+    public void testEditProfileExistingUsername() throws Exception {
+        utenteDto.setUsername("newtestuser");
+        Mockito.when(accountService.findByUsernameOrEmail("testuser")).thenReturn(utente);
+
+        Mockito.when(utenteRepository.existsByUsername("newtestuser")).thenReturn(true);
+        Mockito.when(accountService.existsByEmail("test@example.com")).thenReturn(false);
+        Mockito.when(utenteRepository.findByIdUtente(Mockito.any(Long.class))).thenReturn(utente);
+
+        Mockito.when(utenteRepository.save(Mockito.any(Utente.class))).thenReturn(null);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/editProfile")
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("testuser").password("PasswordTest123!"))
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .flashAttr("utente", utenteDto))
+                .andExpect(MockMvcResultMatchers.status().is(400));
+    }
+    @Test
+    public void testEditProfileExistingEmail() throws Exception {
+        utenteDto.setEmail("newtest@example.com");
+        Mockito.when(accountService.findByUsernameOrEmail("testuser")).thenReturn(utente);
+
+        Mockito.when(accountService.existsByUsername("testuser")).thenReturn(false);
+        Mockito.when(utenteRepository.existsByEmail("newtest@example.com")).thenReturn(true);
+        Mockito.when(utenteRepository.findByIdUtente(Mockito.any(Long.class))).thenReturn(utente);
+
+        Mockito.when(utenteRepository.save(Mockito.any(Utente.class))).thenReturn(null);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/editProfile")
+                        .with(SecurityMockMvcRequestPostProcessors
+                                .user("testuser").password("PasswordTest123!"))
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .flashAttr("utente", utenteDto))
+                .andExpect(MockMvcResultMatchers.status().is(400));
+    }
+
+    @Test
     public void testEditPreferences() throws Exception {
         Preferenze preferenze = new Preferenze();
         preferenze.setIdUtente(utente.getIdUtente());
