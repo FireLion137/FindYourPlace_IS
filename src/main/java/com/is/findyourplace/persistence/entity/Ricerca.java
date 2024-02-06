@@ -67,8 +67,8 @@ public class Ricerca {
      */
     @NotNull
     @PositiveOrZero
-    @Min(2)
-    @Max(500)
+    @Min(10)
+    @Max(150)
     private int raggio;
 
     /**

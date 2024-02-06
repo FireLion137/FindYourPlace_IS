@@ -34,7 +34,8 @@
             <label class="form-field-label" for="raggio" id="raggioValue">Raggio in Km: 25</label>
             <div class="slidecontainer">
                 <input type="range" class="slider" id="raggio" name="raggio"
-                       min="10" max="500" th:value="25" required>
+                       min="10" max="150" th:value="25" required>
+                <p class="errorMessage" id="raggioError"></p>
             </div>
         </div>
 
@@ -48,6 +49,7 @@
                 <option th:value="MEDIO">MEDIO</option>
                 <option th:value="ALTO">ALTO</option>
             </select>
+            <p class="errorMessage" id="costoVitaError"></p>
         </div>
 
         <div class="form-field">
@@ -55,6 +57,7 @@
             <div class="slidecontainer">
                 <input type="range" class="slider" id="dangerMax" name="dangerMax"
                        min="25" max="100" th:value="100">
+                <p class="errorMessage" id="dangerMaxError"></p>
             </div>
         </div>
 
@@ -63,6 +66,7 @@
             <div class="slidecontainer">
                 <input type="range" class="slider" id="numAbitantiMin" name="numAbitantiMin"
                        min="0" max="100000" th:value="0">
+                <p class="errorMessage" id="numAbitantiMinError"></p>
             </div>
         </div>
 
@@ -71,6 +75,7 @@
             <div class="slidecontainer">
                 <input type="range" class="slider" id="numAbitantiMax" name="numAbitantiMax"
                        min="1000" max="1000000" th:value="1000000">
+                <p class="errorMessage" id="numAbitantiMaxError"></p>
             </div>
         </div>
 
@@ -79,6 +84,7 @@
             <div class="slidecontainer">
                 <input type="range" class="slider" id="numNegoziMin" name="numNegoziMin"
                        min="0" max="1000" th:value="0">
+                <p class="errorMessage" id="numNegoziMinError"></p>
             </div>
         </div>
 
@@ -87,6 +93,7 @@
             <div class="slidecontainer">
                 <input type="range" class="slider" id="numRistorantiMin" name="numRistorantiMin"
                        min="0" max="10000" th:value="0">
+                <p class="errorMessage" id="numRistorantiMinError"></p>
             </div>
         </div>
 
@@ -95,6 +102,7 @@
             <div class="slidecontainer">
                 <input type="range" class="slider" id="numScuoleMin" name="numScuoleMin"
                        min="0" max="100" th:value="0">
+                <p class="errorMessage" id="numScuoleMinError"></p>
             </div>
         </div>
 
@@ -132,7 +140,7 @@
                     if(xhr.status === 400) {
                         $('[id$=Error]').text('');
                         xhr.responseJSON.errors.forEach(function(error) {
-                            $('#' + error.field + 'SError').text(error.defaultMessage);
+                            $('#' + error.field + 'Error').text(error.defaultMessage);
                         });
                     }
                     else {

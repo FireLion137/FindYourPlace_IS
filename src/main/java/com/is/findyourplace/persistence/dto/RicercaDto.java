@@ -52,7 +52,7 @@ public class RicercaDto {
     @NotNull
     @PositiveOrZero
     @Min(10)
-    @Max(500)
+    @Max(150)
     private int raggio;
 
 
