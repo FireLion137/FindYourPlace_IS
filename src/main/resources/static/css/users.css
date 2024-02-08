@@ -1,8 +1,11 @@
-#Button-form-notificationB{
+main{
+    margin: auto 0;
+}
+.EndPageButton{
     max-width: fit-content;
         margin: 20px auto;
 }
-#tab-content-form-notificationB{
+.formNotEndPage{
     margin-right: auto;
     margin-left: auto;
     margin-bottom: 20px;

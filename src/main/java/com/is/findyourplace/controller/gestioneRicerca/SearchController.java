@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,45 +101,49 @@ public class SearchController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        String flaskServerUrl = "http://127.0.0.1:5000/start-module";
+        String flaskServerUrl = "http://127.0.0.1:5000/search-luoghi";
 
         // Effettua una chiamata REST al server Flask per avviare il modulo
-        ResponseEntity<Map<String, Object>> responseEntity =
+        ResponseEntity<List<Map<String, Object>>> responseEntity =
                 restTemplate.exchange(
                         flaskServerUrl,
                         HttpMethod.POST,
                         entity,
-                        new ParameterizedTypeReference<Map<String, Object>>() {
+                        new ParameterizedTypeReference<>() {
                         });
-        Map<String, Object> responseBody = responseEntity.getBody();
+        List<Map<String, Object>> responseBody = responseEntity.getBody();
 
-        //response.put()
-        for (int k = 0; k < 5; k++) {
+        if (responseBody == null) {
+            return new ResponseEntity<>(response,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        for (Map<String, Object> luogo : responseBody) {
             LuogoDto luogoDto = new LuogoDto();
-            // **** Temporaneo, va cambiato con i dati ricevuti dal modulo
             luogoDto.setIdRicerca(idRicerca);
 
-            SecureRandom random = new SecureRandom();
-            StringBuilder builder = new StringBuilder(10);
-            String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                    + "abcdefghijklmnopqrstuvwxyz"
-                    + "0123456789";
-            for (int i = 0; i < 10; i++) {
-                builder.append(alphanumeric.
-                        charAt(random.nextInt(alphanumeric.length())));
-            }
-            luogoDto.setNome(builder.toString());
+            luogoDto.setNome((String) luogo.get("nome"));
 
-            luogoDto.setLatitude(ricercaDto.getLatitude());
-            luogoDto.setLongitude(ricercaDto.getLongitude());
-            luogoDto.setQualityIndex(50);
-            luogoDto.setCostoVita(LuogoTrovato.CostoVita.MEDIO);
-            luogoDto.setDanger(35);
-            luogoDto.setNumAbitanti(10000);
-            luogoDto.setNumNegozi(1000);
-            luogoDto.setNumRistoranti(5000);
-            luogoDto.setNumScuole(200);
-            // **** Temporaneo, va cambiato con i dati ricevuti dal modulo
+            luogoDto.setLatitude(
+                    ((Double) luogo.get("latitude")).floatValue());
+            luogoDto.setLongitude(
+                    ((Double) luogo.get("longitude")).floatValue());
+            luogoDto.setQualityIndex(
+                    ((Double) luogo.get("qualityIndex")).floatValue());
+
+            String costovita = (String) luogo.get("costoVita");
+            if (costovita.equals("BASSO")) {
+                luogoDto.setCostoVita(LuogoTrovato.CostoVita.BASSO);
+            } else if (costovita.equals("MEDIO")) {
+                luogoDto.setCostoVita(LuogoTrovato.CostoVita.MEDIO);
+            } else {
+                luogoDto.setCostoVita(LuogoTrovato.CostoVita.ALTO);
+            }
+
+            luogoDto.setDanger(((Double) luogo.get("danger")).floatValue());
+            luogoDto.setNumAbitanti((Integer) luogo.get("numAbitanti"));
+            luogoDto.setNumNegozi((Integer) luogo.get("numNegozi"));
+            luogoDto.setNumRistoranti((Integer) luogo.get("numRistoranti"));
+            luogoDto.setNumScuole((Integer) luogo.get("numScuole"));
 
             searchService.saveLuogoDto(luogoDto);
         }
