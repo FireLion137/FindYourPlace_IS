@@ -8,7 +8,7 @@ import java.util.List;
 public interface HistoryService {
     /**
      * Query per recuperare la cronologia
-     * delle ricerche di un determinato urente
+     * delle ricerche di un determinato utente
      * tramite il suo id.
      * @param idUtente Id dell' Utente
      * @return Lista di Ricerche fatte da quell' Utente

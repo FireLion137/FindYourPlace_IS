@@ -21,7 +21,7 @@ function drawChart(x,y){
     if (y==='numAbitanti')
         title='Numero Abitanti'
     if (y==='qualityIndex')
-        title='indice di qualità'
+        title='Indice di Qualità'
     if (y==='numNegozi')
         title='Numero Negozi'
     if (y==='numScuole')
