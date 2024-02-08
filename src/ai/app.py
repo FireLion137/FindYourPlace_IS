@@ -1,5 +1,4 @@
-import random
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:password@localhost:3306/findyourplace'
@@ -14,6 +13,8 @@ Questa funzione gestisce la richiesta POST per avviare il modulo.
 Returns:
     flask.Response: Risposta JSON.
 """
+    ricerca = request.get_json()
+
     # Va sostituito con il modulo di IA
     lista_luoghi = [
         {"nome": "Bergamo", "latitude": 45.6944947, "longitude": 9.6698727, "qualityIndex": 66.46404280304223,
@@ -34,7 +35,6 @@ Returns:
     ]
 
     return jsonify(lista_luoghi)
-
 
 
 if __name__ == '__main__':

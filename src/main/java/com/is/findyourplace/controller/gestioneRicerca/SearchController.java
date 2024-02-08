@@ -100,17 +100,17 @@ public class SearchController {
         //Call al modulo di IA
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
+        HttpEntity<RicercaDto> entity = new HttpEntity<>(ricercaDto, headers);
         String flaskServerUrl = "http://127.0.0.1:5000/search-luoghi";
 
-        // Effettua una chiamata REST al server Flask per avviare il modulo
+        // Effettua una chiamata REST al server Flask
         ResponseEntity<List<Map<String, Object>>> responseEntity =
                 restTemplate.exchange(
                         flaskServerUrl,
                         HttpMethod.POST,
                         entity,
-                        new ParameterizedTypeReference<>() {
-                        });
+                        new ParameterizedTypeReference<>() {}
+                );
         List<Map<String, Object>> responseBody = responseEntity.getBody();
 
         if (responseBody == null) {
