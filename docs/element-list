@@ -1,0 +1,15 @@
+com.is.findyourplace
+com.is.findyourplace.configuration
+com.is.findyourplace.controller
+com.is.findyourplace.controller.gestioneAmministratori
+com.is.findyourplace.controller.gestioneRicerca
+com.is.findyourplace.controller.gestioneUtenza
+com.is.findyourplace.persistence
+com.is.findyourplace.persistence.dto
+com.is.findyourplace.persistence.entity
+com.is.findyourplace.persistence.entity.CompositeKeys
+com.is.findyourplace.persistence.repository
+com.is.findyourplace.service
+com.is.findyourplace.service.gestioneAmministratori
+com.is.findyourplace.service.gestioneRicerca
+com.is.findyourplace.service.gestioneUtenza
