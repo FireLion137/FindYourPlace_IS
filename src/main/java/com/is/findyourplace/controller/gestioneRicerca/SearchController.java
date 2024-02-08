@@ -114,7 +114,8 @@ public class SearchController {
         List<Map<String, Object>> responseBody = responseEntity.getBody();
 
         if (responseBody == null) {
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
         for (Map<String, Object> luogo : responseBody) {
             LuogoDto luogoDto = new LuogoDto();
@@ -122,12 +123,15 @@ public class SearchController {
 
             luogoDto.setNome((String) luogo.get("nome"));
 
-            luogoDto.setLatitude(((Double) luogo.get("latitude")).floatValue());
-            luogoDto.setLongitude(((Double) luogo.get("longitude")).floatValue());
-            luogoDto.setQualityIndex(((Double) luogo.get("qualityIndex")).floatValue());
+            luogoDto.setLatitude(
+                    ((Double) luogo.get("latitude")).floatValue());
+            luogoDto.setLongitude(
+                    ((Double) luogo.get("longitude")).floatValue());
+            luogoDto.setQualityIndex(
+                    ((Double) luogo.get("qualityIndex")).floatValue());
 
-            String costovita= (String) luogo.get("costoVita");
-            if(costovita.equals("BASSO")) {
+            String costovita = (String) luogo.get("costoVita");
+            if (costovita.equals("BASSO")) {
                 luogoDto.setCostoVita(LuogoTrovato.CostoVita.BASSO);
             } else if (costovita.equals("MEDIO")) {
                 luogoDto.setCostoVita(LuogoTrovato.CostoVita.MEDIO);
