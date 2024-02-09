@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebSecurityConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FindYourPlace</a> &gt; <a href="index.source.html" class="el_package">com.is.findyourplace.configuration</a> &gt; <span class="el_source">WebSecurityConfig.java</span></div><h1>WebSecurityConfig.java</h1><pre class="source lang-java linenums">package com.is.findyourplace.configuration;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+@Configuration
+@EnableWebSecurity
+<span class="fc" id="L17">public class WebSecurityConfig {</span>
+    /**
+     * Autowiring UserDetailsService because
+     * there is a CustomUserDetailsService.
+     */
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    /**
+     * Define the type of PasswordEncoder used for Authentication.
+     * @return BCryptPasswordEncoder
+     */
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+<span class="fc" id="L31">        return new BCryptPasswordEncoder();</span>
+    }
+
+    /**
+     * Define the security filter for every http.
+     * @param http link http passed
+     * @return Builded security http
+     * @throws Exception in case there is an error
+     */
+    @Bean
+    public SecurityFilterChain securityFilterChain(final HttpSecurity http)
+            throws Exception {
+<span class="fc" id="L43">        http</span>
+<span class="fc" id="L44">            .authorizeHttpRequests((authorizeRequests) -&gt; authorizeRequests</span>
+<span class="fc" id="L45">                    .requestMatchers(&quot;/&quot;, &quot;/index&quot;).permitAll()</span>
+<span class="fc" id="L46">                    .requestMatchers(&quot;/accountAuth&quot;, &quot;/register&quot;).permitAll()</span>
+<span class="fc" id="L47">                    .requestMatchers(&quot;/error&quot;).permitAll()</span>
+<span class="fc" id="L48">                    .requestMatchers(&quot;/admin/**&quot;).hasRole(&quot;ADMIN&quot;)</span>
+<span class="fc" id="L49">                    .requestMatchers(&quot;/editProfile&quot;,</span>
+<span class="fc" id="L50">                            &quot;/editPreferences&quot;).authenticated()</span>
+<span class="fc" id="L51">                    .requestMatchers(&quot;/search&quot;, &quot;/searchResult&quot;).permitAll()</span>
+<span class="fc" id="L52">                    .requestMatchers(&quot;/searchHistory&quot;,</span>
+                            &quot;/searchHistory/deleteSearch&quot;,
+                            &quot;/savedPlaces&quot;,
+<span class="fc" id="L55">                            &quot;/savedPlaces/deletePlace&quot;).authenticated()</span>
+<span class="fc" id="L56">                    .requestMatchers(&quot;/retrieveNot&quot;).permitAll()</span>
+<span class="fc" id="L57">                    .anyRequest().permitAll()</span>
+            )
+<span class="fc" id="L59">            .formLogin((form) -&gt; form</span>
+<span class="fc" id="L60">                    .loginPage(&quot;/accountAuth&quot;)</span>
+<span class="fc" id="L61">                    .loginProcessingUrl(&quot;/login&quot;)</span>
+<span class="fc" id="L62">                    .permitAll()</span>
+            )
+<span class="fc" id="L64">            .logout((logout) -&gt; logout</span>
+<span class="fc" id="L65">                    .logoutRequestMatcher(new AntPathRequestMatcher(&quot;/logout&quot;))</span>
+<span class="fc" id="L66">                    .logoutSuccessUrl(&quot;/&quot;)</span>
+<span class="fc" id="L67">                    .permitAll()</span>
+            );
+
+<span class="fc" id="L70">        return http.build();</span>
+    }
+
+    /**
+     * Autowiring to encode with specified passwordEncoder.
+     * @param auth AuthenticationManagerBuilder
+     * @throws Exception in case of errors
+     */
+    @Autowired
+    public void configureGlobal(final AuthenticationManagerBuilder auth)
+            throws Exception {
+<span class="fc" id="L81">        auth</span>
+<span class="fc" id="L82">            .userDetailsService(userDetailsService)</span>
+<span class="fc" id="L83">            .passwordEncoder(passwordEncoder());</span>
+<span class="fc" id="L84">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

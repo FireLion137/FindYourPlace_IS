@@ -105,7 +105,7 @@
         let header = $("meta[name='_csrf_header']").attr("content");
         $.ajax({
             type: 'POST',
-            url: '/savedPlaces/deletePlace',
+            url: CONTEXT_PATH + 'savedPlaces/deletePlace',
             data: {
                 "idLuogo" : idLuogo
             },
@@ -141,7 +141,7 @@
         let header = $("meta[name='_csrf_header']").attr("content");
         $.ajax({
             type: 'POST',
-            url: '/savedPlaces/setNot',
+            url: CONTEXT_PATH + 'savedPlaces/setNot',
             data: {
                 "idLuogo" : idLuogo,
                 "isActive" : isActive

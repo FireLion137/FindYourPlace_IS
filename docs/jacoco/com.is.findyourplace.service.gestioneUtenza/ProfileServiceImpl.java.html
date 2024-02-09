@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProfileServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FindYourPlace</a> &gt; <a href="index.source.html" class="el_package">com.is.findyourplace.service.gestioneUtenza</a> &gt; <span class="el_source">ProfileServiceImpl.java</span></div><h1>ProfileServiceImpl.java</h1><pre class="source lang-java linenums">package com.is.findyourplace.service.gestioneUtenza;
+
+import com.is.findyourplace.persistence.dto.UtenteDto;
+import com.is.findyourplace.persistence.entity.Preferenze;
+import com.is.findyourplace.persistence.entity.Utente;
+import com.is.findyourplace.persistence.repository.PreferenzeRepository;
+import com.is.findyourplace.persistence.repository.UtenteRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ProfileServiceImpl implements ProfileService {
+    /**
+     * Repository Utente.
+     */
+    private final UtenteRepository utenteRepository;
+    /**
+     * Password Encoder.
+     */
+    private final PasswordEncoder passwordEncoder;
+    /**
+     * Repository Preferenze.
+     */
+    private final PreferenzeRepository preferenzeRepository;
+
+    /**
+     * Costruttore del service.
+     * @param utenteRepository UtenteRepository
+     * @param passwordEncoder PasswordEncoder
+     * @param preferenzeRepository PreferenzeRepository
+     */
+    public ProfileServiceImpl(
+            final UtenteRepository utenteRepository,
+            final PasswordEncoder passwordEncoder,
+<span class="fc" id="L35">            final PreferenzeRepository preferenzeRepository) {</span>
+<span class="fc" id="L36">        this.utenteRepository = utenteRepository;</span>
+<span class="fc" id="L37">        this.passwordEncoder = passwordEncoder;</span>
+<span class="fc" id="L38">        this.preferenzeRepository = preferenzeRepository;</span>
+<span class="fc" id="L39">    }</span>
+
+    @Override
+    public void updateUtente(final UtenteDto utenteDto) {
+<span class="fc" id="L43">        Utente utente = utenteRepository.findByIdUtente(</span>
+<span class="fc" id="L44">                utenteDto.getIdUtente()</span>
+        );
+
+<span class="fc" id="L47">        utente.setUsername(utenteDto.getUsername());</span>
+<span class="fc" id="L48">        utente.setEmail(utenteDto.getEmail());</span>
+
+        //Encrypt using springboot security
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (!utenteDto.getPassword().isBlank()) {</span>
+<span class="fc" id="L52">            utente.setPasswordHash(</span>
+<span class="fc" id="L53">                    passwordEncoder.encode(utenteDto.getPassword())</span>
+            );
+        }
+
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (utenteDto.getNumeroTel() != null) {</span>
+<span class="fc" id="L58">            utente.setNumeroTel(utenteDto.getNumeroTel());</span>
+        }
+<span class="fc" id="L60">        utente.setDataNascita(utenteDto.getDataNascita());</span>
+<span class="fc" id="L61">        utente.setNome(utenteDto.getNome());</span>
+<span class="fc" id="L62">        utente.setCognome(utenteDto.getCognome());</span>
+
+<span class="fc" id="L64">        utenteRepository.save(utente);</span>
+<span class="fc" id="L65">    }</span>
+
+    @Override
+    public Preferenze findPrefByUtente(final Utente utente) {
+<span class="fc" id="L69">        return preferenzeRepository.findByIdUtente(utente.getIdUtente());</span>
+    }
+
+    @Override
+    public Preferenze createPreferenze(final Utente utente) {
+<span class="fc" id="L74">        Preferenze preferenze = new Preferenze();</span>
+<span class="fc" id="L75">        preferenze.setIdUtente(utente.getIdUtente());</span>
+<span class="fc" id="L76">        preferenze.setNotifiche(true);</span>
+<span class="fc" id="L77">        preferenze.setUtente(utente);</span>
+<span class="fc" id="L78">        utente.setPreferenze(preferenze);</span>
+
+<span class="fc" id="L80">        preferenzeRepository.save(preferenze);</span>
+<span class="fc" id="L81">        return preferenze;</span>
+    }
+
+    @Override
+    public void updatePreferenze(final Preferenze preferenze) {
+<span class="fc" id="L86">        preferenzeRepository.save(preferenze);</span>
+
+<span class="fc" id="L88">        Utente utente = utenteRepository.findByIdUtente(</span>
+<span class="fc" id="L89">                preferenze.getIdUtente()</span>
+        );
+<span class="fc" id="L91">        utente.setPreferenze(preferenze);</span>
+<span class="fc" id="L92">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

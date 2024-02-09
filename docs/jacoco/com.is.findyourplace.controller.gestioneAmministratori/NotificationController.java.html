@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NotificationController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FindYourPlace</a> &gt; <a href="index.source.html" class="el_package">com.is.findyourplace.controller.gestioneAmministratori</a> &gt; <span class="el_source">NotificationController.java</span></div><h1>NotificationController.java</h1><pre class="source lang-java linenums">package com.is.findyourplace.controller.gestioneAmministratori;
+
+import com.is.findyourplace.persistence.dto.NotificaDto;
+import com.is.findyourplace.service.gestioneAmministratori.NotificationService;
+import com.is.findyourplace.service.gestioneUtenza.AccountService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+//Gestisce l'invio delle notifiche da parte di un Amministratore
+@Controller
+public class NotificationController {
+    /**
+     * Service usato per gestire le notifiche
+     * inviate da un amministratore.
+     */
+    private final NotificationService notificationService;
+    /**
+     * Service usato per gestire gli account degli utenti.
+     */
+    private final AccountService accountService;
+
+
+    /**
+     * Costruttore del controller.
+     *
+     * @param notificationService NotificationService
+     * @param accountService AccountService
+     */
+    public NotificationController(
+            final NotificationService notificationService,
+<span class="fc" id="L42">            final AccountService accountService) {</span>
+<span class="fc" id="L43">        this.notificationService = notificationService;</span>
+<span class="fc" id="L44">        this.accountService = accountService;</span>
+<span class="fc" id="L45">    }</span>
+
+
+    /**
+     * Mapping pagina per inviare notifica a un utente.
+     * @param notificaDto NotificaDto
+     * @param result Contiene gli errori
+     * @return 201 CREATED / 400 BAD REQUEST
+     */
+    @PostMapping(&quot;/sendNotification&quot;)
+    @ResponseBody
+    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; invioNot(
+            @Valid @ModelAttribute(&quot;notifica&quot;)
+            final NotificaDto notificaDto,
+            final BindingResult result) {
+<span class="fc" id="L60">        Map&lt;String, Object&gt; response = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L62">        notificaDto.setDataInvio(LocalDateTime.now());</span>
+<span class="fc" id="L63">        notificaDto.setDataScadenza(LocalDateTime.now().plusMonths(2));</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (notificaDto.getDestinatario() == null</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">                || notificaDto.getDestinatario().isBlank()</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">                || !accountService.existsByUsername(</span>
+<span class="fc" id="L67">                        notificaDto.getDestinatario())) {</span>
+<span class="fc" id="L68">            result.rejectValue(&quot;destinatario&quot;, &quot;null&quot;,</span>
+                    &quot;Destinatario non valido!&quot;);
+        }
+
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (result.hasErrors()) {</span>
+<span class="fc" id="L73">            response.put(&quot;errors&quot;, result.getAllErrors());</span>
+<span class="fc" id="L74">            return new ResponseEntity&lt;&gt;(response, HttpStatus.BAD_REQUEST);</span>
+        }
+<span class="fc" id="L76">        notificationService.saveNotifica(notificaDto);</span>
+
+<span class="fc" id="L78">        return new ResponseEntity&lt;&gt;(response, HttpStatus.CREATED);</span>
+    }
+
+    /**
+     * Mapping pagina per inviare notifica broadcast.
+     * @param notificaDto NotificaDto
+     * @param result Contiene gli errori
+     * @return 201 CREATED / 400 BAD REQUEST
+     */
+    @PostMapping(&quot;/sendNotificationAll&quot;)
+    @ResponseBody
+    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; invioNotAll(
+            @Valid @ModelAttribute(&quot;notifica&quot;)
+            final NotificaDto notificaDto,
+            final BindingResult result) {
+<span class="fc" id="L93">        Map&lt;String, Object&gt; response = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L95">        notificaDto.setDataInvio(LocalDateTime.now());</span>
+<span class="fc" id="L96">        notificaDto.setDataScadenza(LocalDateTime.now().plusMonths(2));</span>
+
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (result.hasErrors()) {</span>
+<span class="fc" id="L99">            response.put(&quot;errors&quot;, result.getAllErrors());</span>
+<span class="fc" id="L100">            return new ResponseEntity&lt;&gt;(response, HttpStatus.BAD_REQUEST);</span>
+        }
+<span class="fc" id="L102">        notificationService.saveNotificaBroadcast(notificaDto);</span>
+
+<span class="fc" id="L104">        return new ResponseEntity&lt;&gt;(response, HttpStatus.CREATED);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

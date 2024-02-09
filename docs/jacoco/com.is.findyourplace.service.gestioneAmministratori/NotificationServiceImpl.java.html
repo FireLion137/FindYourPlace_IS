@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NotificationServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FindYourPlace</a> &gt; <a href="index.source.html" class="el_package">com.is.findyourplace.service.gestioneAmministratori</a> &gt; <span class="el_source">NotificationServiceImpl.java</span></div><h1>NotificationServiceImpl.java</h1><pre class="source lang-java linenums">package com.is.findyourplace.service.gestioneAmministratori;
+
+import com.is.findyourplace.persistence.dto.NotificaDto;
+import com.is.findyourplace.persistence.entity.Notifica;
+import com.is.findyourplace.persistence.entity.NotificaRicevuta;
+import com.is.findyourplace.persistence.entity.Utente;
+import com.is.findyourplace.persistence.repository.NotificaRepository;
+import com.is.findyourplace.persistence.repository.UtenteRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class NotificationServiceImpl implements NotificationService {
+    /**
+     * Repository Utente.
+     */
+    private final UtenteRepository utenteRepository;
+    /**
+     * Repository Notifica.
+     */
+    private final NotificaRepository notificaRepository;
+
+    /**
+     * Costruttore del service.
+     * @param utenteRepository UtenteRepository
+     * @param notificaRepository NotificaRepository
+     */
+    public NotificationServiceImpl(
+            final UtenteRepository utenteRepository,
+<span class="fc" id="L30">            final NotificaRepository notificaRepository) {</span>
+<span class="fc" id="L31">        this.utenteRepository = utenteRepository;</span>
+<span class="fc" id="L32">        this.notificaRepository = notificaRepository;</span>
+<span class="fc" id="L33">    }</span>
+
+    @Override
+    @Transactional
+    public void saveNotifica(final NotificaDto notificaDto) {
+<span class="fc" id="L38">        Notifica notifica = new Notifica();</span>
+<span class="fc" id="L39">        notifica.setAutore(notificaDto.getAutore());</span>
+<span class="fc" id="L40">        notifica.setTesto(notificaDto.getTesto());</span>
+<span class="fc" id="L41">        notifica.setDataInvio(notificaDto.getDataInvio());</span>
+<span class="fc" id="L42">        notifica.setExpireDate(notificaDto.getDataScadenza());</span>
+
+<span class="fc" id="L44">        notificaRepository.save(notifica);</span>
+
+<span class="fc" id="L46">        Utente utente = utenteRepository.findByUsername(</span>
+<span class="fc" id="L47">                notificaDto.getDestinatario()</span>
+        );
+<span class="fc" id="L49">        NotificaRicevuta notificaRicevuta =</span>
+                new NotificaRicevuta(utente, notifica);
+<span class="fc" id="L51">        utente.getNotificheRicevute().add(notificaRicevuta);</span>
+<span class="fc" id="L52">        notifica.getNotificheRicevute().add(notificaRicevuta);</span>
+<span class="fc" id="L53">    }</span>
+
+    @Override
+    @Transactional
+    public void saveNotificaBroadcast(final NotificaDto notificaDto) {
+<span class="fc" id="L58">        Notifica notifica = new Notifica();</span>
+<span class="fc" id="L59">        notifica.setAutore(notificaDto.getAutore());</span>
+<span class="fc" id="L60">        notifica.setTesto(notificaDto.getTesto());</span>
+<span class="fc" id="L61">        notifica.setDataInvio(notificaDto.getDataInvio());</span>
+<span class="fc" id="L62">        notifica.setExpireDate(notificaDto.getDataScadenza());</span>
+
+<span class="fc" id="L64">        notificaRepository.save(notifica);</span>
+
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for (Utente utente: utenteRepository.findAll()) {</span>
+<span class="fc" id="L67">            NotificaRicevuta notificaRicevuta =</span>
+                    new NotificaRicevuta(utente, notifica);
+<span class="fc" id="L69">            utente.getNotificheRicevute().add(notificaRicevuta);</span>
+<span class="fc" id="L70">            notifica.getNotificheRicevute().add(notificaRicevuta);</span>
+<span class="fc" id="L71">        }</span>
+<span class="fc" id="L72">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

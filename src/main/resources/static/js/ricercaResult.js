@@ -82,7 +82,7 @@ function setPref(idLuogo, ispref) {
 
     $.ajax({
         type: 'POST',
-        url: '/savedPlaces/setPref',
+        url: CONTEXT_PATH + 'savedPlaces/setPref',
         data: {
             "idLuogo" : idLuogo,
             "isPref" : ispref

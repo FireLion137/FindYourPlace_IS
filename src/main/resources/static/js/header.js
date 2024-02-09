@@ -61,13 +61,14 @@ window.addEventListener("scroll", function() {
 
 });
 
+const CONTEXT_PATH = $('#contextPathHolder').attr('href');
 
 $(document).ready(function (){
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
     $.ajax({
         type: 'POST',
-        url: '/retrieveNot',
+        url: CONTEXT_PATH + 'retrieveNot',
         beforeSend: function(xhr) {
             xhr.setRequestHeader(header, token);
         },
@@ -121,7 +122,7 @@ function readNot(idNot){
     let header = $("meta[name='_csrf_header']").attr("content");
     $.ajax({
         type: 'POST',
-        url: '/isReadNot',
+        url: CONTEXT_PATH + 'isReadNot',
         data: {
             "idNotifica" : idNot
         },

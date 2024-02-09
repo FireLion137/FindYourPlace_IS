@@ -108,7 +108,7 @@ function InvioNotificaSingola(x){
 
     $.ajax({
         type: 'POST',
-        url: '/sendNotification',
+        url: CONTEXT_PATH + 'sendNotification',
         data: form.serialize(),
         success: function(response, textStatus, xhr) {
             if(xhr.status === 201) {
@@ -143,7 +143,7 @@ function InvioNotificaAll(){
 
     $.ajax({
         type: 'POST',
-        url: '/sendNotificationAll',
+        url: CONTEXT_PATH + 'sendNotificationAll',
         data: form.serialize(),
         success: function(response, textStatus, xhr) {
             if(xhr.status === 201) {
@@ -178,7 +178,7 @@ function InvioNotificaSingolaDetUser(){
 
     $.ajax({
         type: 'POST',
-        url: '/sendNotification',
+        url: CONTEXT_PATH + 'sendNotification',
         data: form.serialize(),
         success: function(response, textStatus, xhr) {
             if(xhr.status === 201) {
