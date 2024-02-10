@@ -119,7 +119,7 @@
             spinner.show();
             $.ajax({
                 type: 'POST',
-                url: '/register',
+                url: CONTEXT_PATH + 'register',
                 data: $('#registrationForm').serialize(),
                 success: function(response, textStatus, xhr) {
                     if(xhr.status === 201) {

@@ -109,7 +109,7 @@ public class SearchController {
                         flaskServerUrl,
                         HttpMethod.POST,
                         entity,
-                        new ParameterizedTypeReference<>() {}
+                        new ParameterizedTypeReference<>() { }
                 );
         List<Map<String, Object>> responseBody = responseEntity.getBody();
 

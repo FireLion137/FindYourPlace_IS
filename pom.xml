@@ -10,7 +10,8 @@
     </parent>
     <groupId>com.is</groupId>
     <artifactId>FindYourPlace</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0.RELEASE</version>
+    <packaging>war</packaging>
     <name>FindYourPlace</name>
     <description>FindYourPlace Web App  -  Progetto FindYourPlace per l'esame di Ingegneria del Software</description>
     <properties>
@@ -27,6 +28,7 @@
             <artifactId>webdrivermanager</artifactId>
             <version>5.6.3</version>
         </dependency>
+
         <dependency>
             <artifactId>spring-boot-starter-mail</artifactId>
             <groupId>org.springframework.boot</groupId>
@@ -133,6 +135,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

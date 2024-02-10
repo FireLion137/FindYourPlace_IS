@@ -8,6 +8,7 @@
 <header class="mainHeader" th:fragment="navbar">
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link id="contextPathHolder" th:href="@{/}"/>
     <script th:src="@{/js/header.js}"></script>
     <div class="wrapperHeader">
         <div class="logo">

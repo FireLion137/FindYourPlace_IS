@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FindYourPlace</a> &gt; <a href="index.source.html" class="el_package">com.is.findyourplace.service.gestioneRicerca</a> &gt; <span class="el_source">SearchServiceImpl.java</span></div><h1>SearchServiceImpl.java</h1><pre class="source lang-java linenums">package com.is.findyourplace.service.gestioneRicerca;
+
+import com.is.findyourplace.persistence.dto.LuogoDto;
+import com.is.findyourplace.persistence.dto.RicercaDto;
+
+import com.is.findyourplace.persistence.entity.Ricerca;
+import com.is.findyourplace.persistence.entity.Filtri;
+import com.is.findyourplace.persistence.entity.Utente;
+import com.is.findyourplace.persistence.entity.Luogo;
+import com.is.findyourplace.persistence.entity.LuogoTrovato;
+import com.is.findyourplace.persistence.entity.Notifica;
+import com.is.findyourplace.persistence.entity.NotificaRicevuta;
+
+import com.is.findyourplace.persistence.repository.RicercaRepository;
+import com.is.findyourplace.persistence.repository.UtenteRepository;
+import com.is.findyourplace.persistence.repository.NotificaRepository;
+import com.is.findyourplace.persistence.repository.LuogoRepository;
+import com.is.findyourplace.persistence.repository.LuogoTrovatoRepository;
+import com.is.findyourplace.persistence.repository.FiltriRepository;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.impl.CoordinateArraySequence;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+@Service
+public class SearchServiceImpl implements SearchService {
+    /**
+     * Repository della Ricerca.
+     */
+    private final RicercaRepository ricercaRepository;
+    /**
+     * Repository dell' Utente.
+     */
+    private final UtenteRepository utenteRepository;
+    /**
+     * Repository del Luogo.
+     */
+    private final LuogoRepository luogoRepository;
+    /**
+     * Repository di LuogoTrovato.
+     */
+    private final LuogoTrovatoRepository luogoTrovatoRepository;
+    /**
+     * Repository di Filtri.
+     */
+    private final FiltriRepository filtriRepository;
+    /**
+     * Repository di Notifica.
+     */
+    private final NotificaRepository notificaRepository;
+
+    /**
+     * Costruttore del Service.
+     * @param ricercaRepository RicercaRepository
+     * @param utenteRepository UtenteRepository
+     * @param luogoRepository LuogoRepository
+     * @param luogoTrovatoRepository LuogoTrovatoRepository
+     * @param filtriRepository FiltriRepository
+     * @param notificaRepository NotificaRepository
+     */
+    public SearchServiceImpl(
+            final RicercaRepository ricercaRepository,
+            final UtenteRepository utenteRepository,
+            final LuogoRepository luogoRepository,
+            final LuogoTrovatoRepository luogoTrovatoRepository,
+            final FiltriRepository filtriRepository,
+<span class="fc" id="L77">            final NotificaRepository notificaRepository) {</span>
+<span class="fc" id="L78">        this.ricercaRepository = ricercaRepository;</span>
+<span class="fc" id="L79">        this.utenteRepository = utenteRepository;</span>
+<span class="fc" id="L80">        this.luogoRepository = luogoRepository;</span>
+<span class="fc" id="L81">        this.luogoTrovatoRepository = luogoTrovatoRepository;</span>
+<span class="fc" id="L82">        this.filtriRepository = filtriRepository;</span>
+<span class="fc" id="L83">        this.notificaRepository = notificaRepository;</span>
+<span class="fc" id="L84">    }</span>
+
+    @Override
+    @Transactional
+    public Long saveRicerca(final RicercaDto ricercaDto) {
+<span class="nc" id="L89">        Ricerca ricerca = new Ricerca();</span>
+<span class="nc" id="L90">        ricerca.setCoordinate(</span>
+                new Point(
+                        new CoordinateArraySequence(new Coordinate[]{
+                                        new Coordinate(
+<span class="nc" id="L94">                                                ricercaDto.getLatitude(),</span>
+<span class="nc" id="L95">                                                ricercaDto.getLongitude()</span>
+                                        )
+                                }),
+                        new GeometryFactory()
+                )
+        );
+<span class="nc" id="L101">        ricerca.setRaggio(ricercaDto.getRaggio());</span>
+<span class="nc" id="L102">        ricerca.setDataRicerca(LocalDateTime.now());</span>
+
+<span class="nc" id="L104">        Filtri filtri = new Filtri();</span>
+<span class="nc" id="L105">        filtri.setIdRicerca(ricerca.getIdRicerca());</span>
+<span class="nc" id="L106">        filtri.setRicerca(ricerca);</span>
+
+<span class="nc" id="L108">        filtri.setCostoVita(ricercaDto.getCostoVita());</span>
+<span class="nc" id="L109">        filtri.setDangerMax(ricercaDto.getDangerMax());</span>
+<span class="nc" id="L110">        filtri.setNumAbitantiMin(ricercaDto.getNumAbitantiMin());</span>
+<span class="nc" id="L111">        filtri.setNumAbitantiMax(ricercaDto.getNumAbitantiMax());</span>
+<span class="nc" id="L112">        filtri.setNumNegoziMin(ricercaDto.getNumNegoziMin());</span>
+<span class="nc" id="L113">        filtri.setNumRistorantiMin(ricercaDto.getNumRistorantiMin());</span>
+<span class="nc" id="L114">        filtri.setNumScuoleMin(ricercaDto.getNumScuoleMin());</span>
+<span class="nc" id="L115">        ricerca.setFiltri(filtri);</span>
+
+        Authentication auth =
+<span class="nc" id="L118">                SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (auth != null</span>
+<span class="nc bnc" id="L120" title="All 4 branches missed.">                &amp;&amp; auth.isAuthenticated()</span>
+                &amp;&amp; !(auth instanceof AnonymousAuthenticationToken)) {
+<span class="nc" id="L122">            Utente utente = utenteRepository.findByUsername(auth.getName());</span>
+<span class="nc" id="L123">            ricerca.setIdUtente(utente.getIdUtente());</span>
+<span class="nc" id="L124">            ricerca.setUtente(utente);</span>
+<span class="nc" id="L125">            utente.getRicerche().add(ricerca);</span>
+        }
+
+<span class="nc" id="L128">        ricercaRepository.save(ricerca);</span>
+<span class="nc" id="L129">        return ricerca.getIdRicerca();</span>
+    }
+
+    @Override
+    @Transactional
+    public void saveLuogoDto(final LuogoDto luogoDto) {
+        Luogo luogo;
+
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (!luogoRepository.existsByNome(luogoDto.getNome())) {</span>
+<span class="nc" id="L138">            luogo = new Luogo();</span>
+<span class="nc" id="L139">            luogo.setNome(luogoDto.getNome());</span>
+<span class="nc" id="L140">            luogo.setCoordinate(</span>
+                    new Point(
+                            new CoordinateArraySequence(new Coordinate[]{
+                                    new Coordinate(
+<span class="nc" id="L144">                                            luogoDto.getLatitude(),</span>
+<span class="nc" id="L145">                                            luogoDto.getLongitude()</span>
+                                    )
+                            }),
+                            new GeometryFactory()
+                    )
+            );
+        } else {
+<span class="nc" id="L152">            luogo = luogoRepository.findByNome(luogoDto.getNome());</span>
+        }
+<span class="nc" id="L154">        luogo.setQualityIndex(luogoDto.getQualityIndex());</span>
+<span class="nc" id="L155">        luogo.setLastFoundDate(LocalDateTime.now());</span>
+
+<span class="nc" id="L157">        luogoRepository.save(luogo);</span>
+
+<span class="nc" id="L159">        Ricerca ricerca = ricercaRepository.findByIdRicerca(</span>
+<span class="nc" id="L160">                luogoDto.getIdRicerca()</span>
+        );
+<span class="nc" id="L162">        LuogoTrovato luogoTrovato =</span>
+                new LuogoTrovato(ricerca, luogo);
+<span class="nc" id="L164">        ricerca.getLuoghiTrovati().add(luogoTrovato);</span>
+<span class="nc" id="L165">        luogo.getLuoghiTrovati().add(luogoTrovato);</span>
+
+<span class="nc" id="L167">        luogoTrovato.setQualityIndex(luogoDto.getQualityIndex());</span>
+<span class="nc" id="L168">        luogoTrovato.setCostoVita(luogoDto.getCostoVita());</span>
+<span class="nc" id="L169">        luogoTrovato.setDanger(luogoDto.getDanger());</span>
+<span class="nc" id="L170">        luogoTrovato.setNumAbitanti(luogoDto.getNumAbitanti());</span>
+<span class="nc" id="L171">        luogoTrovato.setNumNegozi(luogoDto.getNumNegozi());</span>
+<span class="nc" id="L172">        luogoTrovato.setNumRistoranti(luogoDto.getNumRistoranti());</span>
+<span class="nc" id="L173">        luogoTrovato.setNumScuole(luogoDto.getNumScuole());</span>
+
+        //Invio notifica di cambiamento Indice di Qualità
+<span class="nc" id="L176">        String autoreNotIdQ = &quot;FYPIdQ&quot;;</span>
+<span class="nc" id="L177">        String testoNotIdQ = &quot;Il luogo &quot; + luogo.getNome()</span>
+                + &quot; ha cambiato Indice di Qualità!&quot;;
+
+<span class="nc bnc" id="L180" title="All 2 branches missed.">        if (!notificaRepository.existsByAutoreAndTestoAndExpireDateAfter(</span>
+<span class="nc" id="L181">                autoreNotIdQ, testoNotIdQ, LocalDateTime.now())) {</span>
+<span class="nc" id="L182">            Notifica notifica = new Notifica();</span>
+<span class="nc" id="L183">            notifica.setAutore(autoreNotIdQ);</span>
+<span class="nc" id="L184">            notifica.setTesto(testoNotIdQ);</span>
+<span class="nc" id="L185">            notifica.setDataInvio(LocalDateTime.now());</span>
+<span class="nc" id="L186">            notifica.setExpireDate(LocalDateTime.now().plusDays(5));</span>
+
+<span class="nc" id="L188">            List&lt;Utente&gt; utentiNotPref =</span>
+<span class="nc" id="L189">                    utenteRepository.findUtentiByIdLuogoPreferito(</span>
+<span class="nc" id="L190">                            luogo.getIdLuogo(),</span>
+                            5
+                    );
+<span class="nc bnc" id="L193" title="All 2 branches missed.">            if (!utentiNotPref.isEmpty()) {</span>
+<span class="nc" id="L194">                notificaRepository.save(notifica);</span>
+
+<span class="nc bnc" id="L196" title="All 2 branches missed.">                for (Utente utente : utentiNotPref) {</span>
+<span class="nc" id="L197">                    NotificaRicevuta notificaRicevuta =</span>
+                            new NotificaRicevuta(utente, notifica);
+<span class="nc" id="L199">                    utente.getNotificheRicevute().add(notificaRicevuta);</span>
+<span class="nc" id="L200">                    notifica.getNotificheRicevute().add(notificaRicevuta);</span>
+<span class="nc" id="L201">                }</span>
+            }
+
+        }
+<span class="nc" id="L205">    }</span>
+
+    @Override
+    public List&lt;LuogoDto&gt; findLuoghiByIdRicerca(final Long idRicerca) {
+<span class="nc" id="L209">        List&lt;LuogoDto&gt; luoghiDto = new ArrayList&lt;&gt;();</span>
+        for (LuogoTrovato luogoTrovato
+<span class="nc bnc" id="L211" title="All 2 branches missed.">                : luogoTrovatoRepository.findByIdRicerca(idRicerca)) {</span>
+<span class="nc" id="L212">            Luogo luogo = luogoRepository.findByIdLuogo(</span>
+<span class="nc" id="L213">                    luogoTrovato.getIdLuogoTrovato().getIdLuogo());</span>
+
+<span class="nc" id="L215">            luoghiDto.add(mapToLuogoDto(luogo, luogoTrovato));</span>
+<span class="nc" id="L216">        }</span>
+        // Ordina la lista in base al QualityIndex in modo decrescente
+<span class="nc" id="L218">        luoghiDto.sort(Comparator.comparingDouble(</span>
+<span class="nc" id="L219">                LuogoDto::getQualityIndex).reversed());</span>
+<span class="nc" id="L220">        return luoghiDto;</span>
+    }
+
+    @Override
+    public Filtri findFiltriByIdRicerca(final Long idRicerca) {
+<span class="nc" id="L225">        return filtriRepository.findByIdRicerca(idRicerca);</span>
+    }
+
+    private LuogoDto mapToLuogoDto(
+            final Luogo luogo,
+            final LuogoTrovato luogoTrovato) {
+<span class="nc" id="L231">        LuogoDto luogoDto = new LuogoDto();</span>
+<span class="nc" id="L232">        luogoDto.setIdLuogo(luogo.getIdLuogo());</span>
+
+<span class="nc" id="L234">        luogoDto.setNome(luogo.getNome());</span>
+<span class="nc" id="L235">        luogoDto.setLatitude((float) luogo.getCoordinate().getX());</span>
+<span class="nc" id="L236">        luogoDto.setLongitude((float) luogo.getCoordinate().getY());</span>
+
+<span class="nc" id="L238">        luogoDto.setQualityIndex(luogoTrovato.getQualityIndex());</span>
+<span class="nc" id="L239">        luogoDto.setCostoVita(luogoTrovato.getCostoVita());</span>
+<span class="nc" id="L240">        luogoDto.setDanger(luogoTrovato.getDanger());</span>
+<span class="nc" id="L241">        luogoDto.setNumAbitanti(luogoTrovato.getNumAbitanti());</span>
+<span class="nc" id="L242">        luogoDto.setNumNegozi(luogoTrovato.getNumNegozi());</span>
+<span class="nc" id="L243">        luogoDto.setNumRistoranti(luogoTrovato.getNumRistoranti());</span>
+<span class="nc" id="L244">        luogoDto.setNumScuole(luogoTrovato.getNumScuole());</span>
+
+<span class="nc" id="L246">        return luogoDto;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

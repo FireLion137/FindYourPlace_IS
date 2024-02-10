@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FindYourPlace</a> &gt; <a href="index.source.html" class="el_package">com.is.findyourplace.service.gestioneUtenza</a> &gt; <span class="el_source">AccountServiceImpl.java</span></div><h1>AccountServiceImpl.java</h1><pre class="source lang-java linenums">package com.is.findyourplace.service.gestioneUtenza;
+
+import com.is.findyourplace.persistence.dto.UtenteDto;
+import com.is.findyourplace.persistence.entity.Utente;
+import com.is.findyourplace.persistence.repository.UtenteRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AccountServiceImpl implements AccountService {
+    /**
+     * Repository Utente.
+     */
+    private final UtenteRepository utenteRepository;
+    /**
+     * Password Encoder.
+     */
+    private final PasswordEncoder passwordEncoder;
+
+    /**
+     * Costruttore del service.
+     * @param utenteRepository UtenteRepository
+     * @param passwordEncoder PasswordEncoder
+     */
+    public AccountServiceImpl(
+            final UtenteRepository utenteRepository,
+<span class="fc" id="L27">            final PasswordEncoder passwordEncoder) {</span>
+<span class="fc" id="L28">        this.utenteRepository = utenteRepository;</span>
+<span class="fc" id="L29">        this.passwordEncoder = passwordEncoder;</span>
+<span class="fc" id="L30">    }</span>
+
+    @Override
+    public void saveUtente(final UtenteDto utenteDto) {
+<span class="fc" id="L34">        Utente utente = new Utente();</span>
+<span class="fc" id="L35">        utente.setUsername(utenteDto.getUsername());</span>
+<span class="fc" id="L36">        utente.setEmail(utenteDto.getEmail());</span>
+
+        //Encrypt using springboot security
+<span class="fc" id="L39">        utente.setPasswordHash(</span>
+<span class="fc" id="L40">                passwordEncoder.encode(utenteDto.getPassword())</span>
+        );
+
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (utenteDto.getNumeroTel() != null) {</span>
+<span class="fc" id="L44">            utente.setNumeroTel(utenteDto.getNumeroTel());</span>
+        }
+<span class="fc" id="L46">        utente.setDataNascita(utenteDto.getDataNascita());</span>
+<span class="fc" id="L47">        utente.setAdmin(false);</span>
+<span class="fc" id="L48">        utente.setNome(utenteDto.getNome());</span>
+<span class="fc" id="L49">        utente.setCognome(utenteDto.getCognome());</span>
+
+<span class="fc" id="L51">        utenteRepository.save(utente);</span>
+<span class="fc" id="L52">    }</span>
+
+    @Override
+    public Utente findByUsernameOrEmail(final String username) {
+<span class="fc" id="L56">        return utenteRepository.findByUsernameOrEmail(username, username);</span>
+    }
+
+    @Override
+    public UtenteDto findByUsername(final String username) {
+<span class="fc" id="L61">        return mapToUtenteDto(utenteRepository.findByUsername(username));</span>
+    }
+
+    @Override
+    public boolean existsByUsername(final String username) {
+<span class="fc" id="L66">        return utenteRepository.existsByUsername(username);</span>
+    }
+
+    @Override
+    public boolean existsByEmail(final String email) {
+<span class="fc" id="L71">        return utenteRepository.existsByEmail(email);</span>
+    }
+
+
+    private UtenteDto mapToUtenteDto(final Utente u) {
+<span class="fc" id="L76">        UtenteDto utenteDto = new UtenteDto();</span>
+<span class="fc" id="L77">        utenteDto.setUsername(u.getUsername());</span>
+<span class="fc" id="L78">        utenteDto.setEmail(u.getEmail());</span>
+<span class="fc" id="L79">        utenteDto.setNome(u.getNome());</span>
+<span class="fc" id="L80">        utenteDto.setCognome(u.getCognome());</span>
+<span class="fc" id="L81">        utenteDto.setNumeroTel(u.getNumeroTel());</span>
+<span class="fc" id="L82">        utenteDto.setDataNascita(u.getDataNascita());</span>
+
+<span class="fc" id="L84">        return utenteDto;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

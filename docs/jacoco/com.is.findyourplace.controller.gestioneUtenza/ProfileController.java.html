@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProfileController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FindYourPlace</a> &gt; <a href="index.source.html" class="el_package">com.is.findyourplace.controller.gestioneUtenza</a> &gt; <span class="el_source">ProfileController.java</span></div><h1>ProfileController.java</h1><pre class="source lang-java linenums">package com.is.findyourplace.controller.gestioneUtenza;
+
+import com.is.findyourplace.persistence.dto.UtenteDto;
+import com.is.findyourplace.persistence.entity.Preferenze;
+import com.is.findyourplace.persistence.entity.Utente;
+import com.is.findyourplace.service.gestioneUtenza.AccountService;
+import com.is.findyourplace.service.gestioneUtenza.ProfileService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Gestisce le operazioni su un profilo Utente.
+ */
+@Controller
+public class ProfileController {
+    /**
+     * Service usato per l'autenticazione.
+     */
+    private final AccountService accountService;
+    /**
+     * Service usato per la modifica del profilo.
+     */
+    private final ProfileService profileService;
+
+    /**
+     * Costruttore del controller.
+     * @param accountService AccountService
+     * @param profileService ProfileService
+     */
+    public ProfileController(
+            final AccountService accountService,
+<span class="fc" id="L48">            final ProfileService profileService) {</span>
+<span class="fc" id="L49">        this.accountService = accountService;</span>
+<span class="fc" id="L50">        this.profileService = profileService;</span>
+<span class="fc" id="L51">    }</span>
+
+    /**
+     * Mapping della pagina per modificare il profilo.
+     * @param model Model
+     * @return account/editProfile.html
+     */
+    @GetMapping(&quot;/editProfile&quot;)
+    public String viewEditProfile(final Model model) {
+        Authentication auth =
+<span class="fc" id="L61">                SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="pc bpc" id="L62" title="2 of 4 branches missed.">        if (auth == null || auth instanceof AnonymousAuthenticationToken) {</span>
+<span class="nc" id="L63">            return &quot;redirect:/serverError&quot;;</span>
+        }
+<span class="fc" id="L65">        UtenteDto utente = accountService.findByUsername(auth.getName());</span>
+<span class="fc" id="L66">        model.addAttribute(&quot;utente&quot;, utente);</span>
+<span class="fc" id="L67">        return &quot;account/editProfile&quot;;</span>
+    }
+
+    /**
+     * Mapping per la richiesta di modifica profilo.
+     * @param utenteDto UtenteDto contenente tutti i dati.
+     * @param result BindingResult, contiene gli errori.
+     * @param model Model
+     * @param request HttpServletRequest
+     * @return OK 200 / 400 BAD_REQUEST
+     */
+    @PostMapping(&quot;/editProfile&quot;)
+    @ResponseBody
+    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; editProfile(
+            @Valid @ModelAttribute(&quot;utente&quot;) final UtenteDto utenteDto,
+            final BindingResult result,
+            final Model model,
+            final HttpServletRequest request) throws ServletException {
+<span class="fc" id="L85">        Map&lt;String, Object&gt; response = new HashMap&lt;&gt;();</span>
+        Authentication auth =
+<span class="fc" id="L87">                SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="fc" id="L88">        Utente userToUpdate =</span>
+<span class="fc" id="L89">                accountService.findByUsernameOrEmail(auth.getName());</span>
+<span class="fc" id="L90">        boolean isUsernameEqual =</span>
+<span class="fc" id="L91">                userToUpdate.getUsername().equals(utenteDto.getUsername());</span>
+
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (!isUsernameEqual</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">                &amp;&amp; accountService.existsByUsername(</span>
+<span class="fc" id="L95">                        utenteDto.getUsername())) {</span>
+<span class="fc" id="L96">            result.rejectValue(&quot;username&quot;, &quot;null&quot;,</span>
+                    &quot;Username già usato!&quot;);
+        }
+
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        if (!userToUpdate.getEmail().equals(utenteDto.getEmail())</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">                &amp;&amp; accountService.existsByEmail(</span>
+<span class="fc" id="L102">                        utenteDto.getEmail())) {</span>
+<span class="fc" id="L103">            result.rejectValue(&quot;email&quot;, &quot;null&quot;,</span>
+                    &quot;Email già usata!&quot;);
+        }
+
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        if (result.hasErrors()) {</span>
+<span class="fc" id="L108">            model.addAttribute(&quot;utente&quot;, utenteDto);</span>
+<span class="fc" id="L109">            return new ResponseEntity&lt;&gt;(response, HttpStatus.BAD_REQUEST);</span>
+        }
+<span class="fc" id="L111">        utenteDto.setIdUtente(userToUpdate.getIdUtente());</span>
+
+<span class="fc" id="L113">        profileService.updateUtente(utenteDto);</span>
+<span class="pc bpc" id="L114" title="1 of 4 branches missed.">        if (!utenteDto.getPassword().isBlank()</span>
+                || !isUsernameEqual) {
+<span class="fc" id="L116">            request.logout();</span>
+<span class="fc" id="L117">            response.put(&quot;redirect&quot;, &quot;/editProfile&quot;);</span>
+<span class="fc" id="L118">            return new ResponseEntity&lt;&gt;(response, HttpStatus.OK);</span>
+        }
+
+<span class="fc" id="L121">        return new ResponseEntity&lt;&gt;(response, HttpStatus.OK);</span>
+    }
+
+    /**
+     * Mapping della pagina per modificare le preferenze.
+     * @param model Model
+     * @return account/editPreferences.html
+     */
+    @GetMapping(&quot;/editPreferences&quot;)
+    public String viewEditPreferences(final Model model) {
+        Authentication auth =
+<span class="fc" id="L132">                SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="pc bpc" id="L133" title="2 of 4 branches missed.">        if (auth == null</span>
+                || auth instanceof AnonymousAuthenticationToken) {
+<span class="nc" id="L135">            return &quot;redirect:/serverError&quot;;</span>
+        }
+
+<span class="fc" id="L138">        Utente utente = accountService.findByUsernameOrEmail(auth.getName());</span>
+<span class="fc" id="L139">        Preferenze preferenze = profileService.findPrefByUtente(utente);</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        if (preferenze == null) {</span>
+<span class="fc" id="L141">            preferenze = profileService.createPreferenze(utente);</span>
+        }
+
+<span class="fc" id="L144">        model.addAttribute(&quot;preferenze&quot;, preferenze);</span>
+<span class="fc" id="L145">        return &quot;account/editPreferences&quot;;</span>
+    }
+
+    /**
+     * Mapping per la richiesta di modifica preferenze.
+     * @param preferenze Preferenze
+     * @return OK 200 / 400 BAD_REQUEST
+     */
+    @PostMapping(&quot;/editPreferences&quot;)
+    @ResponseBody
+    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; editPreferences(
+            @Valid @ModelAttribute(&quot;preferenze&quot;) final Preferenze preferenze) {
+<span class="fc" id="L157">        Map&lt;String, Object&gt; response = new HashMap&lt;&gt;();</span>
+        Authentication auth =
+<span class="fc" id="L159">                SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="fc" id="L160">        Utente user = accountService.findByUsernameOrEmail(auth.getName());</span>
+<span class="fc" id="L161">        preferenze.setIdUtente(user.getIdUtente());</span>
+
+<span class="fc" id="L163">        profileService.updatePreferenze(preferenze);</span>
+<span class="fc" id="L164">        return new ResponseEntity&lt;&gt;(response, HttpStatus.OK);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

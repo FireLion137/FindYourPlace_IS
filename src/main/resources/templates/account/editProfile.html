@@ -143,7 +143,7 @@
             spinner.show();
             $.ajax({
                 type: 'POST',
-                url: '/editProfile',
+                url: CONTEXT_PATH + 'editProfile',
                 data: $('#editProfileForm').serialize(),
                 success: function(response, textStatus, xhr) {
                     if(xhr.status === 200) {

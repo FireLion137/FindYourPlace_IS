@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FindYourPlace</a> &gt; <a href="index.source.html" class="el_package">com.is.findyourplace.controller.gestioneRicerca</a> &gt; <span class="el_source">SearchController.java</span></div><h1>SearchController.java</h1><pre class="source lang-java linenums">package com.is.findyourplace.controller.gestioneRicerca;
+
+import com.is.findyourplace.persistence.dto.LuogoDto;
+import com.is.findyourplace.persistence.dto.RicercaDto;
+import com.is.findyourplace.persistence.entity.LuogoTrovato;
+import com.is.findyourplace.persistence.entity.Preferiti;
+import com.is.findyourplace.service.gestioneRicerca.SavedPlacesService;
+import com.is.findyourplace.service.gestioneRicerca.SearchService;
+import com.is.findyourplace.service.gestioneUtenza.AccountService;
+import jakarta.validation.Valid;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Gestisce la Ricerca.
+ */
+@Controller
+public class SearchController {
+    /**
+     * Template per le chiamate REST utilizzato
+     * per comunicare con il server Flask.
+     */
+<span class="fc" id="L44">    private final RestTemplate restTemplate = new RestTemplate();</span>
+    /**
+     * Service usato per la ricerca.
+     */
+    private final SearchService searchService;
+    /**
+     *  Service dei luoghi preferiti.
+     */
+    private final SavedPlacesService savedPlacesService;
+    /**
+     *  Service per la gestione degli account.
+     */
+    private final AccountService accountService;
+
+    /**
+     * Costruttore del controller.
+     *
+     * @param searchService  searchService
+     * @param savedPlacesService savedPlacesService
+     * @param accountService accountService
+     */
+    public SearchController(final SearchService searchService,
+                            final SavedPlacesService savedPlacesService,
+<span class="fc" id="L67">                            final AccountService accountService) {</span>
+<span class="fc" id="L68">        this.searchService = searchService;</span>
+<span class="fc" id="L69">        this.savedPlacesService = savedPlacesService;</span>
+<span class="fc" id="L70">        this.accountService = accountService;</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Pagina che effettua la ricerca.
+     * @param ricercaDto Parametri passati dal form
+     * @param result Contiene gli errori
+     * @return 201 CREATED / 400 BAD REQUEST
+     */
+    @PostMapping(&quot;/search&quot;)
+    @ResponseBody
+    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; search(
+            @Valid @ModelAttribute(&quot;ricerca&quot;) final RicercaDto ricercaDto,
+            final BindingResult result) {
+<span class="nc" id="L84">        Map&lt;String, Object&gt; response = new HashMap&lt;&gt;();</span>
+
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (ricercaDto.getNumAbitantiMin() &gt;= ricercaDto.getNumAbitantiMax()) {</span>
+<span class="nc" id="L87">            result.rejectValue(&quot;numAbitantiMin&quot;, &quot;null&quot;,</span>
+                    &quot;Maggiore del numero abitanti massimo!&quot;);
+<span class="nc" id="L89">            result.rejectValue(&quot;numAbitantiMax&quot;, &quot;null&quot;,</span>
+                    &quot;Minore del numero abitanti minimo!&quot;);
+        }
+
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (result.hasErrors()) {</span>
+<span class="nc" id="L94">            response.put(&quot;errors&quot;, result.getAllErrors());</span>
+<span class="nc" id="L95">            return new ResponseEntity&lt;&gt;(response, HttpStatus.BAD_REQUEST);</span>
+        }
+
+<span class="nc" id="L98">        Long idRicerca = searchService.saveRicerca(ricercaDto);</span>
+
+        //Call al modulo di IA
+<span class="nc" id="L101">        HttpHeaders headers = new HttpHeaders();</span>
+<span class="nc" id="L102">        headers.setContentType(MediaType.APPLICATION_JSON);</span>
+<span class="nc" id="L103">        HttpEntity&lt;RicercaDto&gt; entity = new HttpEntity&lt;&gt;(ricercaDto, headers);</span>
+<span class="nc" id="L104">        String flaskServerUrl = &quot;http://127.0.0.1:5000/search-luoghi&quot;;</span>
+
+        // Effettua una chiamata REST al server Flask
+<span class="nc" id="L107">        ResponseEntity&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt; responseEntity =</span>
+<span class="nc" id="L108">                restTemplate.exchange(</span>
+                        flaskServerUrl,
+                        HttpMethod.POST,
+                        entity,
+<span class="nc" id="L112">                        new ParameterizedTypeReference&lt;&gt;() { }</span>
+                );
+<span class="nc" id="L114">        List&lt;Map&lt;String, Object&gt;&gt; responseBody = responseEntity.getBody();</span>
+
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        if (responseBody == null) {</span>
+<span class="nc" id="L117">            return new ResponseEntity&lt;&gt;(response,</span>
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+<span class="nc bnc" id="L120" title="All 2 branches missed.">        for (Map&lt;String, Object&gt; luogo : responseBody) {</span>
+<span class="nc" id="L121">            LuogoDto luogoDto = new LuogoDto();</span>
+<span class="nc" id="L122">            luogoDto.setIdRicerca(idRicerca);</span>
+
+<span class="nc" id="L124">            luogoDto.setNome((String) luogo.get(&quot;nome&quot;));</span>
+
+<span class="nc" id="L126">            luogoDto.setLatitude(</span>
+<span class="nc" id="L127">                    ((Double) luogo.get(&quot;latitude&quot;)).floatValue());</span>
+<span class="nc" id="L128">            luogoDto.setLongitude(</span>
+<span class="nc" id="L129">                    ((Double) luogo.get(&quot;longitude&quot;)).floatValue());</span>
+<span class="nc" id="L130">            luogoDto.setQualityIndex(</span>
+<span class="nc" id="L131">                    ((Double) luogo.get(&quot;qualityIndex&quot;)).floatValue());</span>
+
+<span class="nc" id="L133">            String costovita = (String) luogo.get(&quot;costoVita&quot;);</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">            if (costovita.equals(&quot;BASSO&quot;)) {</span>
+<span class="nc" id="L135">                luogoDto.setCostoVita(LuogoTrovato.CostoVita.BASSO);</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">            } else if (costovita.equals(&quot;MEDIO&quot;)) {</span>
+<span class="nc" id="L137">                luogoDto.setCostoVita(LuogoTrovato.CostoVita.MEDIO);</span>
+            } else {
+<span class="nc" id="L139">                luogoDto.setCostoVita(LuogoTrovato.CostoVita.ALTO);</span>
+            }
+
+<span class="nc" id="L142">            luogoDto.setDanger(((Double) luogo.get(&quot;danger&quot;)).floatValue());</span>
+<span class="nc" id="L143">            luogoDto.setNumAbitanti((Integer) luogo.get(&quot;numAbitanti&quot;));</span>
+<span class="nc" id="L144">            luogoDto.setNumNegozi((Integer) luogo.get(&quot;numNegozi&quot;));</span>
+<span class="nc" id="L145">            luogoDto.setNumRistoranti((Integer) luogo.get(&quot;numRistoranti&quot;));</span>
+<span class="nc" id="L146">            luogoDto.setNumScuole((Integer) luogo.get(&quot;numScuole&quot;));</span>
+
+<span class="nc" id="L148">            searchService.saveLuogoDto(luogoDto);</span>
+<span class="nc" id="L149">        }</span>
+
+
+<span class="nc" id="L152">        response.put(&quot;ricerca&quot;, idRicerca);</span>
+<span class="nc" id="L153">        return new ResponseEntity&lt;&gt;(response, HttpStatus.CREATED);</span>
+    }
+
+    /**
+     * Pagina del risultato della ricerca effettuata.
+     * @param ricerca Id della ricerca
+     * @param model Model
+     * @return ricerca/ricercaResult.html
+     */
+    @GetMapping(&quot;/searchResult&quot;)
+    public String searchResult(
+            @Valid @RequestParam final Long ricerca,
+            final Model model) {
+        Preferiti preferito;
+<span class="nc" id="L167">        List&lt;LuogoDto&gt; luoghi = searchService.findLuoghiByIdRicerca(ricerca);</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        if (luoghi.isEmpty()) {</span>
+<span class="nc" id="L169">            model.addAttribute(&quot;errorMessage&quot;,</span>
+                    &quot;La ricerca non possiede risultati!&quot;);
+<span class="nc" id="L171">            return &quot;error&quot;;</span>
+        }
+
+        Authentication auth =
+<span class="nc" id="L175">                SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="nc bnc" id="L176" title="All 4 branches missed.">        if (auth == null || auth instanceof AnonymousAuthenticationToken) {</span>
+<span class="nc" id="L177">            preferito = null;</span>
+        } else {
+<span class="nc" id="L179">             preferito = savedPlacesService.findPreferito(</span>
+<span class="nc" id="L180">                     accountService.findByUsernameOrEmail(</span>
+<span class="nc" id="L181">                             auth.getName()</span>
+<span class="nc" id="L182">                     ).getIdUtente(),</span>
+<span class="nc" id="L183">                     luoghi.get(0).getIdLuogo()</span>
+             );
+        }
+<span class="nc" id="L186">        model.addAttribute(&quot;preferito&quot;, preferito);</span>
+<span class="nc" id="L187">        model.addAttribute(&quot;luoghi&quot;, luoghi);</span>
+<span class="nc" id="L188">        return &quot;ricerca/ricercaResult&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
