@@ -134,7 +134,7 @@
         let header = $("meta[name='_csrf_header']").attr("content");
         $.ajax({
             type: 'POST',
-            url: '/searchHistory/deleteSearch',
+            url: CONTEXT_PATH + 'searchHistory/deleteSearch',
             data: {
                 "idRicerca" : idRicerca
             },

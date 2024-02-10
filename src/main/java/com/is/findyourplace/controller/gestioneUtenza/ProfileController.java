@@ -114,7 +114,7 @@ public class ProfileController {
         if (!utenteDto.getPassword().isBlank()
                 || !isUsernameEqual) {
             request.logout();
-            response.put("redirect", "/editProfile");
+            response.put("redirect", "editProfile");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
