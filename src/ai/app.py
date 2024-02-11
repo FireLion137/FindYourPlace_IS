@@ -1,4 +1,7 @@
+import pandas as pd
 from flask import Flask, jsonify, request
+from fyp_pkg import InserimentoDati
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:password@localhost:3306/findyourplace'
@@ -14,27 +17,73 @@ Returns:
     flask.Response: Risposta JSON.
 """
     ricerca = request.get_json()
+    # Eliminare 'idRicerca' e 'dataRicerca', non servono e il modulo non se li aspetta
+    ricerca.pop('idRicerca', None)
+    ricerca.pop('dataRicerca', None)
 
-    # Va sostituito con il modulo di IA
-    lista_luoghi = [
-        {"nome": "Bergamo", "latitude": 45.6944947, "longitude": 9.6698727, "qualityIndex": 66.46404280304223,
-         "danger": 20.242155577060352, "costoVita": "ALTO", "numAbitanti": 119809,
-         "numNegozi": 498, "numRistoranti": 7987, "numScuole": 268},
-        {"nome": "Cuneo", "latitude": 44.389633, "longitude": 7.5479007, "qualityIndex": 58.83000077660779,
-         "danger": 16.013278691013483, "costoVita": "MEDIO", "numAbitanti": 55844,
-         "numNegozi": 685, "numRistoranti": 24759, "numScuole": 190},
-        {"nome": "Genova", "latitude": 44.40726, "longitude": 8.9338624, "qualityIndex": 61.04122606641853,
-         "danger": 19.62194826871384, "costoVita": "MEDIO", "numAbitanti": 561191,
-         "numNegozi": 4665, "numRistoranti": 191214, "numScuole": 2218},
-        {"nome": "Salerno", "latitude": 40.6803601, "longitude": 14.7594542, "qualityIndex": 35.081158079870626,
-         "danger": 23.58997117868908, "costoVita": "BASSO", "numAbitanti": 127485,
-         "numNegozi": 438, "numRistoranti": 20003, "numScuole": 114},
-        {"nome": "Milano", "latitude": 45.4641943, "longitude": 9.1896346, "qualityIndex": 67.92584671698411,
-         "danger": 34.29281960751504, "costoVita": "ALTO", "numAbitanti": 1358420,
-         "numNegozi": 5262, "numRistoranti": 138791, "numScuole": 1792}
-    ]
+    # Mappa i valori di costoVita
+    mappa_costo_vita = {'BASSO': 1, 'MEDIO': 2, 'ALTO': 3}
 
-    return jsonify(lista_luoghi)
+    # Sostituisci 'costoVita' con 1, 2, 3
+    if ricerca['costoVita'] in mappa_costo_vita:
+        ricerca['costoVita'] = mappa_costo_vita[ricerca['costoVita']]
+    elif ricerca['costoVita'] == 'QUALSIASI':
+        ricerca['costoVita'] = 3
+
+    # Convertire valori numerici da stringhe a numeri
+    ricerca['raggio'] = int(ricerca['raggio'])
+    ricerca['dangerMax'] = float(ricerca['dangerMax'])
+    ricerca['numAbitantiMin'] = int(ricerca['numAbitantiMin'])
+    ricerca['numAbitantiMax'] = int(ricerca['numAbitantiMax'])
+    ricerca['numNegoziMin'] = int(ricerca['numNegoziMin'])
+    ricerca['numScuoleMin'] = int(ricerca['numScuoleMin'])
+    ricerca['numRistorantiMin'] = int(ricerca['numRistorantiMin'])
+
+    if ricerca['numAbitantiMax'] >= 1000000:
+        ricerca['numAbitantiMax'] = 10000000
+
+    # Estrarre i valori per utilizzarli come parametri
+    parametri = (
+        ricerca['raggio'],
+        ricerca['latitude'],
+        ricerca['longitude'],
+        ricerca['costoVita'],
+        ricerca['dangerMax'],
+        ricerca['numAbitantiMin'],
+        ricerca['numAbitantiMax'],
+        ricerca['numNegoziMin'],
+        ricerca['numRistorantiMin'],
+        ricerca['numScuoleMin']
+    )
+
+    dataframe = InserimentoDati.stampa_ricerca(parametri)
+    risposta = trasforma_dataframe(dataframe)
+
+    data = jsonify(risposta)
+    return data
+
+
+def trasforma_dataframe(df):
+    # verifico se sia effettivamente un dataframe o qualche altro tipo (in errore il modulo restituisce una stringa)
+    if not isinstance(df, pd.DataFrame):
+        return None
+
+    lista_luoghi = []
+    for index, row in df.iterrows():
+        luogo = {
+            'nome': row['Nome'],
+            'latitude': row['Latitudine'],
+            'longitude': row['Longitudine'],
+            'qualityIndex': row['IdQ'],
+            'danger': row['Pericolosità'],
+            'costoVita': 'ALTO' if row['Costo Vita'] == 3 else 'MEDIO' if row['Costo Vita'] == 2 else 'BASSO',
+            'numAbitanti': int(row['Abitanti']),  # Trasformo in intero
+            'numNegozi': row['Num Negozi'],
+            'numRistoranti': row['Num Ristoranti'],
+            'numScuole': row['Num Scuole']
+        }
+        lista_luoghi.append(luogo)
+    return lista_luoghi
 
 
 if __name__ == '__main__':

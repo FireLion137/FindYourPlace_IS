@@ -112,6 +112,7 @@
                 <i id="submitS-spinner" class="fa fa-spinner fa-spin"></i>
             </button>
         </div>
+        <p class="errorMessage" id="resultsNotFound"></p>
     </form>
 </main>
 
@@ -142,6 +143,9 @@
                         xhr.responseJSON.errors.forEach(function(error) {
                             $('#' + error.field + 'Error').text(error.defaultMessage);
                         });
+                    }
+                    else if (xhr.status === 500) {
+                        $('#resultsNotFound').text("Nessun risultato trovato: prova a cambiare filtri o coordinate!");
                     }
                     else {
                         console.log("Errore HTTP Status imprevisto: " + textStatus + errorThrown)
