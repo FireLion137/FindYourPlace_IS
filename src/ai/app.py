@@ -39,6 +39,9 @@ Returns:
     ricerca['numScuoleMin'] = int(ricerca['numScuoleMin'])
     ricerca['numRistorantiMin'] = int(ricerca['numRistorantiMin'])
 
+    if ricerca['numAbitantiMax'] >= 1000000:
+        ricerca['numAbitantiMax'] = 10000000
+
     # Estrarre i valori per utilizzarli come parametri
     parametri = (
         ricerca['raggio'],
@@ -62,7 +65,7 @@ Returns:
 
 def trasforma_dataframe(df):
     # verifico se sia effettivamente un dataframe o qualche altro tipo (in errore il modulo restituisce una stringa)
-    if df is not isinstance(df, pd.DataFrame):
+    if not isinstance(df, pd.DataFrame):
         return None
 
     lista_luoghi = []
@@ -73,7 +76,7 @@ def trasforma_dataframe(df):
             'longitude': row['Longitudine'],
             'qualityIndex': row['IdQ'],
             'danger': row['Pericolosità'],
-            'costoVita': 'ALTO' if row['Costo Vita'] == 2 else 'MEDIO' if row['Costo Vita'] == 1 else 'BASSO',
+            'costoVita': 'ALTO' if row['Costo Vita'] == 3 else 'MEDIO' if row['Costo Vita'] == 2 else 'BASSO',
             'numAbitanti': int(row['Abitanti']),  # Trasformo in intero
             'numNegozi': row['Num Negozi'],
             'numRistoranti': row['Num Ristoranti'],
