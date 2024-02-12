@@ -46,10 +46,10 @@
         <div class="form-field">
             <label class="form-field-label" for="costoVita">Costo della vita:</label>
             <select class="form-field-input" id="costoVita" name="costoVita">
-                <option th:value="QUALSIASI">QUALSIASI</option>
-                <option th:value="BASSO">BASSO</option>
-                <option th:value="MEDIO">MEDIO</option>
-                <option th:value="ALTO">ALTO</option>
+                <option id="costoQ" th:value="QUALSIASI">QUALSIASI</option>
+                <option id="costoB" th:value="BASSO">BASSO</option>
+                <option id="costoM" th:value="MEDIO">MEDIO</option>
+                <option id="costoA" th:value="ALTO">ALTO</option>
             </select>
             <p class="errorMessage" id="costoVitaError"></p>
         </div>
