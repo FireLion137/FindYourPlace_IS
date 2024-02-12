@@ -34,16 +34,16 @@ public class RicercaDto {
      * Latitudine su cui verrà eseguita la Ricerca.
      */
     @NotNull
-    @DecimalMin(value = "36.619987291")
-    @DecimalMax(value = "47.1153931748")
+    @DecimalMin(value = "36.619987291", message = "Coordinate non valide!")
+    @DecimalMax(value = "47.1153931748", message = "Coordinate non valide!")
     private float latitude;
 
     /**
      * Longitudine su cui verrà eseguita la Ricerca.
      */
     @NotNull
-    @DecimalMin(value = "6.7499552751")
-    @DecimalMax(value = "18.4802470232")
+    @DecimalMin(value = "6.7499552751", message = "Coordinate non valide!")
+    @DecimalMax(value = "18.4802470232", message = "Coordinate non valide!")
     private float longitude;
 
     /**

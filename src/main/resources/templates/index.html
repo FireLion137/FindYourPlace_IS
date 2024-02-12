@@ -40,6 +40,8 @@
         </div>
 
         <div id="map"></div>
+        <p class="errorMessage" id="latitudeError"></p>
+        <p class="errorMessage" id="longitudeError"></p>
 
         <div class="form-field">
             <label class="form-field-label" for="costoVita">Costo della vita:</label>
@@ -143,6 +145,11 @@
                         xhr.responseJSON.errors.forEach(function(error) {
                             $('#' + error.field + 'Error').text(error.defaultMessage);
                         });
+                        let longitudeError = $('#longitudeError');
+                        if($('#latitudeError').textContent !== ''
+                            && longitudeError.textContent !== '') {
+                            longitudeError.textContent = ''
+                        }
                     }
                     else if (xhr.status === 500) {
                         $('#resultsNotFound').text("Nessun risultato trovato: prova a cambiare filtri o coordinate!");

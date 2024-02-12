@@ -73,6 +73,6 @@ main {
     display: none;
 }
 
-#resultsNotFound {
+#resultsNotFound, #latitudeError, #longitudeError {
     text-align: center;
 }
