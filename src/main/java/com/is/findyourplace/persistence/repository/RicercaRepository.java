@@ -13,7 +13,7 @@ public interface RicercaRepository extends JpaRepository<Ricerca, Long> {
      * @param idRicerca Id della Ricerca
      * @return Ricerca
      */
-    Ricerca findByIdRicerca(long idRicerca);
+    Ricerca findByIdRicerca(Long idRicerca);
     /**
      * Query per trovare la lista delle ricerche di un utente.
      * @param idUtente Id dell' Utente

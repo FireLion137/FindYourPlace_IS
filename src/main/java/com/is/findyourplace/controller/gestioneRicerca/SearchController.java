@@ -8,6 +8,7 @@ import com.is.findyourplace.service.gestioneRicerca.SavedPlacesService;
 import com.is.findyourplace.service.gestioneRicerca.SearchService;
 import com.is.findyourplace.service.gestioneUtenza.AccountService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -54,6 +55,13 @@ public class SearchController {
      *  Service per la gestione degli account.
      */
     private final AccountService accountService;
+
+    /**
+     * Variabile usata per definire quando questo controller
+     * viene usato per un test.
+     */
+    @Value("${app.testMode:false}")
+    private boolean testMode;
 
     /**
      * Costruttore del controller.
@@ -103,14 +111,34 @@ public class SearchController {
         HttpEntity<RicercaDto> entity = new HttpEntity<>(ricercaDto, headers);
         String flaskServerUrl = "http://127.0.0.1:5000/search-luoghi";
 
-        // Effettua una chiamata REST al server Flask
-        ResponseEntity<List<Map<String, Object>>> responseEntity =
-                restTemplate.exchange(
-                        flaskServerUrl,
-                        HttpMethod.POST,
-                        entity,
-                        new ParameterizedTypeReference<>() { }
-                );
+        ResponseEntity<List<Map<String, Object>>> responseEntity;
+        if (!testMode) {
+            // Effettua una chiamata REST al server Flask
+             responseEntity =
+                    restTemplate.exchange(
+                            flaskServerUrl,
+                            HttpMethod.POST,
+                            entity,
+                            new ParameterizedTypeReference<>() { }
+                    );
+        } else {
+            responseEntity = ResponseEntity.ok()
+                    .body(List.of(
+                            new HashMap<>() {{
+                                put("costoVita", "BASSO");
+                                put("danger", 39.54139399955827);
+                                put("latitude", 40.9045572);
+                                put("longitude", 14.2901223);
+                                put("nome", "Test");
+                                put("numAbitanti", 74268);
+                                put("numNegozi", 112);
+                                put("numRistoranti", 96);
+                                put("numScuole", 23);
+                                put("qualityIndex", 37.66);
+                            }})
+                    );
+        }
+
         List<Map<String, Object>> responseBody = responseEntity.getBody();
 
         if (responseBody == null) {
