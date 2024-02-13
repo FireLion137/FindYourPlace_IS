@@ -8,6 +8,7 @@ import com.is.findyourplace.service.gestioneRicerca.SavedPlacesService;
 import com.is.findyourplace.service.gestioneRicerca.SearchService;
 import com.is.findyourplace.service.gestioneUtenza.AccountService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class SearchController {
      * Template per le chiamate REST utilizzato
      * per comunicare con il server Flask.
      */
-<span class="fc" id="L44">    private final RestTemplate restTemplate = new RestTemplate();</span>
+<span class="fc" id="L45">    private final RestTemplate restTemplate = new RestTemplate();</span>
     /**
      * Service usato per la ricerca.
      */
@@ -56,6 +57,13 @@ public class SearchController {
     private final AccountService accountService;
 
     /**
+     * Variabile usata per definire quando questo controller
+     * viene usato per un test.
+     */
+    @Value(&quot;${app.testMode:false}&quot;)
+    private boolean testMode;
+
+    /**
      * Costruttore del controller.
      *
      * @param searchService  searchService
@@ -64,11 +72,11 @@ public class SearchController {
      */
     public SearchController(final SearchService searchService,
                             final SavedPlacesService savedPlacesService,
-<span class="fc" id="L67">                            final AccountService accountService) {</span>
-<span class="fc" id="L68">        this.searchService = searchService;</span>
-<span class="fc" id="L69">        this.savedPlacesService = savedPlacesService;</span>
-<span class="fc" id="L70">        this.accountService = accountService;</span>
-<span class="fc" id="L71">    }</span>
+<span class="fc" id="L75">                            final AccountService accountService) {</span>
+<span class="fc" id="L76">        this.searchService = searchService;</span>
+<span class="fc" id="L77">        this.savedPlacesService = savedPlacesService;</span>
+<span class="fc" id="L78">        this.accountService = accountService;</span>
+<span class="fc" id="L79">    }</span>
 
     /**
      * Pagina che effettua la ricerca.
@@ -81,76 +89,96 @@ public class SearchController {
     public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; search(
             @Valid @ModelAttribute(&quot;ricerca&quot;) final RicercaDto ricercaDto,
             final BindingResult result) {
-<span class="nc" id="L84">        Map&lt;String, Object&gt; response = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L92">        Map&lt;String, Object&gt; response = new HashMap&lt;&gt;();</span>
 
-<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (ricercaDto.getNumAbitantiMin() &gt;= ricercaDto.getNumAbitantiMax()) {</span>
-<span class="nc" id="L87">            result.rejectValue(&quot;numAbitantiMin&quot;, &quot;null&quot;,</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (ricercaDto.getNumAbitantiMin() &gt;= ricercaDto.getNumAbitantiMax()) {</span>
+<span class="fc" id="L95">            result.rejectValue(&quot;numAbitantiMin&quot;, &quot;null&quot;,</span>
                     &quot;Maggiore del numero abitanti massimo!&quot;);
-<span class="nc" id="L89">            result.rejectValue(&quot;numAbitantiMax&quot;, &quot;null&quot;,</span>
+<span class="fc" id="L97">            result.rejectValue(&quot;numAbitantiMax&quot;, &quot;null&quot;,</span>
                     &quot;Minore del numero abitanti minimo!&quot;);
         }
 
-<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (result.hasErrors()) {</span>
-<span class="nc" id="L94">            response.put(&quot;errors&quot;, result.getAllErrors());</span>
-<span class="nc" id="L95">            return new ResponseEntity&lt;&gt;(response, HttpStatus.BAD_REQUEST);</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (result.hasErrors()) {</span>
+<span class="fc" id="L102">            response.put(&quot;errors&quot;, result.getAllErrors());</span>
+<span class="fc" id="L103">            return new ResponseEntity&lt;&gt;(response, HttpStatus.BAD_REQUEST);</span>
         }
 
-<span class="nc" id="L98">        Long idRicerca = searchService.saveRicerca(ricercaDto);</span>
+<span class="fc" id="L106">        Long idRicerca = searchService.saveRicerca(ricercaDto);</span>
 
         //Call al modulo di IA
-<span class="nc" id="L101">        HttpHeaders headers = new HttpHeaders();</span>
-<span class="nc" id="L102">        headers.setContentType(MediaType.APPLICATION_JSON);</span>
-<span class="nc" id="L103">        HttpEntity&lt;RicercaDto&gt; entity = new HttpEntity&lt;&gt;(ricercaDto, headers);</span>
-<span class="nc" id="L104">        String flaskServerUrl = &quot;http://127.0.0.1:5000/search-luoghi&quot;;</span>
+<span class="fc" id="L109">        HttpHeaders headers = new HttpHeaders();</span>
+<span class="fc" id="L110">        headers.setContentType(MediaType.APPLICATION_JSON);</span>
+<span class="fc" id="L111">        HttpEntity&lt;RicercaDto&gt; entity = new HttpEntity&lt;&gt;(ricercaDto, headers);</span>
+<span class="fc" id="L112">        String flaskServerUrl = &quot;http://127.0.0.1:5000/search-luoghi&quot;;</span>
 
-        // Effettua una chiamata REST al server Flask
-<span class="nc" id="L107">        ResponseEntity&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt; responseEntity =</span>
-<span class="nc" id="L108">                restTemplate.exchange(</span>
-                        flaskServerUrl,
-                        HttpMethod.POST,
-                        entity,
-<span class="nc" id="L112">                        new ParameterizedTypeReference&lt;&gt;() { }</span>
-                );
-<span class="nc" id="L114">        List&lt;Map&lt;String, Object&gt;&gt; responseBody = responseEntity.getBody();</span>
+        ResponseEntity&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt; responseEntity;
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (!testMode) {</span>
+            // Effettua una chiamata REST al server Flask
+<span class="nc" id="L117">             responseEntity =</span>
+<span class="nc" id="L118">                    restTemplate.exchange(</span>
+                            flaskServerUrl,
+                            HttpMethod.POST,
+                            entity,
+<span class="nc" id="L122">                            new ParameterizedTypeReference&lt;&gt;() { }</span>
+                    );
+        } else {
+<span class="fc" id="L125">            responseEntity = ResponseEntity.ok()</span>
+<span class="fc" id="L126">                    .body(List.of(</span>
+<span class="fc" id="L127">                            new HashMap&lt;&gt;() {{</span>
+<span class="fc" id="L128">                                put(&quot;costoVita&quot;, &quot;BASSO&quot;);</span>
+<span class="fc" id="L129">                                put(&quot;danger&quot;, 39.54139399955827);</span>
+<span class="fc" id="L130">                                put(&quot;latitude&quot;, 40.9045572);</span>
+<span class="fc" id="L131">                                put(&quot;longitude&quot;, 14.2901223);</span>
+<span class="fc" id="L132">                                put(&quot;nome&quot;, &quot;Test&quot;);</span>
+<span class="fc" id="L133">                                put(&quot;numAbitanti&quot;, 74268);</span>
+<span class="fc" id="L134">                                put(&quot;numNegozi&quot;, 112);</span>
+<span class="fc" id="L135">                                put(&quot;numRistoranti&quot;, 96);</span>
+<span class="fc" id="L136">                                put(&quot;numScuole&quot;, 23);</span>
+<span class="fc" id="L137">                                put(&quot;qualityIndex&quot;, 37.66);</span>
+<span class="fc" id="L138">                            }})</span>
+                    );
+        }
 
-<span class="nc bnc" id="L116" title="All 2 branches missed.">        if (responseBody == null) {</span>
-<span class="nc" id="L117">            return new ResponseEntity&lt;&gt;(response,</span>
+<span class="fc" id="L142">        List&lt;Map&lt;String, Object&gt;&gt; responseBody = responseEntity.getBody();</span>
+
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (responseBody == null) {</span>
+<span class="nc" id="L145">            return new ResponseEntity&lt;&gt;(response,</span>
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
-<span class="nc bnc" id="L120" title="All 2 branches missed.">        for (Map&lt;String, Object&gt; luogo : responseBody) {</span>
-<span class="nc" id="L121">            LuogoDto luogoDto = new LuogoDto();</span>
-<span class="nc" id="L122">            luogoDto.setIdRicerca(idRicerca);</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        for (Map&lt;String, Object&gt; luogo : responseBody) {</span>
+<span class="fc" id="L149">            LuogoDto luogoDto = new LuogoDto();</span>
+<span class="fc" id="L150">            luogoDto.setIdRicerca(idRicerca);</span>
 
-<span class="nc" id="L124">            luogoDto.setNome((String) luogo.get(&quot;nome&quot;));</span>
+<span class="fc" id="L152">            luogoDto.setNome((String) luogo.get(&quot;nome&quot;));</span>
 
-<span class="nc" id="L126">            luogoDto.setLatitude(</span>
-<span class="nc" id="L127">                    ((Double) luogo.get(&quot;latitude&quot;)).floatValue());</span>
-<span class="nc" id="L128">            luogoDto.setLongitude(</span>
-<span class="nc" id="L129">                    ((Double) luogo.get(&quot;longitude&quot;)).floatValue());</span>
-<span class="nc" id="L130">            luogoDto.setQualityIndex(</span>
-<span class="nc" id="L131">                    ((Double) luogo.get(&quot;qualityIndex&quot;)).floatValue());</span>
+<span class="fc" id="L154">            luogoDto.setLatitude(</span>
+<span class="fc" id="L155">                    ((Double) luogo.get(&quot;latitude&quot;)).floatValue());</span>
+<span class="fc" id="L156">            luogoDto.setLongitude(</span>
+<span class="fc" id="L157">                    ((Double) luogo.get(&quot;longitude&quot;)).floatValue());</span>
+<span class="fc" id="L158">            luogoDto.setQualityIndex(</span>
+<span class="fc" id="L159">                    ((Double) luogo.get(&quot;qualityIndex&quot;)).floatValue());</span>
 
-<span class="nc" id="L133">            String costovita = (String) luogo.get(&quot;costoVita&quot;);</span>
-<span class="nc bnc" id="L134" title="All 2 branches missed.">            if (costovita.equals(&quot;BASSO&quot;)) {</span>
-<span class="nc" id="L135">                luogoDto.setCostoVita(LuogoTrovato.CostoVita.BASSO);</span>
-<span class="nc bnc" id="L136" title="All 2 branches missed.">            } else if (costovita.equals(&quot;MEDIO&quot;)) {</span>
-<span class="nc" id="L137">                luogoDto.setCostoVita(LuogoTrovato.CostoVita.MEDIO);</span>
+<span class="fc" id="L161">            String costovita = (String) luogo.get(&quot;costoVita&quot;);</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">            if (costovita.equals(&quot;BASSO&quot;)) {</span>
+<span class="fc" id="L163">                luogoDto.setCostoVita(LuogoTrovato.CostoVita.BASSO);</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">            } else if (costovita.equals(&quot;MEDIO&quot;)) {</span>
+<span class="nc" id="L165">                luogoDto.setCostoVita(LuogoTrovato.CostoVita.MEDIO);</span>
             } else {
-<span class="nc" id="L139">                luogoDto.setCostoVita(LuogoTrovato.CostoVita.ALTO);</span>
+<span class="nc" id="L167">                luogoDto.setCostoVita(LuogoTrovato.CostoVita.ALTO);</span>
             }
 
-<span class="nc" id="L142">            luogoDto.setDanger(((Double) luogo.get(&quot;danger&quot;)).floatValue());</span>
-<span class="nc" id="L143">            luogoDto.setNumAbitanti((Integer) luogo.get(&quot;numAbitanti&quot;));</span>
-<span class="nc" id="L144">            luogoDto.setNumNegozi((Integer) luogo.get(&quot;numNegozi&quot;));</span>
-<span class="nc" id="L145">            luogoDto.setNumRistoranti((Integer) luogo.get(&quot;numRistoranti&quot;));</span>
-<span class="nc" id="L146">            luogoDto.setNumScuole((Integer) luogo.get(&quot;numScuole&quot;));</span>
+<span class="fc" id="L170">            luogoDto.setDanger(((Double) luogo.get(&quot;danger&quot;)).floatValue());</span>
+<span class="fc" id="L171">            luogoDto.setNumAbitanti((Integer) luogo.get(&quot;numAbitanti&quot;));</span>
+<span class="fc" id="L172">            luogoDto.setNumNegozi((Integer) luogo.get(&quot;numNegozi&quot;));</span>
+<span class="fc" id="L173">            luogoDto.setNumRistoranti((Integer) luogo.get(&quot;numRistoranti&quot;));</span>
+<span class="fc" id="L174">            luogoDto.setNumScuole((Integer) luogo.get(&quot;numScuole&quot;));</span>
 
-<span class="nc" id="L148">            searchService.saveLuogoDto(luogoDto);</span>
-<span class="nc" id="L149">        }</span>
+<span class="fc" id="L176">            searchService.saveLuogoDto(luogoDto);</span>
+<span class="fc" id="L177">        }</span>
 
 
-<span class="nc" id="L152">        response.put(&quot;ricerca&quot;, idRicerca);</span>
-<span class="nc" id="L153">        return new ResponseEntity&lt;&gt;(response, HttpStatus.CREATED);</span>
+<span class="fc" id="L180">        response.put(&quot;ricerca&quot;, idRicerca);</span>
+<span class="fc" id="L181">        return new ResponseEntity&lt;&gt;(response, HttpStatus.CREATED);</span>
     }
 
     /**
@@ -164,28 +192,28 @@ public class SearchController {
             @Valid @RequestParam final Long ricerca,
             final Model model) {
         Preferiti preferito;
-<span class="nc" id="L167">        List&lt;LuogoDto&gt; luoghi = searchService.findLuoghiByIdRicerca(ricerca);</span>
-<span class="nc bnc" id="L168" title="All 2 branches missed.">        if (luoghi.isEmpty()) {</span>
-<span class="nc" id="L169">            model.addAttribute(&quot;errorMessage&quot;,</span>
+<span class="fc" id="L195">        List&lt;LuogoDto&gt; luoghi = searchService.findLuoghiByIdRicerca(ricerca);</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">        if (luoghi.isEmpty()) {</span>
+<span class="nc" id="L197">            model.addAttribute(&quot;errorMessage&quot;,</span>
                     &quot;La ricerca non possiede risultati!&quot;);
-<span class="nc" id="L171">            return &quot;error&quot;;</span>
+<span class="nc" id="L199">            return &quot;error&quot;;</span>
         }
 
         Authentication auth =
-<span class="nc" id="L175">                SecurityContextHolder.getContext().getAuthentication();</span>
-<span class="nc bnc" id="L176" title="All 4 branches missed.">        if (auth == null || auth instanceof AnonymousAuthenticationToken) {</span>
-<span class="nc" id="L177">            preferito = null;</span>
+<span class="fc" id="L203">                SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="pc bpc" id="L204" title="2 of 4 branches missed.">        if (auth == null || auth instanceof AnonymousAuthenticationToken) {</span>
+<span class="nc" id="L205">            preferito = null;</span>
         } else {
-<span class="nc" id="L179">             preferito = savedPlacesService.findPreferito(</span>
-<span class="nc" id="L180">                     accountService.findByUsernameOrEmail(</span>
-<span class="nc" id="L181">                             auth.getName()</span>
-<span class="nc" id="L182">                     ).getIdUtente(),</span>
-<span class="nc" id="L183">                     luoghi.get(0).getIdLuogo()</span>
+<span class="fc" id="L207">             preferito = savedPlacesService.findPreferito(</span>
+<span class="fc" id="L208">                     accountService.findByUsernameOrEmail(</span>
+<span class="fc" id="L209">                             auth.getName()</span>
+<span class="fc" id="L210">                     ).getIdUtente(),</span>
+<span class="fc" id="L211">                     luoghi.get(0).getIdLuogo()</span>
              );
         }
-<span class="nc" id="L186">        model.addAttribute(&quot;preferito&quot;, preferito);</span>
-<span class="nc" id="L187">        model.addAttribute(&quot;luoghi&quot;, luoghi);</span>
-<span class="nc" id="L188">        return &quot;ricerca/ricercaResult&quot;;</span>
+<span class="fc" id="L214">        model.addAttribute(&quot;preferito&quot;, preferito);</span>
+<span class="fc" id="L215">        model.addAttribute(&quot;luoghi&quot;, luoghi);</span>
+<span class="fc" id="L216">        return &quot;ricerca/ricercaResult&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

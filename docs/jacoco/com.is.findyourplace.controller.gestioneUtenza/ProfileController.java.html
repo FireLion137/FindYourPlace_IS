@@ -114,7 +114,7 @@ public class ProfileController {
 <span class="pc bpc" id="L114" title="1 of 4 branches missed.">        if (!utenteDto.getPassword().isBlank()</span>
                 || !isUsernameEqual) {
 <span class="fc" id="L116">            request.logout();</span>
-<span class="fc" id="L117">            response.put(&quot;redirect&quot;, &quot;/editProfile&quot;);</span>
+<span class="fc" id="L117">            response.put(&quot;redirect&quot;, &quot;editProfile&quot;);</span>
 <span class="fc" id="L118">            return new ResponseEntity&lt;&gt;(response, HttpStatus.OK);</span>
         }
 

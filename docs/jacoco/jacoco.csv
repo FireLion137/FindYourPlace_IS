@@ -11,6 +11,7 @@ FindYourPlace,com.is.findyourplace.configuration,WebSecurityConfig,0,154,0,0,0,2
 FindYourPlace,com.is.findyourplace,ServletInitializer,12,0,0,0,2,0,2,0,2,0
 FindYourPlace,com.is.findyourplace.service.gestioneAmministratori,EmailService,21,6,0,0,7,1,1,1,1,1
 FindYourPlace,com.is.findyourplace.service.gestioneAmministratori,NotificationServiceImpl,0,112,0,2,0,28,0,4,0,3
-FindYourPlace,com.is.findyourplace.service.gestioneRicerca,SearchServiceImpl,397,21,16,0,91,8,13,1,5,1
-FindYourPlace,com.is.findyourplace.controller.gestioneRicerca,SearchController,251,17,18,0,57,6,11,1,2,1
+FindYourPlace,com.is.findyourplace.service.gestioneRicerca,SearchServiceImpl,12,405,6,10,2,97,7,7,1,5
+FindYourPlace,com.is.findyourplace.controller.gestioneRicerca,SearchController,41,239,8,12,9,57,7,6,0,3
 FindYourPlace,com.is.findyourplace.controller.gestioneRicerca,SearchController.new ParameterizedTypeReference() {...},6,0,0,0,1,0,1,0,1,0
+FindYourPlace,com.is.findyourplace.controller.gestioneRicerca,SearchController.new HashMap() {...},0,64,0,0,0,12,0,1,0,1
