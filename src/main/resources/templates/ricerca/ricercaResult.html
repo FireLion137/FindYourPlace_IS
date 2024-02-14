@@ -23,10 +23,10 @@
                        th:with="idqToDisplay = ${(luoghi[0].qualityIndex % 1 == 0
                        ? #strings.replace(luoghi[0].qualityIndex, '.0', '')
                        : luoghi[0].qualityIndex) + '%'}">
-                      <span class="good-result" th:if="${luoghi[0].qualityIndex}>=65.00"
+                      <span class="good-result" th:if="${luoghi[0].qualityIndex}>=60.00"
                             th:text="${idqToDisplay}">
                       </span>
-                      <span class="medium-result" th:if="${luoghi[0].qualityIndex}>=40.00 and ${luoghi[0].qualityIndex}<=64.99"
+                      <span class="medium-result" th:if="${luoghi[0].qualityIndex}>=40.00 and ${luoghi[0].qualityIndex}<=59.99"
                             th:text="${idqToDisplay}">
                       </span>
                       <span class="bad-result" th:if="${luoghi[0].qualityIndex}<=39.99"
@@ -34,10 +34,10 @@
                       </span>
                   </div>
                   <div class="SearchResult-idq-comment" >
-                      <span class="good-result" th:if="${luoghi[0].qualityIndex}>=65.00">
+                      <span class="good-result" th:if="${luoghi[0].qualityIndex}>=60.00">
                           La Qualità di Vita calcolata è ottima!
                       </span>
-                      <span class="medium-result" th:if="${luoghi[0].qualityIndex}>=40.00 and ${luoghi[0].qualityIndex}<=64.99">
+                      <span class="medium-result" th:if="${luoghi[0].qualityIndex}>=40.00 and ${luoghi[0].qualityIndex}<=59.99">
                           La Qualità di Vita calcolata è discreta.
                       </span>
                       <span class="bad-result" th:if="${luoghi[0].qualityIndex}<=39.99">
