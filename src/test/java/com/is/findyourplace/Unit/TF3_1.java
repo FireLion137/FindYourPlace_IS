@@ -53,6 +53,7 @@ public class TF3_1 {
     RicercaDto ricercaDto;
     Utente utente;
     Ricerca ricerca;
+    Luogo luogo;
     @BeforeEach
     public void setUp() {
         ricercaDto = new RicercaDto();
@@ -72,6 +73,9 @@ public class TF3_1 {
         ricerca = new Ricerca();
         ricerca.setIdRicerca(1L);
         ricerca.setUtente(utente);
+
+        luogo = new Luogo();
+        luogo.setIdLuogo(1L);
     }
 
     @Test
@@ -80,7 +84,7 @@ public class TF3_1 {
         Mockito.when(utenteRepository.findByUsername(Mockito.any(String.class))).thenReturn(utente);
 
         Mockito.when(luogoRepository.existsByNome(Mockito.any(String.class))).thenReturn(false);
-        Mockito.when(luogoRepository.save(Mockito.any(Luogo.class))).thenReturn(null);
+        Mockito.when(luogoRepository.save(Mockito.any(Luogo.class))).thenReturn(luogo);
 
         Mockito.when(ricercaRepository.findByIdRicerca(null)).thenReturn(ricerca);
 

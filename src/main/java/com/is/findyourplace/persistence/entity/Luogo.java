@@ -43,7 +43,7 @@ public class Luogo {
     @Id
     @Column(name = "id_luogo")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idLuogo = 0L;
+    private Long idLuogo;
 
     /**
      * Nome del Luogo.

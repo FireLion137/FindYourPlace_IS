@@ -17,30 +17,30 @@
        <div class="SearchResult-MainResult">
           <div class="SearchResult-luogo">
               <h2 class="SearchResult-luogo-text" >Il luogo che fa per te è:</h2>
-              <h1 class="SearchResult-luogo-actualresult"  th:text="${luoghi[0].nome}"></h1>
+              <h1 class="SearchResult-luogo-actualresult" th:text="${luoghi[0].nome}"></h1>
               <div class="SearchResult-idq">
                   <div class="SearchResult-idq-value"
                        th:with="idqToDisplay = ${(luoghi[0].qualityIndex % 1 == 0
                        ? #strings.replace(luoghi[0].qualityIndex, '.0', '')
                        : luoghi[0].qualityIndex) + '%'}">
-                      <span class="good-result" th:if="${luoghi[0].qualityIndex}>=65"
+                      <span class="good-result" th:if="${luoghi[0].qualityIndex}>=65.00"
                             th:text="${idqToDisplay}">
                       </span>
-                      <span class="medium-result" th:if="${luoghi[0].qualityIndex}>=40 and ${luoghi[0].qualityIndex}<=64"
+                      <span class="medium-result" th:if="${luoghi[0].qualityIndex}>=40.00 and ${luoghi[0].qualityIndex}<=64.99"
                             th:text="${idqToDisplay}">
                       </span>
-                      <span class="bad-result" th:if="${luoghi[0].qualityIndex}<=39"
+                      <span class="bad-result" th:if="${luoghi[0].qualityIndex}<=39.99"
                             th:text="${idqToDisplay}">
                       </span>
                   </div>
                   <div class="SearchResult-idq-comment" >
-                      <span class="good-result" th:if="${luoghi[0].qualityIndex}>=65">
+                      <span class="good-result" th:if="${luoghi[0].qualityIndex}>=65.00">
                           La Qualità di Vita calcolata è ottima!
                       </span>
-                      <span class="medium-result" th:if="${luoghi[0].qualityIndex}>=40 and ${luoghi[0].qualityIndex}<=64">
+                      <span class="medium-result" th:if="${luoghi[0].qualityIndex}>=40.00 and ${luoghi[0].qualityIndex}<=64.99">
                           La Qualità di Vita calcolata è discreta.
                       </span>
-                      <span class="bad-result" th:if="${luoghi[0].qualityIndex}<=39">
+                      <span class="bad-result" th:if="${luoghi[0].qualityIndex}<=39.99">
                           La Qualità di Vita calcolata è pessima...
                       </span>
                   </div>

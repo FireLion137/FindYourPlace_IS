@@ -154,7 +154,7 @@ public class SearchServiceImpl implements SearchService {
         luogo.setQualityIndex(luogoDto.getQualityIndex());
         luogo.setLastFoundDate(LocalDateTime.now());
 
-        luogoRepository.save(luogo);
+        luogo = luogoRepository.save(luogo);
 
         Ricerca ricerca = ricercaRepository.findByIdRicerca(
                 luogoDto.getIdRicerca()
